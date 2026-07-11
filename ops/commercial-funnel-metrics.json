@@ -1,0 +1,144 @@
+{
+  "title": "Enquiry Reviews commercial funnel metrics",
+  "source_of_truth": {
+    "behaviour": "Analytics platform (landing_view, video_*, form_*, review_request_success)",
+    "commercial": "Enquiry Reviews Google Sheet timestamps",
+    "join_key": "lead_id — the only lead identifier allowed in analytics events"
+  },
+  "privacy_rules": [
+    "Do not send name, email, firm name, or full submitted URLs into analytics",
+    "lead_id is the only lead identifier in analytics",
+    "UTM params must never contain prospect email, name or company"
+  ],
+  "channel_utm_conventions": [
+    { "channel": "Cold email", "utm_source": "outbound_email", "utm_medium": "email" },
+    { "channel": "LinkedIn", "utm_source": "linkedin", "utm_medium": "dm" },
+    { "channel": "WhatsApp Business", "utm_source": "whatsapp", "utm_medium": "message" },
+    { "channel": "Cold-call follow-up", "utm_source": "cold_call", "utm_medium": "follow_up_link" }
+  ],
+  "sheet_timestamp_columns": {
+    "requested_at": "Request received",
+    "review_delivered_at": "Review delivered",
+    "discussion_booked_at": "Discussion booked",
+    "discussion_held_at": "Discussion held",
+    "problem_verified_at": "Problem verified",
+    "project_qualified_at": "Project qualified",
+    "paid_project_at": "Paid project"
+  },
+  "metrics": [
+    {
+      "id": "outreach_click_to_review_request",
+      "name": "Outreach click to review request",
+      "purpose": "Measures whether the page earns the request",
+      "formula": "Unique valid review requests / unique outreach landing sessions",
+      "numerator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where status is not 'Not suitable' and requested_at is set (valid review requests in period)"
+      },
+      "denominator": {
+        "analytics_or_sheet": "analytics",
+        "definition": "Unique landing_view events filtered to outreach UTMs (source in outbound_email, linkedin, whatsapp, cold_call) in the same period"
+      },
+      "sheets_helper": "Valid requests = COUNTA(FILTER(requested_at, status<>\"Not suitable\"))"
+    },
+    {
+      "id": "request_to_completed_review",
+      "name": "Request to completed review",
+      "purpose": "Measures delivery capacity and lead suitability",
+      "formula": "Reviews delivered / valid review requests",
+      "numerator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where review_delivered_at is non-empty"
+      },
+      "denominator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where requested_at is non-empty and status is not 'Not suitable'"
+      },
+      "sheets_formula_example": "=COUNTIF(review_delivered_at_range,\"<>\")/COUNTIFS(requested_at_range,\"<>\",status_range,\"<>Not suitable\")"
+    },
+    {
+      "id": "delivered_review_to_discussion",
+      "name": "Delivered review to discussion",
+      "purpose": "Measures usefulness of the evidence",
+      "formula": "Discussions held / reviews delivered",
+      "numerator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where discussion_held_at is non-empty"
+      },
+      "denominator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where review_delivered_at is non-empty"
+      },
+      "sheets_formula_example": "=COUNTIF(discussion_held_at_range,\"<>\")/COUNTIF(review_delivered_at_range,\"<>\")"
+    },
+    {
+      "id": "discussion_to_verified_problem",
+      "name": "Discussion to verified problem",
+      "purpose": "Measures diagnostic accuracy",
+      "formula": "Discussions with an agreed, worthwhile problem / discussions held",
+      "numerator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where problem_verified_at is non-empty"
+      },
+      "denominator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where discussion_held_at is non-empty"
+      },
+      "sheets_formula_example": "=COUNTIF(problem_verified_at_range,\"<>\")/COUNTIF(discussion_held_at_range,\"<>\")"
+    },
+    {
+      "id": "verified_problem_to_paid_project",
+      "name": "Verified problem to paid project",
+      "purpose": "Measures commercial fit and solution credibility",
+      "formula": "Paid projects / verified problems",
+      "numerator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where paid_project_at is non-empty"
+      },
+      "denominator": {
+        "analytics_or_sheet": "sheet",
+        "definition": "COUNT of rows where problem_verified_at is non-empty"
+      },
+      "sheets_formula_example": "=COUNTIF(paid_project_at_range,\"<>\")/COUNTIF(problem_verified_at_range,\"<>\")"
+    }
+  ],
+  "supporting_behavioural_metrics": [
+    {
+      "name": "Landing page view to video play",
+      "formula": "Unique video_play / unique landing_view"
+    },
+    {
+      "name": "Video progress milestones",
+      "formula": "Unique video_progress by milestone (25/50/75/90) / unique video_play"
+    },
+    {
+      "name": "Video completion rate",
+      "formula": "video_complete / video_play (session-unique play)"
+    },
+    {
+      "name": "Video viewer to review-form start",
+      "formula": "review_form_start / video_play"
+    },
+    {
+      "name": "Form start to successful submission",
+      "formula": "review_request_success / review_form_start"
+    },
+    {
+      "name": "Error rate by form field",
+      "formula": "review_form_error count grouped by field / review_form_start"
+    },
+    {
+      "name": "Conversion by outreach channel",
+      "formula": "review_request_success / landing_view grouped by source + medium + campaign"
+    },
+    {
+      "name": "Median time from request to review delivery",
+      "formula": "MEDIAN(review_delivered_at - requested_at) for delivered rows"
+    }
+  ],
+  "dashboard_notes": [
+    "Use timestamps for funnel calculations; do not infer stage timing from free-text notes",
+    "Filter Not suitable / Closed out of conversion denominators where appropriate",
+    "Trace a test visitor: landing_view (UTMs) → video_* → review_form_start → review_request_success(lead_id) → sheet row with same lead_id"
+  ]
+}

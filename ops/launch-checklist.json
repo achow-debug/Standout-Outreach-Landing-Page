@@ -1,0 +1,89 @@
+{
+  "title": "Launch checklist — Legal Enquiry Review",
+  "generated_by": "Phase 6 hardening",
+  "note": "Engineering hardening is complete. Items below still need business assets, legal approval or live infrastructure before the Phase 6 exit condition is fully met.",
+  "engineering_complete": [
+    {
+      "id": "a11y-skip-link",
+      "status": "done",
+      "detail": "Skip link, focusable main, focus styles, overflow-wrap, disclosure focus"
+    },
+    {
+      "id": "failure-paths",
+      "status": "done",
+      "detail": "Video fallback, analytics swallow, form validation, duplicate-submit guard, n8n timeout/generic errors"
+    },
+    {
+      "id": "security-headers",
+      "status": "done",
+      "detail": "CSP, Referrer-Policy, Permissions-Policy, nosniff, frame denial, COOP; secrets check in prebuild"
+    },
+    {
+      "id": "metadata-canonical",
+      "status": "done",
+      "detail": "Title, description, canonical /, OG/Twitter, favicon, redirects from alternate routes"
+    },
+    {
+      "id": "copy-audit-tooling",
+      "status": "done",
+      "detail": "npm run check:copy writes ops/launch-readiness.json; no prohibited claim patterns in copy"
+    },
+    {
+      "id": "analytics-no-pii",
+      "status": "done",
+      "detail": "lead_id-only lead identifier; sanitised event props"
+    }
+  ],
+  "business_blockers": [
+    {
+      "id": "final-mp4",
+      "status": "open",
+      "detail": "Upload compressed legal-enquiry-review.mp4"
+    },
+    {
+      "id": "final-poster",
+      "status": "open",
+      "detail": "Upload optimised legal-enquiry-review-poster.webp (<150KB target)"
+    },
+    {
+      "id": "captions-transcript-proofread",
+      "status": "open",
+      "detail": "Replace draft transcript and proofread VTT against final recording"
+    },
+    {
+      "id": "proof-line",
+      "status": "open",
+      "detail": "Substantiate, revise or remove Staffordshire proof placeholder"
+    },
+    {
+      "id": "legal-entity",
+      "status": "open",
+      "detail": "Complete registered name, company number and address in site-config"
+    },
+    {
+      "id": "lawful-basis-retention",
+      "status": "open",
+      "detail": "Approve and insert lawful basis + retention in site-config"
+    },
+    {
+      "id": "processors",
+      "status": "open",
+      "detail": "List approved processors in site-config.privacy.processors"
+    },
+    {
+      "id": "n8n-sheet-email",
+      "status": "open",
+      "detail": "Production N8N_WEBHOOK_URL/SECRET, Enquiry Reviews sheet, SPF/DKIM/DMARC for achow@standoutgroup.net"
+    },
+    {
+      "id": "device-video-test",
+      "status": "open",
+      "detail": "Test final MP4 on real iPhone Safari and Android Chrome"
+    }
+  ],
+  "commands": {
+    "check_launch": "npm run check:launch",
+    "check_copy_strict": "node scripts/check-copy-audit.mjs --strict",
+    "build": "npm run build"
+  }
+}

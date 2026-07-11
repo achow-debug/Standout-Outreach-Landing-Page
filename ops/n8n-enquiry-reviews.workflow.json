@@ -1,0 +1,98 @@
+{
+  "name": "Standout Enquiry Reviews",
+  "meta": {
+    "description": "Receives signed review requests from the landing page, upserts the Enquiry Reviews sheet, and sends confirmation + internal emails.",
+    "schema_version": "1.0",
+    "expected_headers": {
+      "X-Standout-Timestamp": "Unix ms string",
+      "X-Standout-Signature": "HMAC-SHA256 hex of `${timestamp}.${rawBody}` using N8N_WEBHOOK_SECRET",
+      "X-Standout-Lead-Id": "UUID lead_id"
+    },
+    "payload_fields": [
+      "schema_version",
+      "lead_id",
+      "requested_at",
+      "name",
+      "firm_name",
+      "work_email",
+      "website",
+      "source",
+      "medium",
+      "campaign",
+      "content",
+      "term",
+      "landing_path",
+      "referrer_domain",
+      "status"
+    ],
+    "sheet_name": "Enquiry Reviews",
+    "idempotency": "Skip append when lead_id already exists in the sheet",
+    "emails": {
+      "confirmation_from": "achow@standoutgroup.net",
+      "internal_to": "achow@standoutgroup.net",
+      "source": "Use payload.emails.confirmation and payload.emails.internal (subject + text) prepared by the landing API",
+      "rules": [
+        "Confirm firm and website",
+        "Explain next step in 2–3 sentences",
+        "Repeat: public information only, no test enquiry",
+        "Provide reply address for corrections",
+        "No calendar CTA",
+        "Omit delivery timing unless configured in site-config"
+      ]
+    },
+    "n8n_steps": [
+      "1. Webhook (POST) — production URL path only; do not expose to the browser",
+      "2. Verify HMAC: compute hex(hmac_sha256(secret, `${X-Standout-Timestamp}.${rawBody}`)) and compare to X-Standout-Signature; reject if timestamp skew > 5 minutes",
+      "3. Validate required fields: lead_id, name, firm_name, work_email, website, requested_at",
+      "4. Google Sheets lookup by lead_id — if found, return 200 { ok: true, duplicate: true }",
+      "5. Append row with status=Requested and updated_at=now; leave commercial/delivery columns empty",
+      "6. Send confirmation email to work_email from achow@standoutgroup.net",
+      "7. Send internal notification with lead_id, firm, website, source, campaign",
+      "8. Update confirmation_email_sent_at on success; write last_error and alert on failure",
+      "9. Respond 200 { ok: true, lead_id }"
+    ],
+    "recommended_statuses": [
+      "Requested",
+      "Validated",
+      "In progress",
+      "Delivered",
+      "Discussion booked",
+      "Discussion held",
+      "Problem verified",
+      "Project qualified",
+      "Won",
+      "Not suitable",
+      "Closed"
+    ],
+    "sheet_columns": [
+      "lead_id",
+      "requested_at",
+      "name",
+      "firm_name",
+      "work_email",
+      "website",
+      "source",
+      "medium",
+      "campaign",
+      "content",
+      "term",
+      "landing_path",
+      "referrer_domain",
+      "status",
+      "assigned_to",
+      "review_started_at",
+      "review_delivered_at",
+      "review_url",
+      "discussion_booked_at",
+      "discussion_held_at",
+      "problem_verified_at",
+      "problem_summary",
+      "project_qualified_at",
+      "paid_project_at",
+      "project_value",
+      "confirmation_email_sent_at",
+      "last_error",
+      "updated_at"
+    ]
+  }
+}

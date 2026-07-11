@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-07-11T22:11:42.358Z",
+  "passed": [
+    "Asset present: public/video/legal-enquiry-review-captions.vtt",
+    "No prohibited claim patterns found in page/email copy"
+  ],
+  "warnings": [
+    "Proof line is still marked placeholder — substantiate, revise or remove before launch",
+    "Legal entity company number unset — complete footer identity before production",
+    "Legal entity registered address unset — complete footer identity before production"
+  ],
+  "blockers": [
+    "Missing production asset: public/video/legal-enquiry-review.mp4",
+    "Missing production asset: public/video/legal-enquiry-review-poster.webp",
+    "Video transcript is still a draft placeholder in lib/landing-copy.ts",
+    "Privacy lawful basis is unset in lib/site-config.ts",
+    "Privacy retention period is unset in lib/site-config.ts"
+  ],
+  "launch_ready": false
+}
