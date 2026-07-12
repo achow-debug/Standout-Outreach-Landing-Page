@@ -1,35 +1,27 @@
 type VideoPosterPlaceholderProps = {
   title: string;
   subtitle: string;
-  durationLabel: string;
 };
 
 /**
- * Prospect-facing poster stand-in until the real MP4/poster ship.
- * Communicates value without exposing file paths or build instructions.
+ * Development / missing-asset stand-in only.
+ * Must not look like a finished product thumbnail.
  */
 export function VideoPosterPlaceholder({
   title,
   subtitle,
-  durationLabel,
 }: VideoPosterPlaceholderProps) {
   return (
     <div
-      className="video-poster"
-      style={{ aspectRatio: "16 / 9" }}
-      role="img"
-      aria-label={`${title}. ${subtitle}. ${durationLabel}.`}
+      className="video-player"
+      role="status"
+      aria-label={`${title}. ${subtitle}`}
     >
-      <div className="video-poster-atmosphere" aria-hidden="true" />
-      <div className="video-poster-content">
-        <p className="video-poster-duration">{durationLabel}</p>
-        <p className="video-poster-title">{title}</p>
-        <p className="video-poster-subtitle">{subtitle}</p>
-        <span className="video-poster-play" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M7 4.5v11l9-5.5-9-5.5z" fill="currentColor" />
-          </svg>
-        </span>
+      <div className="video-player-frame video-player-frame--missing">
+        <div className="video-player-error">
+          <p className="video-player-error-title">{title}</p>
+          <p className="video-player-error-message">{subtitle}</p>
+        </div>
       </div>
     </div>
   );

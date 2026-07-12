@@ -10,10 +10,10 @@ export const siteConfig = {
   /** Canonical route for this dedicated outreach microsite */
   canonicalPath: "/",
   /**
-   * Identity line in the hero — who is speaking.
-   * Staffordshire trading history is not legal-sector proof; keep it in the footer.
+   * Legacy proof line retained for audit scripts; not rendered on the redesigned page.
    */
-  proofLine: "A five-minute breakdown by Alex Chow, Standout Group",
+  proofLine:
+    "Evidence before recommendations · No replacement CRM required",
   proofLineIsPlaceholder: false,
   /**
    * Optional delivery timing for confirmation email/page.
@@ -31,15 +31,24 @@ export const siteConfig = {
   privacy: {
     controllerName: "Standout Group",
     controllerEmail: "achow@standoutgroup.net",
-    /** Approved lawful basis — leave null until business confirms */
-    lawfulBasis: null as string | null,
-    /** Approved retention period — leave null until business confirms */
-    retentionPeriod: null as string | null,
     /**
-     * Approved processor list for the privacy notice.
-     * Leave empty until the live processor set is confirmed.
+     * Aligned with the confirmed Standout Group privacy notice (trading-name
+     * controller path until the formal registered entity is published).
      */
-    processors: [] as string[],
+    lawfulBasis:
+      "Review requests and related correspondence are processed because they are necessary to take steps at your request before a potential contract, and to pursue our legitimate interest in delivering and improving the review service in a way that does not override your rights.",
+    retentionPeriod:
+      "Review request records, review findings and related correspondence are kept while needed to assess eligibility, deliver the agreed review, handle follow-up questions and meet legal obligations, then deleted or anonymised. Fixed calendar retention periods will be published here if adopted.",
+    /**
+     * Live processor set for this microsite (same stack as the main Standout Group site).
+     */
+    processors: [
+      "Hosting (Vercel)",
+      "Workflow automation (n8n)",
+      "Lead storage (Google Sheets)",
+      "Transactional email (Resend)",
+      "Analytics (Plausible Analytics)",
+    ],
   },
   /**
    * Legal / trading identity for the footer.

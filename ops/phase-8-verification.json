@@ -1,0 +1,98 @@
+{
+  "title": "Phase 8 — Responsive, accessibility and quality assurance",
+  "generated_at": "2026-07-12T22:15:00.000Z",
+  "commands_run": [
+    "npx tsc --noEmit -p .",
+    "npx eslint .",
+    "node scripts/check-copy-audit.mjs",
+    "npm run build",
+    "npm run start -- -p 3456",
+    "Chrome headless screenshots at 375/430/768/1024/1440",
+    "playwright-core browser checks (overflow, modal, Escape, validation, reassurance stack)"
+  ],
+  "results": {
+    "typecheck": "pass",
+    "eslint": "pass",
+    "production_build": "pass",
+    "form_validation_unit": {
+      "empty": "pass — field errors for all four inputs",
+      "valid": "pass — website normalised to https://firm.co.uk",
+      "bad_email": "pass",
+      "javascript_url": "pass — rejected"
+    },
+    "responsive": {
+      "375": { "overflow": false, "screenshot": "ops/phase-8-screenshots/w-375.png" },
+      "430": { "overflow": false, "screenshot": "ops/phase-8-screenshots/w-430.png" },
+      "768": { "overflow": false, "screenshot": "ops/phase-8-screenshots/w-768.png" },
+      "1024": { "overflow": false, "screenshot": "ops/phase-8-screenshots/w-1024.png" },
+      "1440": { "overflow": false, "screenshot": "ops/phase-8-screenshots/w-1440.png" }
+    },
+    "modal": {
+      "opens_from_cta": "pass",
+      "four_fields": "pass",
+      "escape_closes": "pass",
+      "focus_returns_to_cta": "pass",
+      "body_scroll_lock_class": "pass",
+      "empty_submit_validation": "pass — 4 aria-invalid fields + error summary"
+    },
+    "reassurance_mobile": {
+      "flex_direction": "column",
+      "separators_hidden": true,
+      "result": "pass"
+    },
+    "scope_dom": {
+      "single_h1": true,
+      "dialog_present": true,
+      "one_page_cta": true,
+      "privacy_link_on_landing": false,
+      "legacy_sections_absent": true,
+      "obsolete_components_removed": [
+        "review-scope-disclosure.tsx",
+        "request-confirmation.tsx",
+        "example-finding.tsx",
+        "hero-video-cta.tsx",
+        "journey-mechanism.tsx",
+        "video-transcript.tsx"
+      ]
+    },
+    "approved_copy": "pass — rendered HTML matches approved deck strings"
+  },
+  "fixes_applied_during_phase_8": [
+    "Corrected HTML form redirect targets from /?request=*#request to /?request=* (anchor removed with redesign)",
+    "Modal recovers ?request=received / ?request=error on load",
+    "Added overflow-x: clip on html/body",
+    "Modal max-height / body padding respect safe-area insets for mobile keyboards"
+  ],
+  "acceptance_checklist": [
+    { "item": "Distinctive black-to-purple Standout Group text wordmark", "status": "pass" },
+    { "item": "Watch the full breakdown eyebrow", "status": "pass" },
+    { "item": "Exact approved headline", "status": "pass" },
+    { "item": "Exact approved subheading", "status": "pass" },
+    { "item": "Clear responsive video thumbnail with play control", "status": "blocked", "detail": "MP4 and poster missing; development placeholder renders" },
+    { "item": "Exact credibility/risk-reduction line", "status": "pass" },
+    { "item": "Exact outcome line", "status": "pass" },
+    { "item": "One primary CTA in page content", "status": "pass" },
+    { "item": "CTA opens accessible on-screen modal", "status": "pass" },
+    { "item": "Four fields with labels and approved placeholders", "status": "pass" },
+    { "item": "Real submission flow preserved", "status": "pass_code", "detail": "Client posts to /api/review-request; live n8n not exercised in this pass" },
+    { "item": "Minimal exact footer", "status": "pass" },
+    { "item": "No nav/stats/process/accordion/transcript/extra content", "status": "pass" },
+    { "item": "Responsive at mobile/tablet/laptop/desktop", "status": "pass" },
+    { "item": "Keyboard and screen-reader fundamentals", "status": "pass", "detail": "Native dialog trap, Escape, focus return, labelled fields, error summary" },
+    { "item": "Lint, type-check and production build", "status": "pass" }
+  ],
+  "blockers": [
+    {
+      "id": "missing_video_mp4",
+      "severity": "Add public/video/legal-enquiry-review.mp4 before production launch"
+    },
+    {
+      "id": "missing_video_poster",
+      "severity": "Add public/video/legal-enquiry-review-poster.webp before production launch"
+    }
+  ],
+  "out_of_scope_warnings": [
+    "Copy-audit still warns about unset company number / registered address — redesign Phase 7 forbids those in the footer",
+    "Captions VTT still notes proofreading against the final recording"
+  ]
+}

@@ -18,8 +18,13 @@ type EnquiryVideoPlayerProps = {
   hasPoster: boolean;
   fallbackMessage: string;
   directLinkLabel: string;
+  playLabel?: string;
 };
 
+/**
+ * Focal breakdown player: custom play control until playback starts,
+ * then native controls. No autoplay.
+ */
 export function EnquiryVideoPlayer({
   mp4Path,
   captionsPath,
@@ -28,9 +33,11 @@ export function EnquiryVideoPlayer({
   hasPoster,
   fallbackMessage,
   directLinkLabel,
+  playLabel = "Play the full breakdown",
 }: EnquiryVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playbackFailed, setPlaybackFailed] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const durationRef = useRef<number | null>(null);
 
   const videoMeta = useCallback(() => {
@@ -61,6 +68,7 @@ export function EnquiryVideoPlayer({
     };
 
     const onPlay = () => {
+      setHasStarted(true);
       const flag = `video_play:${siteConfig.video.id}:${siteConfig.video.version}`;
       if (hasSessionFlag(flag)) return;
       setSessionFlag(flag);
@@ -106,51 +114,72 @@ export function EnquiryVideoPlayer({
     };
   }, [videoMeta]);
 
+  async function startPlayback() {
+    const video = videoRef.current;
+    if (!video || playbackFailed) return;
+
+    try {
+      await video.play();
+      setHasStarted(true);
+    } catch {
+      setPlaybackFailed(true);
+    }
+  }
+
   if (playbackFailed) {
     return (
-      <div
-        className="video-poster video-poster--error"
-        style={{ aspectRatio: "16 / 9" }}
-        role="alert"
-      >
-        <div className="video-poster-content">
-          <p className="video-poster-subtitle">{fallbackMessage}</p>
-          <p className="m-0">
-            <a className="text-[var(--color-accent-soft)] underline" href={mp4Path}>
-              {directLinkLabel}
-            </a>
-          </p>
+      <div className="video-player" role="alert">
+        <div className="video-player-frame video-player-frame--error">
+          <div className="video-player-error">
+            <p className="video-player-error-message">{fallbackMessage}</p>
+            <p className="m-0">
+              <a href={mp4Path}>{directLinkLabel}</a>
+            </p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className="relative w-full overflow-hidden rounded-[var(--radius-md)] bg-[var(--color-ink)]"
-      style={{ aspectRatio: "16 / 9" }}
-    >
-      <video
-        ref={videoRef}
-        className="h-full w-full object-cover"
-        controls
-        playsInline
-        preload="metadata"
-        poster={hasPoster && posterPath ? posterPath : undefined}
-      >
-        <source src={mp4Path} type="video/mp4" />
-        {hasCaptions ? (
-          <track
-            kind="captions"
-            src={captionsPath}
-            srcLang="en-GB"
-            label="English"
-            default
-          />
+    <div className="video-player">
+      <div className="video-player-frame">
+        <video
+          ref={videoRef}
+          className="video-player-media"
+          controls={hasStarted}
+          playsInline
+          preload="metadata"
+          poster={hasPoster && posterPath ? posterPath : undefined}
+        >
+          <source src={mp4Path} type="video/mp4" />
+          {hasCaptions ? (
+            <track
+              kind="captions"
+              src={captionsPath}
+              srcLang="en-GB"
+              label="English"
+              default
+            />
+          ) : null}
+          {fallbackMessage} <a href={mp4Path}>{directLinkLabel}</a>
+        </video>
+
+        {!hasStarted ? (
+          <button
+            type="button"
+            className="video-player-play"
+            aria-label={playLabel}
+            onClick={startPlayback}
+          >
+            <span className="video-player-play-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M9 5.5v17l14-8.5L9 5.5z" fill="currentColor" />
+              </svg>
+            </span>
+          </button>
         ) : null}
-        {fallbackMessage}{" "}
-        <a href={mp4Path}>{directLinkLabel}</a>
-      </video>
+      </div>
     </div>
   );
 }

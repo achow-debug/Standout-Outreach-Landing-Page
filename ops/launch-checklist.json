@@ -1,89 +1,41 @@
 {
-  "title": "Launch checklist — Legal Enquiry Review",
-  "generated_by": "Phase 6 hardening",
-  "note": "Engineering hardening is complete. Items below still need business assets, legal approval or live infrastructure before the Phase 6 exit condition is fully met.",
-  "engineering_complete": [
-    {
-      "id": "a11y-skip-link",
-      "status": "done",
-      "detail": "Skip link, focusable main, focus styles, overflow-wrap, disclosure focus"
-    },
-    {
-      "id": "failure-paths",
-      "status": "done",
-      "detail": "Video fallback, analytics swallow, form validation, duplicate-submit guard, n8n timeout/generic errors"
-    },
-    {
-      "id": "security-headers",
-      "status": "done",
-      "detail": "CSP, Referrer-Policy, Permissions-Policy, nosniff, frame denial, COOP; secrets check in prebuild"
-    },
-    {
-      "id": "metadata-canonical",
-      "status": "done",
-      "detail": "Title, description, canonical /, OG/Twitter, favicon, redirects from alternate routes"
-    },
-    {
-      "id": "copy-audit-tooling",
-      "status": "done",
-      "detail": "npm run check:copy writes ops/launch-readiness.json; no prohibited claim patterns in copy"
-    },
-    {
-      "id": "analytics-no-pii",
-      "status": "done",
-      "detail": "lead_id-only lead identifier; sanitised event props"
-    }
-  ],
-  "business_blockers": [
+  "title": "Launch checklist — redesign (improvements plan v2)",
+  "updated_at": "2026-07-12T22:20:00.000Z",
+  "plan": "improvements plan v2.md Phases 1–8",
+  "engineering_status": "complete",
+  "phases": {
+    "1_audit": "done",
+    "2_remove_long_form": "done",
+    "3_wordmark_hero": "done",
+    "4_video_focal": "done_code — awaiting production MP4/poster assets",
+    "5_credibility_block": "done",
+    "6_cta_modal_form": "done",
+    "7_footer_rhythm": "done",
+    "8_qa": "done — see ops/phase-8-verification.json and ops/final-acceptance.json"
+  },
+  "production_blockers": [
     {
       "id": "final-mp4",
       "status": "open",
-      "detail": "Upload compressed legal-enquiry-review.mp4"
+      "detail": "Add public/video/legal-enquiry-review.mp4 (real commercial breakdown)"
     },
     {
       "id": "final-poster",
       "status": "open",
-      "detail": "Upload optimised legal-enquiry-review-poster.webp (<150KB target)"
+      "detail": "Add public/video/legal-enquiry-review-poster.webp (real 16:9 preview, target <150KB)"
     },
     {
-      "id": "captions-transcript-proofread",
+      "id": "captions-proofread",
       "status": "open",
-      "detail": "Replace draft transcript and proofread VTT against final recording"
+      "detail": "Proofread VTT against the finished spoken recording once the MP4 exists"
     },
     {
-      "id": "proof-line",
+      "id": "n8n-webhook",
       "status": "open",
-      "detail": "Substantiate, revise or remove Staffordshire proof placeholder"
-    },
-    {
-      "id": "legal-entity",
-      "status": "open",
-      "detail": "Complete registered name, company number and address in site-config"
-    },
-    {
-      "id": "lawful-basis-retention",
-      "status": "open",
-      "detail": "Approve and insert lawful basis + retention in site-config"
-    },
-    {
-      "id": "processors",
-      "status": "open",
-      "detail": "List approved processors in site-config.privacy.processors"
-    },
-    {
-      "id": "n8n-sheet-email",
-      "status": "open",
-      "detail": "Production N8N_WEBHOOK_URL/SECRET, Enquiry Reviews sheet, SPF/DKIM/DMARC for achow@standoutgroup.net"
-    },
-    {
-      "id": "device-video-test",
-      "status": "open",
-      "detail": "Test final MP4 on real iPhone Safari and Android Chrome"
+      "detail": "Set N8N_WEBHOOK_URL and N8N_WEBHOOK_SECRET in production; sheet + SPF/DKIM/DMARC"
     }
   ],
-  "commands": {
-    "check_launch": "npm run check:launch",
-    "check_copy_strict": "node scripts/check-copy-audit.mjs --strict",
-    "build": "npm run build"
-  }
+  "not_blockers_for_redesign": [
+    "Company number / registered address — redesign footer is copyright-only by design"
+  ]
 }

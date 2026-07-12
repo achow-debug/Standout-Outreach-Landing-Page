@@ -1,16 +1,21 @@
 import { AnalyticsBootstrap } from "@/components/landing/analytics-bootstrap";
+import { EnquiryVideoPlayer } from "@/components/landing/enquiry-video-player";
 import { Hero } from "@/components/landing/hero";
-import { JourneyMechanism } from "@/components/landing/journey-mechanism";
 import { MinimalFooter } from "@/components/landing/minimal-footer";
-import { ReviewRequestForm } from "@/components/landing/review-request-form";
+import { ReassuranceBlock } from "@/components/landing/reassurance-block";
+import { ReviewRequestCta } from "@/components/landing/review-request-cta";
+import { VideoPosterPlaceholder } from "@/components/landing/video-poster-placeholder";
+import { landingCopy } from "@/lib/landing-copy";
+import { siteConfig } from "@/lib/site-config";
+import { getVideoAssetStatus } from "@/lib/video-assets";
 
-type HomePageProps = {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-};
-
-export default async function HomePage({ searchParams }: HomePageProps) {
-  const params = searchParams ? await searchParams : {};
-  const requestStatus = typeof params.request === "string" ? params.request : null;
+/**
+ * Redesign page shell. Phase 8 — responsive, accessibility and QA.
+ */
+export default function HomePage() {
+  const { video } = landingCopy;
+  const assets = siteConfig.video;
+  const status = getVideoAssetStatus();
 
   return (
     <>
@@ -18,18 +23,34 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <main id="main-content" tabIndex={-1}>
         <div className="page-shell">
           <Hero />
-        </div>
-        <JourneyMechanism />
-        <div className="page-shell">
-          <ReviewRequestForm
-            initialStatus={
-              requestStatus === "received"
-                ? "received"
-                : requestStatus === "error"
-                  ? "error"
-                  : null
-            }
-          />
+
+          <section
+            id="video"
+            className="video-section"
+            aria-label={video.sectionLabel}
+          >
+            {status.ready ? (
+              <EnquiryVideoPlayer
+                mp4Path={assets.mp4Path}
+                captionsPath={assets.captionsPath}
+                posterPath={status.poster ? assets.posterPath : null}
+                hasCaptions={status.captions}
+                hasPoster={status.poster}
+                fallbackMessage={video.fallbackMessage}
+                directLinkLabel={video.directLinkLabel}
+                playLabel={video.playLabel}
+              />
+            ) : (
+              <VideoPosterPlaceholder
+                title={video.posterTitle}
+                subtitle={video.posterSubtitle}
+              />
+            )}
+          </section>
+
+          <ReassuranceBlock />
+
+          <ReviewRequestCta />
         </div>
       </main>
       <MinimalFooter />

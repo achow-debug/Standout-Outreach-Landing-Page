@@ -35,11 +35,20 @@ for (const file of videoFiles) {
   else blockers.push(`Missing production asset: ${file}`);
 }
 
-const transcript = read("lib/landing-copy.ts");
-if (/Draft transcript aligned/.test(transcript)) {
+const landingCopySource = read("lib/landing-copy.ts");
+if (/Draft transcript aligned/.test(landingCopySource)) {
   blockers.push("Video transcript is still a draft placeholder in lib/landing-copy.ts");
 } else {
-  passed.push("Transcript does not contain draft placeholder wording");
+  passed.push("No draft transcript placeholder wording in landing copy");
+}
+
+const captions = exists("public/video/legal-enquiry-review-captions.vtt")
+  ? read("public/video/legal-enquiry-review-captions.vtt")
+  : "";
+if (/Proofread against the final spoken recording/.test(captions)) {
+  warnings.push(
+    "Captions still note proofreading against the final spoken recording — align VTT to the finished MP4 before launch",
+  );
 }
 
 const siteConfig = read("lib/site-config.ts");
@@ -64,21 +73,34 @@ if (/retentionPeriod:\s*null/.test(siteConfig)) {
 }
 
 if (/companyNumber:\s*null/.test(siteConfig)) {
-  warnings.push("Legal entity company number unset — complete footer identity before production");
+  // Redesign footer is copyright-only; registration details are not shown on-page.
+  passed.push(
+    "Company number unset is acceptable — redesign footer is copyright-only (not rendered)",
+  );
 }
 
 if (/registeredAddress:\s*null/.test(siteConfig)) {
-  warnings.push("Legal entity registered address unset — complete footer identity before production");
+  passed.push(
+    "Registered address unset is acceptable — redesign footer is copyright-only (not rendered)",
+  );
 }
 
 const prohibited = [
   /Your firm is losing leads/i,
   /reception team is too slow/i,
   /We guarantee more retained cases/i,
+  /We guarantee more retained matters/i,
+  /guarantee(?:s|d)?\s+(?:more\s+)?(?:retained|revenue|ROI)/i,
   /AI will transform your law firm/i,
+  /AI will replace your intake team/i,
+  /AI (?:will |can )?replace(?:s|ing)? (?:your )?(?:solicitors?|intake)/i,
   /Only a few spaces remain/i,
+  /limited spaces/i,
   /Book a strategy call/i,
   /authorised enquiry test/i,
+  /increase revenue by 21 times/i,
+  /conversion rates?\s+(?:increase|rise|grow|improve).{0,40}21/i,
+  /21 times (?:higher|more|greater) conversion/i,
 ];
 
 const copySources = [

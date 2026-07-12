@@ -6,13 +6,9 @@ import {
 
 export type AnalyticsEventName =
   | "landing_view"
-  | "hero_video_cta_click"
   | "video_play"
   | "video_progress"
   | "video_complete"
-  | "transcript_open"
-  | "review_scope_open"
-  | "example_finding_open"
   | "review_form_start"
   | "review_form_error"
   | "review_request_success";
@@ -48,7 +44,6 @@ const ALLOWED_PROP_KEYS = new Set([
   "milestone",
   "cta_location",
   "location",
-  "finding_id",
   "field",
   "error_category",
   "landing_path",

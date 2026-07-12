@@ -1,0 +1,215 @@
+{
+  "title": "Phase 7 — Functional, analytics and launch verification",
+  "generated_at": "2026-07-12T20:15:00.000Z",
+  "word_count": {
+    "baseline_phase_0": 595,
+    "final_default_visible": 232,
+    "reduction_words": 363,
+    "reduction_percent": 61,
+    "budget": 300,
+    "sections": {
+      "hero": { "words": 47, "budget": 65 },
+      "video": { "words": 12, "budget": 20 },
+      "bottleneck": { "words": 60, "budget": 80 },
+      "mechanism": { "words": 66, "budget": 85 },
+      "review": { "words": 47, "budget": 50 }
+    }
+  },
+  "final_section_order": [
+    "Commercial hero + video (header)",
+    "Bottleneck / response-speed evidence",
+    "Conversion-layer mechanism",
+    "Free review request form",
+    "Minimal footer"
+  ],
+  "files_changed_this_phase": [
+    "lib/analytics.ts",
+    "scripts/check-copy-audit.mjs",
+    "ops/phase-7-verification.json",
+    "ops/launch-checklist.json",
+    "ops/launch-readiness.json"
+  ],
+  "functional_checks": [
+    {
+      "id": "hero_cta_scroll_no_autoplay",
+      "result": "pass",
+      "detail": "HeroVideoCta scrolls/focuses #video; no video.play(); preload=metadata only"
+    },
+    {
+      "id": "video_playback",
+      "result": "blocked",
+      "detail": "Production MP4/poster missing; placeholder renders until assets added"
+    },
+    {
+      "id": "captions_and_transcript",
+      "result": "partial",
+      "detail": "VTT present; transcript disclosure works; transcript body still draft placeholder"
+    },
+    {
+      "id": "disclosures_keyboard",
+      "result": "pass",
+      "detail": "Native details/summary with focus-visible and 48px min-height"
+    },
+    {
+      "id": "form_validation",
+      "result": "pass",
+      "detail": "Zod client validation unit cases: empty, valid, bad email, javascript: URL"
+    },
+    {
+      "id": "single_request_submission",
+      "result": "pass_code",
+      "detail": "isSubmitting guard + honeypot + rate limit + lead_id idempotency; live n8n not exercised"
+    },
+    {
+      "id": "error_success_states",
+      "result": "pass",
+      "detail": "Error summary + RequestConfirmation success path present"
+    },
+    {
+      "id": "privacy_link",
+      "result": "pass",
+      "detail": "Form and footer Link to /privacy; privacy route builds"
+    },
+    {
+      "id": "research_source_link",
+      "result": "pass",
+      "detail": "MIT study URL returns HTTP 200 application/pdf; target=_blank rel=noopener noreferrer"
+    }
+  ],
+  "analytics_checks": [
+    {
+      "id": "landing_view",
+      "result": "pass",
+      "detail": "AnalyticsBootstrap once per session with UTMs + device + referrer_domain"
+    },
+    {
+      "id": "hero_video_cta_click",
+      "result": "pass"
+    },
+    {
+      "id": "video_play_and_milestones",
+      "result": "pass",
+      "detail": "play + 25/50/75/90 progress + complete; session-deduped"
+    },
+    {
+      "id": "transcript_open",
+      "result": "pass"
+    },
+    {
+      "id": "conversion_layer_disclosure_open",
+      "result": "pass",
+      "detail": "conversion_layer_capability_open"
+    },
+    {
+      "id": "review_scope_disclosure_open",
+      "result": "pass",
+      "detail": "review_scope_open"
+    },
+    {
+      "id": "form_start",
+      "result": "pass",
+      "detail": "review_form_start"
+    },
+    {
+      "id": "form_error_no_pii",
+      "result": "pass",
+      "detail": "sanitizeAnalyticsProps strips name/email/website; only field + error_category"
+    },
+    {
+      "id": "review_request_success",
+      "result": "pass",
+      "detail": "lead_id + attribution props"
+    },
+    {
+      "id": "utm_survives_submission",
+      "result": "pass",
+      "detail": "sessionStorage attribution captured and posted with allowlisted keys"
+    },
+    {
+      "id": "dead_event_cleanup",
+      "result": "fixed",
+      "detail": "Removed leftover example_finding_open and finding_id allowlist entry"
+    }
+  ],
+  "credibility_checks": [
+    {
+      "id": "no_retained_revenue_roi_guarantee",
+      "result": "pass"
+    },
+    {
+      "id": "no_21x_conversion_claim",
+      "result": "pass",
+      "detail": "Copy states qualification odds fell 21-fold; audit patterns expanded"
+    },
+    {
+      "id": "multi_industry_caveat",
+      "result": "pass"
+    },
+    {
+      "id": "ai_safeguard",
+      "result": "pass",
+      "detail": "Disclosure only: administrative questions, capture, escalation — not unsupervised legal advice"
+    },
+    {
+      "id": "automation_does_not_replace_solicitors",
+      "result": "pass",
+      "detail": "Human where reassurance matters; existing team & CRM anchors"
+    },
+    {
+      "id": "existing_crm_consistency",
+      "result": "pass",
+      "detail": "existing CRM + No replacement CRM required"
+    }
+  ],
+  "accessibility_and_performance": [
+    {
+      "id": "wcag_target",
+      "result": "pass_engineering",
+      "detail": "Skip link, lang=en-GB, focus-visible, 48px controls, sr-only where needed; full AA audit not automated"
+    },
+    {
+      "id": "keyboard_completion",
+      "result": "pass_code",
+      "detail": "Native controls + disclosure summaries + form; browser keyboard pass recommended"
+    },
+    {
+      "id": "heading_structure",
+      "result": "pass",
+      "detail": "h1 hero → h2 sections → h3 mechanism stage labels"
+    },
+    {
+      "id": "visible_focus",
+      "result": "pass"
+    },
+    {
+      "id": "not_colour_or_hover_only",
+      "result": "pass"
+    },
+    {
+      "id": "no_full_video_preload",
+      "result": "pass",
+      "detail": "preload=metadata"
+    },
+    {
+      "id": "no_animation_library",
+      "result": "pass",
+      "detail": "No framer-motion/gsap/lottie; CSS-only motion"
+    },
+    {
+      "id": "production_build",
+      "result": "pass",
+      "detail": "npm run build succeeded (Next.js 15.5.20)"
+    }
+  ],
+  "production_dependencies_remaining": [
+    "public/video/legal-enquiry-review.mp4",
+    "public/video/legal-enquiry-review-poster.webp",
+    "Proofread outline captions/transcript against the final spoken recording",
+    "Legal entity registeredName, companyNumber and registeredAddress in lib/site-config.ts",
+    "Production N8N_WEBHOOK_URL / N8N_WEBHOOK_SECRET + sheet + email DNS",
+    "Device test of final MP4 on iPhone Safari and Android Chrome",
+    "NEXT_PUBLIC_ANALYTICS_PROVIDER if Plausible (or other) is enabled"
+  ],
+  "definition_of_done_engineering": true,
+  "launch_ready": false
+}

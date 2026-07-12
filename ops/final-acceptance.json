@@ -1,0 +1,69 @@
+{
+  "title": "Final acceptance — improvements plan v2 (Phases 1–8)",
+  "generated_at": "2026-07-12T22:20:00.000Z",
+  "engineering_complete": true,
+  "launch_ready": false,
+  "summary": "All redesign phases are implemented and verified. Production launch still requires the real breakdown MP4, poster image, caption proofread against that recording, and live n8n webhook configuration.",
+  "commands": {
+    "typecheck": "pass",
+    "eslint": "pass",
+    "production_build": "pass",
+    "copy_audit": "pass_with_known_asset_blockers",
+    "browser_acceptance": "pass — 22/22 (scripts/final-acceptance-browser.mjs)"
+  },
+  "browser_acceptance": {
+    "overflow_375": "pass",
+    "overflow_430": "pass",
+    "overflow_768": "pass",
+    "overflow_1024": "pass",
+    "overflow_1440": "pass",
+    "single_h1": "pass",
+    "approved_h1": "pass",
+    "footer_exact": "pass",
+    "one_page_cta": "pass",
+    "dialog_present": "pass",
+    "no_banned_copy": "pass",
+    "no_privacy_link_on_landing": "pass",
+    "modal_opens": "pass",
+    "escape_closes_and_returns_focus": "pass",
+    "client_validation": "pass",
+    "reopen_preserves_draft": "pass",
+    "api_mock_success_response": "pass",
+    "success_state": "pass",
+    "reopen_after_success_is_fresh": "pass",
+    "server_error_state": "pass",
+    "duplicate_submit_guard": "pass",
+    "reassurance_stacks_on_mobile": "pass"
+  },
+  "final_checklist": [
+    { "item": "Distinctive black-to-purple Standout Group text wordmark", "status": "pass" },
+    { "item": "Watch the full breakdown eyebrow", "status": "pass" },
+    { "item": "Exact approved headline", "status": "pass" },
+    { "item": "Exact approved subheading", "status": "pass" },
+    { "item": "Clear responsive video thumbnail with play control", "status": "blocked_assets", "detail": "Player implemented; MP4 + poster not in public/video" },
+    { "item": "Exact credibility/risk-reduction line", "status": "pass" },
+    { "item": "Exact outcome line", "status": "pass" },
+    { "item": "One primary CTA in page content", "status": "pass" },
+    { "item": "CTA opens accessible on-screen modal", "status": "pass" },
+    { "item": "Four fields with labels and approved placeholders", "status": "pass" },
+    { "item": "Real submission flow preserved", "status": "pass", "detail": "Posts to /api/review-request; success/error/duplicate verified with route mocks" },
+    { "item": "Minimal exact footer", "status": "pass" },
+    { "item": "No nav/stats/process/accordion/transcript/extra content", "status": "pass" },
+    { "item": "Responsive at mobile/tablet/laptop/desktop", "status": "pass" },
+    { "item": "Keyboard and screen-reader fundamentals", "status": "pass" },
+    { "item": "Lint, type-check and production build", "status": "pass" }
+  ],
+  "production_blockers": [
+    "Add public/video/legal-enquiry-review.mp4",
+    "Add public/video/legal-enquiry-review-poster.webp",
+    "Proofread captions VTT against the finished spoken recording",
+    "Configure N8N_WEBHOOK_URL and N8N_WEBHOOK_SECRET for production delivery"
+  ],
+  "fixes_in_final_pass": [
+    "Hardened duplicate-submit guard with isSubmittingRef",
+    "Aligned copy-audit with copyright-only footer (company number/address not required on-page)",
+    "Removed unused review_scope_open analytics event",
+    "Added scripts/final-acceptance-browser.mjs and ops/final-acceptance.json",
+    "Updated ops/launch-checklist.json for redesign Phases 1–8"
+  ]
+}

@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
   if (!result.ok) {
     if (acceptsHtml) {
-      return NextResponse.redirect(new URL("/?request=error#request", request.url), {
+      return NextResponse.redirect(new URL("/?request=error", request.url), {
         status: 303,
       });
     }
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
 
   if (acceptsHtml) {
     return NextResponse.redirect(
-      new URL("/?request=received#request", request.url),
+      new URL("/?request=received", request.url),
       { status: 303 },
     );
   }

@@ -1,127 +1,84 @@
 /**
- * Centralised launch-direction copy for the Legal Enquiry Review landing page.
- * Edit copy here rather than inside component structure.
+ * Centralised copy for the Legal Enquiry Review landing page.
+ * Visible page copy must match the approved redesign deck exactly.
  */
 
 export const landingCopy = {
   meta: {
     title: "Legal Enquiry Review | Standout Group",
     description:
-      "A free, public-facing review of what a prospective client experiences between asking your firm for help and reaching the right person.",
+      "See how Standout Group helps UK law firms convert online demand. Watch the breakdown, then request your free enquiry review.",
   },
   hero: {
-    eyebrow: "FOR UK LAW FIRMS",
-    h1: "What happens after a prospective client decides to ask your firm for help?",
+    /** Visible wording; play icon is rendered separately in the UI. */
+    eyebrow: "Watch the full breakdown",
+    h1: "See how we help UK Law Firms convert online demand",
     supporting:
-      "A five-minute look at where a client's need for guidance meets the firm's real enquiry process.",
-    primaryCta: "Watch the 5-minute breakdown",
+      "A quick walkthrough of the exact innovative system we use to progress your online enquiries towards paying clients. Watch it, then request your free enquiry review.",
   },
   video: {
-    heading: "Watch: What happens between enquiry and response",
-    transcriptLabel: "Read video transcript",
-    transcript: `Draft transcript aligned to the five-minute outline. Replace with the proofread transcript of the final recording before launch.
-
-0:00–0:35 — A prospective client may arrive distressed, uncertain or unfamiliar with what to do next. The firm may be excellent once the right person is involved; this review looks at the journey required to reach them.
-
-0:35–1:20 — Two realities meet: the client’s need for guidance and reassurance, and the firm’s shared inboxes, reception routing, incomplete messages, competing priorities and unclear response ownership.
-
-1:20–2:15 — An observable example: a practice-area page, its call to action, the form it leads to, and what is—or is not—explained about the next step.
-
-2:15–3:25 — The review method separates observation and evidence from possible implication, then asks a question for the firm to verify—never assuming an internal problem from the public website alone.
-
-3:25–4:15 — You receive a short recorded walkthrough, annotated evidence and the priority questions needed to verify any operational or commercial implication.
-
-4:15–5:00 — The review uses only the public website. No system access, no test enquiry, and no call required. Request it below when you are ready.`,
+    sectionLabel: "Breakdown video",
+    playLabel: "Play the full breakdown",
     fallbackMessage:
       "This video could not be played in your browser. Open the MP4 directly to watch the breakdown.",
     directLinkLabel: "Open the video file directly",
-    posterTitle: "The five-minute breakdown",
-    posterSubtitle: "Enquiry to response — both sides of the journey",
+    /** Shown only when the MP4 is missing in non-production. */
+    posterTitle: "Breakdown video unavailable",
+    posterSubtitle:
+      "Add the MP4 and poster assets to public/video to preview the player.",
   },
-  mechanism: {
-    heading: "One journey. Seen from both sides.",
-    supporting:
-      "What the prospective client can see—and where the firm’s process needs to be verified.",
-    columnHeaders: {
-      client: "Prospective client",
-      stage: "Journey stage",
-      firm: "Firm reality",
-    },
-    stages: [
-      {
-        id: "service-page",
-        label: "Service page",
-        clientSignal: "Is this the right help?",
-        firmSignal: "Enquiry source",
-      },
-      {
-        id: "cta-form",
-        label: "Form",
-        clientSignal: "What should I explain?",
-        firmSignal: "Information required",
-      },
-      {
-        id: "handoff",
-        label: "Handoff",
-        clientSignal: "Has someone received it?",
-        firmSignal: "Ownership and routing",
-        emphasize: true,
-      },
-      {
-        id: "next-step",
-        label: "Response",
-        clientSignal: "What happens next?",
-        firmSignal: "Responsibility and visibility",
-      },
-    ],
-    deliverable:
-      "You receive a short recorded review, annotated observations and the questions needed to verify any possible implication.",
-    exampleFindingLabel: "See an example finding",
-    exampleFinding: {
-      observation:
-        "A family-law page directs visitors to the firm's general contact form.",
-      evidence:
-        "“Contact our team” opens /contact, which asks for basic contact details and a free-text message.",
-      implication:
-        "A prospective client may not know whether the enquiry has reached the relevant team or what happens next; the firm may need to route the message manually.",
-      question:
-        "How are these enquiries acknowledged, assigned and followed up today?",
-    },
+  reassurance: {
+    /** Dot-separated statements; joined for display, split for responsive stacking. */
+    credibilityItems: [
+      "Built for UK law firms",
+      "Works around your existing website and CRM",
+      "No replacement system required",
+    ] as const,
+    outcomeItems: [
+      "More qualified conversations",
+      "Less administration",
+      "Clearer marketing ROI",
+    ] as const,
+  },
+  cta: {
+    label: "Request your free enquiry review",
   },
   reviewRequest: {
     heading: "Request your free enquiry review",
-    supporting:
-      "Tell me which firm to review. I’ll look at one public journey and send you the evidence.",
     submitCta: "Request my free enquiry review",
     submittingCta: "Sending request…",
-    scopeLink: "See exactly what I review",
-    scopeDisclosure:
-      "I will review one relevant service page, its primary action, the public enquiry form it leads to, the guidance given before submission, the visible explanation of what happens next and the mobile experience. I will not submit a test enquiry. Any internal implication will be presented as a question to verify—not as an assumed fact.",
-    riskReversal: "Public website only · No access · No obligation",
-    privacyMicrocopyBeforeLink:
-      "By requesting a review, you agree that Standout Group may use these details to prepare and deliver it. See the ",
-    privacyMicrocopyAfterLink: ".",
     errorSummaryHeading: "Please correct the following:",
     submitError:
       "Something went wrong sending your request. Please try again in a moment.",
     fields: {
-      name: { label: "Name", autocomplete: "name" as const },
-      firmName: { label: "Firm name", autocomplete: "organization" as const },
-      workEmail: { label: "Work email", autocomplete: "email" as const },
+      name: {
+        label: "Name",
+        autocomplete: "name" as const,
+        placeholder: "Your name",
+      },
+      firmName: {
+        label: "Firm name",
+        autocomplete: "organization" as const,
+        placeholder: "Your firm name",
+      },
+      workEmail: {
+        label: "Work email",
+        autocomplete: "email" as const,
+        placeholder: "you@firm.co.uk",
+      },
       website: {
         label: "Website",
         autocomplete: "url" as const,
-        placeholder: "examplelegal.co.uk",
+        placeholder: "https://yourfirm.co.uk",
       },
     },
   },
   confirmation: {
     heading: "Your review request has been received.",
-    body: "I will check the website details and email you with the next step. You do not need to book a call or provide access to anything.",
+    body: "We'll check the website details and email you with the next step. You do not need to book a call or provide access to anything.",
   },
   footer: {
-    privacyLabel: "Privacy Notice",
-    locationNote: "Based in Staffordshire · Working with UK firms",
+    copyright: "© 2026 Standout Group. All rights reserved.",
   },
   privacyPage: {
     title: "Privacy Notice",

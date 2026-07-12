@@ -33,7 +33,7 @@ export function buildConfirmationEmail(payload: ReviewIdentity): {
     "",
     `Thank you for requesting a free Legal Enquiry Review for ${payload.firm_name} (${payload.website}).`,
     "",
-    "I will check the website details and email you with the next step. The review uses only publicly visible pages. It does not require system access, a test enquiry, or a call.",
+    "We’ll check the website details and email you with the next step. The review uses only publicly visible pages. It does not require system access, a test enquiry, or a call.",
   ];
 
   if (siteConfig.reviewDeliveryTiming) {
