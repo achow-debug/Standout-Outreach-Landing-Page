@@ -338,10 +338,10 @@ export function ReviewRequestForm({
         onBlur={handleBlur}
       />
 
-      <p className="request-submit">
+      <div className="request-submit">
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary request-submit-btn"
           disabled={isSubmitting}
           aria-busy={isSubmitting}
         >
@@ -349,7 +349,8 @@ export function ReviewRequestForm({
             ? reviewRequest.submittingCta
             : reviewRequest.submitCta}
         </button>
-      </p>
+        <p className="request-trust-line">{reviewRequest.trustLine}</p>
+      </div>
     </form>
   );
 }

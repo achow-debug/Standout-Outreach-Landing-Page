@@ -65,7 +65,15 @@ const scope = await page.evaluate(() => {
     h1Count: document.querySelectorAll("h1").length,
     h1: document.querySelector("h1")?.textContent?.trim() ?? "",
     footer: document.querySelector(".site-footer-copy")?.textContent?.trim() ?? "",
-    ctaCount: document.querySelectorAll(".cta-section .btn-cta").length,
+    ctaCount: [...document.querySelectorAll(".btn-cta")].filter((el) => {
+      let node = el;
+      while (node) {
+        const style = window.getComputedStyle(node);
+        if (style.display === "none" || style.visibility === "hidden") return false;
+        node = node.parentElement;
+      }
+      return true;
+    }).length,
     dialogCount: document.querySelectorAll("dialog.review-modal").length,
     banned: [
       "Book a strategy call",
@@ -90,8 +98,8 @@ record("dialog_present", scope.dialogCount === 1);
 record("no_banned_copy", scope.banned.length === 0, scope.banned.join(", "));
 record("no_privacy_link_on_landing", !scope.hasPrivacyLink);
 
-// Modal open / Escape / focus return
-await page.click(".btn-cta");
+// Modal open / Escape / focus return (mobile viewport → sticky dock CTA)
+await page.click(".mobile-cta-bar .btn-cta");
 const opened = await page.evaluate(() => ({
   open: document.querySelector("dialog.review-modal")?.open ?? false,
   modalOpen: document.documentElement.classList.contains("modal-open"),
@@ -113,7 +121,7 @@ record(
 );
 
 // Validation
-await page.click(".btn-cta");
+await page.click(".mobile-cta-bar .btn-cta");
 await page.click('button[type="submit"]');
 const validation = await page.evaluate(() => ({
   summary: Boolean(document.querySelector(".form-error-summary")),
@@ -129,13 +137,13 @@ record(
 await page.fill('input[name="name"]', "Alex Test");
 await page.keyboard.press("Escape");
 await page.waitForTimeout(80);
-await page.click(".btn-cta");
+await page.click(".mobile-cta-bar .btn-cta");
 const preserved = await page.inputValue('input[name="name"]');
 record("reopen_preserves_draft", preserved === "Alex Test", preserved);
 
 // Fresh page for submission-path tests (avoids leftover validation UI state)
 await gotoHome(390, 844);
-await page.click(".btn-cta");
+await page.click(".mobile-cta-bar .btn-cta");
 
 // Success path via mocked API
 await page.unroute("**/api/review-request").catch(() => {});
@@ -185,7 +193,7 @@ record(
 // Close after success remounts fresh form
 await page.keyboard.press("Escape");
 await page.waitForTimeout(100);
-await page.click(".btn-cta");
+await page.click(".mobile-cta-bar .btn-cta");
 const fresh = await page.evaluate(() => ({
   name: document.querySelector('input[name="name"]')?.value ?? null,
   success: Boolean(document.querySelector(".review-modal-success")),
@@ -222,7 +230,7 @@ record("server_error_state", serverError);
 
 // Duplicate-submit guard while in-flight (fresh page)
 await gotoHome(390, 844);
-await page.click(".btn-cta");
+await page.click(".mobile-cta-bar .btn-cta");
 await page.unroute("**/api/review-request").catch(() => {});
 let postCount = 0;
 await page.route("**/api/review-request", async (route) => {

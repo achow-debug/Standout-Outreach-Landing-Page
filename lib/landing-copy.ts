@@ -1,20 +1,19 @@
 /**
  * Centralised copy for the Legal Enquiry Review landing page.
- * Visible page copy must match the approved redesign deck exactly.
  */
 
 export const landingCopy = {
   meta: {
     title: "Legal Enquiry Review | Standout Group",
     description:
-      "See how Standout Group helps UK law firms convert online demand. Watch the breakdown, then request your free enquiry review.",
+      "Poor enquiry handling can cost UK law firms over £1 million a year in lost revenue. Watch how Standout Group’s review works, then request yours free.",
   },
   hero: {
-    /** Visible wording; play icon is rendered separately in the UI. */
-    eyebrow: "Watch the full breakdown",
-    h1: "See how we help UK Law Firms convert online demand",
+    audience: "Exclusively for UK Law Firms",
+    h1: "Is poor enquiry handling quietly costing your firm £1 million?",
     supporting:
-      "A quick walkthrough of the exact innovative system we use to progress your online enquiries towards paying clients. Watch it, then request your free enquiry review.",
+      "The average UK legal firm leaks over seven figures a year in lost revenue. Find out if you're one of them in 5 minutes.",
+    bridge: "Watch how, then request your free enquiry review",
   },
   video: {
     sectionLabel: "Breakdown video",
@@ -28,48 +27,62 @@ export const landingCopy = {
       "Add the MP4 and poster assets to public/video to preview the player.",
   },
   reassurance: {
-    /** Dot-separated statements; joined for display, split for responsive stacking. */
-    credibilityItems: [
-      "Built for UK law firms",
-      "Works around your existing website and CRM",
-      "No replacement system required",
-    ] as const,
-    outcomeItems: [
-      "More qualified conversations",
-      "Less administration",
-      "Clearer marketing ROI",
-    ] as const,
+    items: [
+      {
+        id: "data",
+        icon: "chart" as const,
+        title: "Data-Backed",
+        body: "100+ UK Law Firms analysed to build this engine.",
+      },
+      {
+        id: "enterprise",
+        icon: "lock" as const,
+        title: "Enterprise Grade",
+        body: "Built on isolated, bank-grade AI infrastructure.",
+      },
+      {
+        id: "compliance",
+        icon: "shield" as const,
+        title: "SRA Compliant",
+        body: "Fully GDPR & SRA conscious by design.",
+      },
+    ],
   },
   cta: {
     label: "Request your free enquiry review",
+    mobileLabel: "Request Free Review →",
+    microcopy:
+      "A free straight look at where your enquiries are being lost — you'll decide whether to take it further or not",
   },
   reviewRequest: {
     heading: "Request your free enquiry review",
-    submitCta: "Request my free enquiry review",
+    subtitle: "Where should we send your custom enquiry review?",
+    submitCta: "Request My Free Enquiry Review →",
     submittingCta: "Sending request…",
+    trustLine: "🔒 100% Free • No sales call required • No obligation to take it further",
     errorSummaryHeading: "Please correct the following:",
     submitError:
       "Something went wrong sending your request. Please try again in a moment.",
     fields: {
       name: {
-        label: "Name",
+        label: "Your Name",
         autocomplete: "name" as const,
-        placeholder: "Your name",
+        placeholder: "e.g. Sarah Jenkins",
       },
       firmName: {
-        label: "Firm name",
+        label: "Law Firm Name",
         autocomplete: "organization" as const,
-        placeholder: "Your firm name",
+        placeholder: "e.g. Smith & Partners Solicitors",
       },
       workEmail: {
-        label: "Work email",
+        label: "Work Email",
         autocomplete: "email" as const,
-        placeholder: "you@firm.co.uk",
+        placeholder: "sarah@smithlaw.co.uk",
       },
       website: {
-        label: "Website",
+        label: "Your Firm's Website",
         autocomplete: "url" as const,
-        placeholder: "https://yourfirm.co.uk",
+        placeholder: "smithlaw.co.uk",
       },
     },
   },

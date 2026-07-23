@@ -1,36 +1,48 @@
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
+import type { ReactNode } from "react";
+
+const ACCENT_SPAN = "text-[var(--color-accent)] font-extrabold";
+
+/** Wrap an exact phrase in the brand accent span; visible text unchanged. */
+function accentPhrase(text: string, phrase: string): ReactNode {
+  const index = text.indexOf(phrase);
+  if (index === -1) return text;
+  return (
+    <>
+      {text.slice(0, index)}
+      <span className={ACCENT_SPAN}>{phrase}</span>
+      {text.slice(index + phrase.length)}
+    </>
+  );
+}
 
 /**
- * Centred brand wordmark + offer copy.
- * Gradient lettering, capsule eyebrow and fluid type for Phase 3.
+ * Centred brand wordmark, audience capsule, headline and supporting copy.
  */
 export function Hero() {
   const { hero } = landingCopy;
+  const [standout, group] = siteConfig.businessName.split(" ");
 
   return (
-    <header className="hero-surface">
-      <p className="brand-mark">
-        <span className="brand-mark-name">{siteConfig.businessName}</span>
-      </p>
-
-      <p className="hero-eyebrow">
-        <span className="hero-eyebrow-icon" aria-hidden="true">
-          <svg
-            width="10"
-            height="10"
-            viewBox="0 0 10 10"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M2.25 1.2v7.6L8.5 5 2.25 1.2z" fill="currentColor" />
-          </svg>
+    <header className="hero-surface flex flex-col items-center gap-5 pt-8 pb-6 md:gap-6 md:pt-6 md:pb-8">
+      <p className="brand-mark text-center">
+        <span className="brand-mark-name">
+          {standout}{" "}
+          <span className="brand-mark-accent">{group}</span>
         </span>
-        <span className="hero-eyebrow-text">{hero.eyebrow}</span>
       </p>
 
-      <h1 className="hero-title">{hero.h1}</h1>
-      <p className="hero-supporting">{hero.supporting}</p>
+      <p className="hero-audience inline-block bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full text-center">
+        {hero.audience}
+      </p>
+
+      <h1 className="hero-title w-full text-center text-slate-950">
+        {accentPhrase(hero.h1, "£1 million")}
+      </h1>
+      <p className="hero-supporting w-full text-center text-slate-800">
+        {hero.supporting}
+      </p>
     </header>
   );
 }
