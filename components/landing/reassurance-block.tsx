@@ -1,4 +1,5 @@
 import { landingCopy } from "@/lib/landing-copy";
+import type { CSSProperties } from "react";
 
 type TrustIcon = (typeof landingCopy.reassurance.items)[number]["icon"];
 
@@ -48,13 +49,22 @@ function TrustSignalIcon({ name }: { name: TrustIcon }) {
  * Compact trust badges stacked under the video — icon + one short line each.
  */
 export function ReassuranceBlock() {
-  const { items } = landingCopy.reassurance;
+  const { items, methodology } = landingCopy.reassurance;
 
   return (
-    <section className="trust-grid" aria-label="Why firms trust this review">
+    <section
+      className="trust-grid"
+      aria-label="Why firms trust this review"
+      data-reveal
+    >
       <ul className="trust-grid-list">
-        {items.map((item) => (
-          <li key={item.id} className="trust-card">
+        {items.map((item, index) => (
+          <li
+            key={item.id}
+            className="trust-card"
+            data-reveal-child
+            style={{ "--reveal-index": index } as CSSProperties}
+          >
             <span className="trust-card-icon">
               <TrustSignalIcon name={item.icon} />
             </span>
@@ -69,6 +79,14 @@ export function ReassuranceBlock() {
           </li>
         ))}
       </ul>
+      <div className="trust-methodology">
+        <p className="trust-methodology-heading">{methodology.heading}</p>
+        {methodology.body.map((paragraph, index) => (
+          <p key={index} className="trust-methodology-body">
+            {paragraph}
+          </p>
+        ))}
+      </div>
     </section>
   );
 }

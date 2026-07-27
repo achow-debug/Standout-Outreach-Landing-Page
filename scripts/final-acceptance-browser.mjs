@@ -33,6 +33,17 @@ async function gotoHome(width = 1280, height = 900) {
   await page.goto(BASE_URL, { waitUntil: "networkidle" });
 }
 
+/** Scroll to the video so the deferred mobile sticky CTA unlocks. */
+async function unlockMobileStickyCta() {
+  await page.evaluate(() => {
+    document.getElementById("video")?.scrollIntoView({
+      block: "center",
+      behavior: "instant",
+    });
+  });
+  await page.waitForSelector(".mobile-cta-bar.is-visible", { timeout: 5000 });
+}
+
 // Overflow across plan widths
 for (const width of [375, 430, 768, 1024, 1440]) {
   await gotoHome(width, 900);
@@ -61,19 +72,14 @@ await gotoHome(390, 844);
 // Scope / copy
 const scope = await page.evaluate(() => {
   const text = document.body.innerText;
+  const sticky = document.querySelector(".mobile-cta-bar");
   return {
     h1Count: document.querySelectorAll("h1").length,
     h1: document.querySelector("h1")?.textContent?.trim() ?? "",
     footer: document.querySelector(".site-footer-copy")?.textContent?.trim() ?? "",
-    ctaCount: [...document.querySelectorAll(".btn-cta")].filter((el) => {
-      let node = el;
-      while (node) {
-        const style = window.getComputedStyle(node);
-        if (style.display === "none" || style.visibility === "hidden") return false;
-        node = node.parentElement;
-      }
-      return true;
-    }).length,
+    stickyDeferred: sticky
+      ? !sticky.classList.contains("is-visible")
+      : false,
     dialogCount: document.querySelectorAll("dialog.review-modal").length,
     banned: [
       "Book a strategy call",
@@ -81,22 +87,41 @@ const scope = await page.evaluate(() => {
       "MIT study",
       "Helping UK law firms convert more",
     ].filter((s) => text.toLowerCase().includes(s.toLowerCase())),
-    hasPrivacyLink: Boolean(document.querySelector('a[href="/privacy"]')),
+    hasPrivacyLinkInChrome: Boolean(
+      document.querySelector(
+        '.page-shell a[href="/privacy"], .site-footer a[href="/privacy"], .hero-surface a[href="/privacy"]',
+      ),
+    ),
   };
 });
 record("single_h1", scope.h1Count === 1, scope.h1);
 record(
   "approved_h1",
-  scope.h1 === "See how we help UK Law Firms convert online demand",
+  scope.h1 ===
+    "Is poor enquiry handling quietly costing your firm £1 million in lost revenue?",
 );
 record(
   "footer_exact",
   scope.footer === "© 2026 Standout Group. All rights reserved.",
 );
-record("one_page_cta", scope.ctaCount === 1);
+record("sticky_cta_deferred_until_video", scope.stickyDeferred);
 record("dialog_present", scope.dialogCount === 1);
 record("no_banned_copy", scope.banned.length === 0, scope.banned.join(", "));
-record("no_privacy_link_on_landing", !scope.hasPrivacyLink);
+record("no_privacy_link_on_landing_chrome", !scope.hasPrivacyLinkInChrome);
+
+await unlockMobileStickyCta();
+const unlockedCta = await page.evaluate(() => {
+  return [...document.querySelectorAll(".btn-cta")].filter((el) => {
+    let node = el;
+    while (node) {
+      const style = window.getComputedStyle(node);
+      if (style.display === "none" || style.visibility === "hidden") return false;
+      node = node.parentElement;
+    }
+    return true;
+  }).length;
+});
+record("one_page_cta", unlockedCta === 1, `visible=${unlockedCta}`);
 
 // Modal open / Escape / focus return (mobile viewport → sticky dock CTA)
 await page.click(".mobile-cta-bar .btn-cta");
@@ -106,6 +131,11 @@ const opened = await page.evaluate(() => ({
   fields: document.querySelectorAll(".request-form .field").length,
 }));
 record("modal_opens", opened.open && opened.modalOpen && opened.fields === 4);
+
+const privacyInModal = await page.evaluate(() =>
+  Boolean(document.querySelector("dialog.review-modal a[href='/privacy']")),
+);
+record("privacy_link_in_modal", privacyInModal);
 
 await page.keyboard.press("Escape");
 await page.waitForTimeout(120);
@@ -143,6 +173,7 @@ record("reopen_preserves_draft", preserved === "Alex Test", preserved);
 
 // Fresh page for submission-path tests (avoids leftover validation UI state)
 await gotoHome(390, 844);
+await unlockMobileStickyCta();
 await page.click(".mobile-cta-bar .btn-cta");
 
 // Success path via mocked API
@@ -185,7 +216,7 @@ const success = await page.evaluate(() => ({
 }));
 record(
   "success_state",
-  success.title === "Your review request has been received." &&
+  success.title === "Your pilot request has been received." &&
     Boolean(success.body),
   JSON.stringify(success),
 );
@@ -230,6 +261,7 @@ record("server_error_state", serverError);
 
 // Duplicate-submit guard while in-flight (fresh page)
 await gotoHome(390, 844);
+await unlockMobileStickyCta();
 await page.click(".mobile-cta-bar .btn-cta");
 await page.unroute("**/api/review-request").catch(() => {});
 let postCount = 0;
@@ -255,20 +287,22 @@ await page.evaluate(() => {
 await page.waitForSelector(".review-modal-success", { timeout: 5000 });
 record("duplicate_submit_guard", postCount === 1, `posts=${postCount}`);
 
-// Mobile reassurance stack
+// Mobile trust grid present
 await gotoHome(375, 812);
-const stack = await page.evaluate(() => {
-  const line = document.querySelector(".reassurance-credibility");
-  const sep = document.querySelector(".reassurance-sep");
+const trust = await page.evaluate(() => {
+  const grid = document.querySelector(".trust-grid-list");
+  const cards = document.querySelectorAll(".trust-card").length;
+  const methodology = document.querySelector(".trust-methodology")?.textContent?.trim() ?? "";
   return {
-    flexDirection: line ? getComputedStyle(line).flexDirection : null,
-    sepDisplay: sep ? getComputedStyle(sep).display : null,
+    display: grid ? getComputedStyle(grid).display : null,
+    cards,
+    methodology,
   };
 });
 record(
-  "reassurance_stacks_on_mobile",
-  stack.flexDirection === "column" && stack.sepDisplay === "none",
-  JSON.stringify(stack),
+  "trust_grid_on_mobile",
+  trust.display === "flex" && trust.cards === 3 && trust.methodology.length > 0,
+  JSON.stringify(trust),
 );
 
 const failed = report.checks.filter((c) => !c.pass);

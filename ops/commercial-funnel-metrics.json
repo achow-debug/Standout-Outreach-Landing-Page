@@ -104,6 +104,10 @@
   ],
   "supporting_behavioural_metrics": [
     {
+      "name": "Landing page view to bridge click",
+      "formula": "Unique bridge_to_video_click / unique landing_view"
+    },
+    {
       "name": "Landing page view to video play",
       "formula": "Unique video_play / unique landing_view"
     },
@@ -114,6 +118,14 @@
     {
       "name": "Video completion rate",
       "formula": "video_complete / video_play (session-unique play)"
+    },
+    {
+      "name": "CTA open rate",
+      "formula": "review_cta_open / unique landing_view (split by cta_location)"
+    },
+    {
+      "name": "CTA open to form start",
+      "formula": "review_form_start / review_cta_open"
     },
     {
       "name": "Video viewer to review-form start",

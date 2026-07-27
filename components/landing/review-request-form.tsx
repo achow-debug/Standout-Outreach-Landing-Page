@@ -12,7 +12,11 @@ import {
   ensureAttributionCaptured,
   type StoredAttribution,
 } from "@/lib/attribution";
-import { attributionProps, trackEvent } from "@/lib/analytics";
+import {
+  attributionProps,
+  getDeviceCategory,
+  trackEvent,
+} from "@/lib/analytics";
 import { landingCopy } from "@/lib/landing-copy";
 import {
   type FieldErrors,
@@ -94,6 +98,7 @@ export function ReviewRequestForm({
       trackEvent("review_form_start", {
         ...attributionProps(),
         cta_location: "page_modal",
+        device_category: getDeviceCategory(),
         landing_path:
           typeof window !== "undefined" ? window.location.pathname : "/",
       });
@@ -140,6 +145,7 @@ export function ReviewRequestForm({
           field: name,
           error_category: "validation",
           cta_location: "page_modal",
+          device_category: getDeviceCategory(),
         });
       }
       return;
@@ -182,6 +188,7 @@ export function ReviewRequestForm({
             field: "form",
             error_category: "validation",
             cta_location: "page_modal",
+            device_category: getDeviceCategory(),
           });
         } else {
           setFormError(data.error ?? reviewRequest.submitError);
@@ -189,6 +196,7 @@ export function ReviewRequestForm({
             field: "form",
             error_category: "submission",
             cta_location: "page_modal",
+            device_category: getDeviceCategory(),
           });
         }
         return;
@@ -199,6 +207,7 @@ export function ReviewRequestForm({
           lead_id: data.lead_id,
           ...attributionProps(),
           cta_location: "page_modal",
+          device_category: getDeviceCategory(),
           landing_path:
             typeof window !== "undefined" ? window.location.pathname : "/",
         });
@@ -212,6 +221,7 @@ export function ReviewRequestForm({
         field: "form",
         error_category: "network",
         cta_location: "page_modal",
+        device_category: getDeviceCategory(),
       });
     } finally {
       if (generation === submitGenerationRef.current) {
@@ -349,7 +359,29 @@ export function ReviewRequestForm({
             ? reviewRequest.submittingCta
             : reviewRequest.submitCta}
         </button>
-        <p className="request-trust-line">{reviewRequest.trustLine}</p>
+        <p className="request-trust-line">
+          <span className="request-trust-icon" aria-hidden="true">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="5" y="11" width="14" height="10" rx="2" />
+              <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+            </svg>
+          </span>
+          <span>{reviewRequest.trustLine}</span>
+        </p>
+        <p className="request-privacy-line">
+          <a href="/privacy" className="request-privacy-link">
+            {reviewRequest.privacyLinkLabel}
+          </a>
+        </p>
       </div>
     </form>
   );

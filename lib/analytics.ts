@@ -6,9 +6,11 @@ import {
 
 export type AnalyticsEventName =
   | "landing_view"
+  | "bridge_to_video_click"
   | "video_play"
   | "video_progress"
   | "video_complete"
+  | "review_cta_open"
   | "review_form_start"
   | "review_form_error"
   | "review_request_success";

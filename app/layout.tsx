@@ -1,5 +1,6 @@
 import { Source_Sans_3 } from "next/font/google";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { AnalyticsProviderScript } from "@/components/landing/analytics-provider-script";
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
@@ -64,6 +65,18 @@ export default function RootLayout({
   return (
     <html lang="en-GB" className={sourceSans.variable}>
       <body className="font-sans antialiased">
+        {/*
+          Enables CSS load/scroll motion only when JS runs and the visitor
+          has not requested reduced motion. Without this class, content stays
+          fully visible — no-JS never hides the value prop.
+        */}
+        <Script
+          id="motion-ok"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("motion-ok")}}catch(e){}})();`,
+          }}
+        />
         <a className="skip-link" href="#main-content">
           Skip to main content
         </a>

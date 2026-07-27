@@ -11,12 +11,88 @@ import {
   type MouseEvent,
   type ReactNode,
 } from "react";
+import { VIDEO_COMPLETE_EVENT } from "@/lib/landing-events";
 import { ReviewRequestForm } from "@/components/landing/review-request-form";
+import {
+  attributionProps,
+  getDeviceCategory,
+  trackEvent,
+} from "@/lib/analytics";
 import { landingCopy } from "@/lib/landing-copy";
+import { siteConfig } from "@/lib/site-config";
 
-type OpenFn = (trigger: HTMLButtonElement | null) => void;
+type CtaLocation = "inline_desktop" | "sticky_mobile";
+
+type OpenFn = (
+  trigger: HTMLButtonElement | null,
+  location: CtaLocation,
+) => void;
 
 const ReviewModalContext = createContext<OpenFn | null>(null);
+
+function useVideoCompleteFlag() {
+  const [complete, setComplete] = useState(false);
+
+  useEffect(() => {
+    function handleComplete() {
+      setComplete(true);
+    }
+
+    window.addEventListener(VIDEO_COMPLETE_EVENT, handleComplete);
+    return () => {
+      window.removeEventListener(VIDEO_COMPLETE_EVENT, handleComplete);
+    };
+  }, []);
+
+  return complete;
+}
+
+/**
+ * Unlocks the mobile sticky CTA once the visitor scrolls toward the video.
+ * Requires a small scroll so the dock never competes with the first impression,
+ * even when the video partially fits in the initial viewport.
+ * Fails open if the target is missing so conversion is never blocked.
+ */
+function useStickyCtaUnlocked() {
+  const [unlocked, setUnlocked] = useState(false);
+
+  useEffect(() => {
+    const target = document.getElementById("video");
+    if (!target) {
+      setUnlocked(true);
+      return;
+    }
+
+    const unlock = () => setUnlocked(true);
+
+    function check() {
+      const el = document.getElementById("video");
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      // First paint often shows part of the video; only unlock once the visitor
+      // has scrolled, or the video has moved into the active reading band.
+      const engaged =
+        window.scrollY >= 24 || rect.top < window.innerHeight * 0.45;
+      const videoApproaching = rect.top < window.innerHeight * 0.9;
+      if (engaged && videoApproaching) {
+        unlock();
+        window.removeEventListener("scroll", check);
+        window.removeEventListener("resize", check);
+      }
+    }
+
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    check();
+
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, []);
+
+  return unlocked;
+}
 
 /**
  * Owns the enquiry modal and exposes open() to the page CTA.
@@ -32,14 +108,26 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
   const [initialError, setInitialError] = useState<string | null>(null);
   const completedRef = useRef(false);
 
-  const openModal = useCallback((trigger: HTMLButtonElement | null) => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    lastTriggerRef.current = trigger;
-    if (dialog.open) return;
-    document.documentElement.classList.add("modal-open");
-    dialog.showModal();
-  }, []);
+  const openModal = useCallback(
+    (trigger: HTMLButtonElement | null, location: CtaLocation) => {
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      lastTriggerRef.current = trigger;
+      if (dialog.open) return;
+
+      trackEvent("review_cta_open", {
+        ...attributionProps(),
+        cta_location: location,
+        device_category: getDeviceCategory(),
+        landing_path:
+          typeof window !== "undefined" ? window.location.pathname : "/",
+      });
+
+      document.documentElement.classList.add("modal-open");
+      dialog.showModal();
+    },
+    [],
+  );
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -159,6 +247,12 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
                 tabIndex={-1}
               >
                 <p className="review-modal-success-body">{confirmation.body}</p>
+                {siteConfig.reviewDeliveryTiming ? (
+                  <p className="review-modal-success-timing">
+                    {confirmation.timingPrefix}{" "}
+                    {siteConfig.reviewDeliveryTiming}.
+                  </p>
+                ) : null}
               </div>
             ) : (
               <ReviewRequestForm
@@ -181,6 +275,7 @@ export function ReviewRequestCta() {
   const { cta } = landingCopy;
   const openModal = useContext(ReviewModalContext);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const videoComplete = useVideoCompleteFlag();
 
   if (!openModal) {
     throw new Error("ReviewRequestCta must be used inside ReviewRequestShell");
@@ -189,13 +284,19 @@ export function ReviewRequestCta() {
   return (
     <section
       className="cta-section hidden md:block"
-      aria-label="Request a review"
+      aria-label="Request a pilot"
+      data-reveal
     >
+      {videoComplete ? (
+        <p className="cta-after-video-cue" role="status">
+          {cta.afterVideoCue}
+        </p>
+      ) : null}
       <button
         ref={buttonRef}
         type="button"
         className="btn btn-primary btn-cta"
-        onClick={() => openModal(buttonRef.current)}
+        onClick={() => openModal(buttonRef.current, "inline_desktop")}
       >
         <span>{cta.label}</span>
         <span className="btn-cta-arrow" aria-hidden="true">
@@ -220,12 +321,14 @@ export function ReviewRequestCta() {
 }
 
 /**
- * Fixed bottom dock for mobile viewports — always-available conversion CTA.
+ * Fixed bottom dock for mobile — appears once the visitor reaches the video.
  */
 export function MobileStickyCta() {
   const { cta } = landingCopy;
   const openModal = useContext(ReviewModalContext);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const unlocked = useStickyCtaUnlocked();
+  const videoComplete = useVideoCompleteFlag();
 
   if (!openModal) {
     throw new Error("MobileStickyCta must be used inside ReviewRequestShell");
@@ -233,15 +336,23 @@ export function MobileStickyCta() {
 
   return (
     <div
-      className="mobile-cta-bar fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/80 bg-white/85 p-4 shadow-lg backdrop-blur-md md:hidden"
+      className={`mobile-cta-bar fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/80 bg-white/85 p-4 shadow-lg backdrop-blur-md md:hidden${unlocked ? " is-visible" : ""}`}
       role="region"
-      aria-label="Request a review"
+      aria-label="Request a pilot"
+      aria-hidden={!unlocked}
+      inert={!unlocked}
     >
+      {videoComplete ? (
+        <p className="mobile-cta-after-video-cue" role="status">
+          {cta.afterVideoCue}
+        </p>
+      ) : null}
       <button
         ref={buttonRef}
         type="button"
         className="btn btn-primary btn-cta mobile-cta-bar-btn"
-        onClick={() => openModal(buttonRef.current)}
+        tabIndex={unlocked ? 0 : -1}
+        onClick={() => openModal(buttonRef.current, "sticky_mobile")}
       >
         {cta.mobileLabel}
       </button>

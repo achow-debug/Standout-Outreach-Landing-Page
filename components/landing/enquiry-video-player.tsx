@@ -6,6 +6,7 @@ import {
   setSessionFlag,
   trackEvent,
 } from "@/lib/analytics";
+import { VIDEO_COMPLETE_EVENT } from "@/lib/landing-events";
 import { siteConfig } from "@/lib/site-config";
 
 const PROGRESS_MILESTONES = [25, 50, 75, 90] as const;
@@ -93,6 +94,7 @@ export function EnquiryVideoPlayer({
 
     const onEnded = () => {
       trackEvent("video_complete", videoMeta());
+      window.dispatchEvent(new CustomEvent(VIDEO_COMPLETE_EVENT));
     };
 
     const onError = () => {

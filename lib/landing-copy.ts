@@ -10,10 +10,10 @@ export const landingCopy = {
   },
   hero: {
     audience: "Exclusively for UK Law Firms",
-    h1: "Is poor enquiry handling quietly costing your firm £1 million?",
+    h1: "Is poor enquiry handling quietly costing your firm £1 million in lost revenue?",
     supporting:
-      "The average UK legal firm leaks over seven figures a year in lost revenue. Find out if you're one of them in 5 minutes.",
-    bridge: "Watch how, then request your free enquiry review",
+      "UK legal firms lose over seven figures a year in enquiries that are never followed up properly. Find out if yours is one of them in 5 minutes.",
+    bridge: "Watch how it works, then start your free 30-day pilot.",
   },
   video: {
     sectionLabel: "Breakdown video",
@@ -32,34 +32,46 @@ export const landingCopy = {
         id: "data",
         icon: "chart" as const,
         title: "Data-Backed",
-        body: "100+ UK Law Firms analysed to build this engine.",
+        body: "100+ UK Law Firms analysed to design this system",
       },
       {
         id: "enterprise",
         icon: "lock" as const,
         title: "Enterprise Grade",
-        body: "Built on isolated, bank-grade AI infrastructure.",
+        body: "Built using enterprise-grade AI infrastructure",
       },
       {
         id: "compliance",
         icon: "shield" as const,
         title: "SRA Compliant",
-        body: "Fully GDPR & SRA conscious by design.",
+        body: "Fully SRA and GDPR compliant by design",
       },
     ],
+    /** Risk-reversal explanation for the free 30-day pilot. */
+    methodology: {
+      heading: "Why is this free?",
+      body: [
+        "Because we're confident it works. We handle all the setup, for 30 days we run, measure, and share with you the results. If it doesn't move the needle, you've lost nothing. If it does, you decide whether to take it further.",
+        "No pressure. No obligation. We only work together if it makes sense for both of us.",
+      ],
+    },
   },
   cta: {
-    label: "Request your free enquiry review",
-    mobileLabel: "Request Free Review →",
+    label: "Start your free 30-day pilot",
+    mobileLabel: "Start Free 30-Day Pilot →",
     microcopy:
-      "A free straight look at where your enquiries are being lost — you'll decide whether to take it further or not",
+      "A free 30-day pilot to fix where your enquiries are being lost — you'll decide whether to take it further or not",
+    /** Shown once after the breakdown video finishes — static cue, no motion. */
+    afterVideoCue: "Ready when you are — start your free 30-day pilot below.",
   },
   reviewRequest: {
-    heading: "Request your free enquiry review",
-    subtitle: "Where should we send your custom enquiry review?",
-    submitCta: "Request My Free Enquiry Review →",
+    heading: "Start your free 30-day pilot",
+    subtitle: "Where should we send your free 30-day pilot details?",
+    submitCta: "Start My Free 30-Day Pilot →",
     submittingCta: "Sending request…",
-    trustLine: "🔒 100% Free • No sales call required • No obligation to take it further",
+    trustLine:
+      "100% Free • No sales call required • No obligation to take it further",
+    privacyLinkLabel: "Privacy notice",
     errorSummaryHeading: "Please correct the following:",
     submitError:
       "Something went wrong sending your request. Please try again in a moment.",
@@ -87,8 +99,10 @@ export const landingCopy = {
     },
   },
   confirmation: {
-    heading: "Your review request has been received.",
+    heading: "Your pilot request has been received.",
     body: "We'll check the website details and email you with the next step. You do not need to book a call or provide access to anything.",
+    /** Prefixed when siteConfig.reviewDeliveryTiming is set. */
+    timingPrefix: "Expected timing:",
   },
   footer: {
     copyright: "© 2026 Standout Group. All rights reserved.",

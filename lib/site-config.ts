@@ -10,7 +10,8 @@ export const siteConfig = {
   /** Canonical route for this dedicated outreach microsite */
   canonicalPath: "/",
   /**
-   * Legacy proof line retained for audit scripts; not rendered on the redesigned page.
+   * Legacy proof line retained for audit scripts; methodology copy on the page
+   * lives in landingCopy.reassurance.methodology.
    */
   proofLine:
     "Evidence before recommendations · No replacement CRM required",
@@ -18,6 +19,7 @@ export const siteConfig = {
   /**
    * Optional delivery timing for confirmation email/page.
    * Leave null until the business can consistently meet a stated period.
+   * Example once ready: "within 3 business days"
    */
   reviewDeliveryTiming: null as string | null,
   video: {
