@@ -41,7 +41,7 @@ async function unlockMobileStickyCta() {
       behavior: "instant",
     });
   });
-  await page.waitForSelector(".mobile-cta-bar.is-visible", { timeout: 5000 });
+  await page.waitForSelector(".mobile-sticky-cta-wrapper.is-visible", { timeout: 5000 });
 }
 
 // Overflow across plan widths
@@ -72,7 +72,7 @@ await gotoHome(390, 844);
 // Scope / copy
 const scope = await page.evaluate(() => {
   const text = document.body.innerText;
-  const sticky = document.querySelector(".mobile-cta-bar");
+  const sticky = document.querySelector(".mobile-sticky-cta-wrapper");
   return {
     h1Count: document.querySelectorAll("h1").length,
     h1: document.querySelector("h1")?.textContent?.trim() ?? "",
@@ -98,7 +98,7 @@ record("single_h1", scope.h1Count === 1, scope.h1);
 record(
   "approved_h1",
   scope.h1 ===
-    "Is poor enquiry handling quietly costing your firm £1 million in lost revenue?",
+    "Our analysis of 100+ UK law firms found 70% are losing over £100K a year to unfollowed enquiries",
 );
 record(
   "footer_exact",
@@ -124,7 +124,7 @@ const unlockedCta = await page.evaluate(() => {
 record("one_page_cta", unlockedCta === 1, `visible=${unlockedCta}`);
 
 // Modal open / Escape / focus return (mobile viewport → sticky dock CTA)
-await page.click(".mobile-cta-bar .btn-cta");
+await page.click(".mobile-sticky-cta-wrapper .btn-cta");
 const opened = await page.evaluate(() => ({
   open: document.querySelector("dialog.review-modal")?.open ?? false,
   modalOpen: document.documentElement.classList.contains("modal-open"),
@@ -151,7 +151,7 @@ record(
 );
 
 // Validation
-await page.click(".mobile-cta-bar .btn-cta");
+await page.click(".mobile-sticky-cta-wrapper .btn-cta");
 await page.click('button[type="submit"]');
 const validation = await page.evaluate(() => ({
   summary: Boolean(document.querySelector(".form-error-summary")),
@@ -167,14 +167,14 @@ record(
 await page.fill('input[name="name"]', "Alex Test");
 await page.keyboard.press("Escape");
 await page.waitForTimeout(80);
-await page.click(".mobile-cta-bar .btn-cta");
+await page.click(".mobile-sticky-cta-wrapper .btn-cta");
 const preserved = await page.inputValue('input[name="name"]');
 record("reopen_preserves_draft", preserved === "Alex Test", preserved);
 
 // Fresh page for submission-path tests (avoids leftover validation UI state)
 await gotoHome(390, 844);
 await unlockMobileStickyCta();
-await page.click(".mobile-cta-bar .btn-cta");
+await page.click(".mobile-sticky-cta-wrapper .btn-cta");
 
 // Success path via mocked API
 await page.unroute("**/api/review-request").catch(() => {});
@@ -224,7 +224,7 @@ record(
 // Close after success remounts fresh form
 await page.keyboard.press("Escape");
 await page.waitForTimeout(100);
-await page.click(".mobile-cta-bar .btn-cta");
+await page.click(".mobile-sticky-cta-wrapper .btn-cta");
 const fresh = await page.evaluate(() => ({
   name: document.querySelector('input[name="name"]')?.value ?? null,
   success: Boolean(document.querySelector(".review-modal-success")),
@@ -262,7 +262,7 @@ record("server_error_state", serverError);
 // Duplicate-submit guard while in-flight (fresh page)
 await gotoHome(390, 844);
 await unlockMobileStickyCta();
-await page.click(".mobile-cta-bar .btn-cta");
+await page.click(".mobile-sticky-cta-wrapper .btn-cta");
 await page.unroute("**/api/review-request").catch(() => {});
 let postCount = 0;
 await page.route("**/api/review-request", async (route) => {
@@ -303,6 +303,44 @@ record(
   "trust_grid_on_mobile",
   trust.display === "flex" && trust.cards === 3 && trust.methodology.length > 0,
   JSON.stringify(trust),
+);
+
+// Sticky dock stays visible through trust (before footer clearance)
+await unlockMobileStickyCta();
+await page.evaluate(() => {
+  document.querySelector(".trust-grid")?.scrollIntoView({
+    block: "start",
+    behavior: "instant",
+  });
+});
+await page.waitForTimeout(120);
+const stickyThroughTrust = await page.evaluate(() => {
+  const sticky = document.querySelector(".mobile-sticky-cta-wrapper");
+  const footer = document.querySelector(".site-footer");
+  if (!sticky || !footer) {
+    return { pass: false, detail: "missing sticky or footer" };
+  }
+  const dockClearance =
+    (Number.parseFloat(
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--mobile-sticky-cta-height")
+        .trim(),
+    ) || 88) + 24;
+  const footerTop = footer.getBoundingClientRect().top;
+  // Matches observer: landmark must enter the area above the dock.
+  const inClearance = footerTop < window.innerHeight - dockClearance;
+  const visible = sticky.classList.contains("is-visible");
+  return {
+    // Require trust scroll position to be outside footer clearance, then
+    // the dock must still be visible (the regression this check guards).
+    pass: !inClearance && visible,
+    detail: `is-visible=${visible} footerTop=${Math.round(footerTop)} inClearance=${inClearance}`,
+  };
+});
+record(
+  "sticky_cta_visible_through_trust",
+  stickyThroughTrust.pass,
+  stickyThroughTrust.detail,
 );
 
 const failed = report.checks.filter((c) => !c.pass);

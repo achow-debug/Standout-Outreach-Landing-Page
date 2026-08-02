@@ -94,6 +94,87 @@ function useStickyCtaUnlocked() {
   return unlocked;
 }
 
+/** True when an element participates in layout (not `display: none`). */
+function isLayoutVisible(el: Element): boolean {
+  return window.getComputedStyle(el).display !== "none";
+}
+
+/**
+ * Sticky dock visibility after unlock:
+ * visible through video / trust / methodology; hide only in a small clearance
+ * zone around an equivalent on-screen CTA or the footer (not when merely
+ * reading trust). Modal open is handled separately via `html.modal-open`.
+ */
+function useStickyCtaSuppressed() {
+  const [suppressed, setSuppressed] = useState(false);
+
+  useEffect(() => {
+    let observer: IntersectionObserver | null = null;
+
+    function clearanceRootMargin(): string {
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue("--mobile-sticky-cta-height")
+        .trim();
+      const dockPx = Number.parseFloat(raw) || 88;
+      // Shrink the root from the bottom by the dock footprint so we only
+      // suppress when the landmark enters the area above the dock (about to
+      // be covered) — not while it merely peeks under the dock on short pages.
+      return `0px 0px -${dockPx + 24}px 0px`;
+    }
+
+    function collectTargets(): Element[] {
+      const targets: Element[] = [];
+      const footer = document.querySelector(".site-footer");
+      if (footer instanceof Element) targets.push(footer);
+
+      // Equivalent in-page CTA only when it is a real on-screen peer.
+      // On mobile `#final-cta` is `hidden md:block` — must not suppress.
+      const finalCta = document.getElementById("final-cta");
+      if (finalCta instanceof Element && isLayoutVisible(finalCta)) {
+        targets.push(finalCta);
+      }
+      return targets;
+    }
+
+    function bind() {
+      observer?.disconnect();
+      observer = null;
+
+      const targets = collectTargets();
+      if (targets.length === 0) {
+        setSuppressed(false);
+        return;
+      }
+
+      const visibility = new Map<Element, boolean>();
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            visibility.set(entry.target, entry.isIntersecting);
+          }
+          setSuppressed([...visibility.values()].some(Boolean));
+        },
+        { root: null, threshold: 0, rootMargin: clearanceRootMargin() },
+      );
+
+      for (const target of targets) {
+        visibility.set(target, false);
+        observer.observe(target);
+      }
+    }
+
+    bind();
+    // Re-bind when `#final-cta` crosses the md visibility breakpoint.
+    window.addEventListener("resize", bind);
+    return () => {
+      window.removeEventListener("resize", bind);
+      observer?.disconnect();
+    };
+  }, []);
+
+  return suppressed;
+}
+
 /**
  * Owns the enquiry modal and exposes open() to the page CTA.
  */
@@ -283,6 +364,7 @@ export function ReviewRequestCta() {
 
   return (
     <section
+      id="final-cta"
       className="cta-section hidden md:block"
       aria-label="Request a pilot"
       data-reveal
@@ -321,14 +403,28 @@ export function ReviewRequestCta() {
 }
 
 /**
- * Fixed bottom dock for mobile — appears once the visitor reaches the video.
+ * Fixed bottom dock for mobile — unlocks near the video, stays visible through
+ * trust/methodology, and hides only in the clearance zone around a visible
+ * equivalent in-page CTA or the footer (also hidden while the modal is open).
  */
 export function MobileStickyCta() {
   const { cta } = landingCopy;
   const openModal = useContext(ReviewModalContext);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const unlocked = useStickyCtaUnlocked();
+  const suppressed = useStickyCtaSuppressed();
   const videoComplete = useVideoCompleteFlag();
+  const isVisible = unlocked && !suppressed;
+
+  useEffect(() => {
+    document.documentElement.classList.toggle(
+      "sticky-cta-clearance",
+      isVisible,
+    );
+    return () => {
+      document.documentElement.classList.remove("sticky-cta-clearance");
+    };
+  }, [isVisible]);
 
   if (!openModal) {
     throw new Error("MobileStickyCta must be used inside ReviewRequestShell");
@@ -336,26 +432,28 @@ export function MobileStickyCta() {
 
   return (
     <div
-      className={`mobile-cta-bar fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/80 bg-white/85 p-4 shadow-lg backdrop-blur-md md:hidden${unlocked ? " is-visible" : ""}`}
+      className={`mobile-sticky-cta-wrapper md:hidden${isVisible ? " is-visible" : ""}`}
       role="region"
       aria-label="Request a pilot"
-      aria-hidden={!unlocked}
-      inert={!unlocked}
+      aria-hidden={!isVisible}
+      inert={!isVisible}
     >
-      {videoComplete ? (
-        <p className="mobile-cta-after-video-cue" role="status">
-          {cta.afterVideoCue}
-        </p>
-      ) : null}
-      <button
-        ref={buttonRef}
-        type="button"
-        className="btn btn-primary btn-cta mobile-cta-bar-btn"
-        tabIndex={unlocked ? 0 : -1}
-        onClick={() => openModal(buttonRef.current, "sticky_mobile")}
-      >
-        {cta.mobileLabel}
-      </button>
+      <div className="mobile-sticky-cta">
+        {videoComplete ? (
+          <p className="mobile-cta-after-video-cue" role="status">
+            {cta.afterVideoCue}
+          </p>
+        ) : null}
+        <button
+          ref={buttonRef}
+          type="button"
+          className="btn btn-primary btn-cta mobile-cta-bar-btn"
+          tabIndex={isVisible ? 0 : -1}
+          onClick={() => openModal(buttonRef.current, "sticky_mobile")}
+        >
+          {cta.mobileLabel}
+        </button>
+      </div>
     </div>
   );
 }

@@ -63,12 +63,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-GB" className={sourceSans.variable}>
+    <html lang="en-GB" className={sourceSans.variable} suppressHydrationWarning>
       <body className="font-sans antialiased">
         {/*
           Enables CSS load/scroll motion only when JS runs and the visitor
           has not requested reduced motion. Without this class, content stays
           fully visible — no-JS never hides the value prop.
+          Runs before paint; suppressHydrationWarning on <html> allows the
+          early `motion-ok` class without a React hydration mismatch.
         */}
         <Script
           id="motion-ok"

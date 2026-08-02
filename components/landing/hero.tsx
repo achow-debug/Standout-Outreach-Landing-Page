@@ -38,10 +38,10 @@ export function Hero() {
       </p>
 
       <h1 className="hero-title motion-enter motion-enter--2 w-full text-center text-slate-950">
-        {accentPhrase(hero.h1, "£1 million")}
+        {accentPhrase(hero.h1, "£100K")}
       </h1>
       <p className="hero-supporting motion-enter motion-enter--3 w-full text-center text-slate-800">
-        {accentPhrase(hero.supporting, "seven figures")}
+        {accentPhrase(hero.supporting, "£100K")}
       </p>
     </header>
   );

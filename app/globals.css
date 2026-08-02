@@ -33,6 +33,8 @@
   --shadow-soft: 0 10px 30px -5px rgb(15 23 42 / 5%);
   --shadow-cta: 0 8px 20px -6px rgb(107 44 95 / 35%);
   --control-min-height: 3rem; /* 48px — WCAG / mobile tap target */
+  /* Sticky dock surface (button + padding); cue may grow it — clearance includes buffer */
+  --mobile-sticky-cta-height: 88px;
 }
 
 @theme inline {
@@ -80,12 +82,6 @@ html {
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .mobile-cta-bar {
-    background: #fff;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
   .review-modal::backdrop {
     background: rgb(15 23 42 / 85%);
     backdrop-filter: none;
@@ -171,7 +167,6 @@ html.motion-ok [data-reveal].is-revealed [data-reveal-child] {
 
 body {
   margin: 0;
-  min-height: 100vh;
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.55;
@@ -213,8 +208,21 @@ a:hover {
   margin-inline: auto;
   padding-inline: 1rem; /* px-4 */
   padding-top: 2rem; /* breathing room above logo — mobile + base */
-  /* padding-bottom left to Tailwind on the content shell (pb-36 / md:pb-8) */
+  /* padding-bottom: Tailwind pb-12 (48px) mobile / md:pb-8 — natural footer rhythm */
   box-sizing: border-box;
+}
+
+/*
+  Single mobile sticky-CTA clearance. Applied only while the dock is visible
+  (html.sticky-cta-clearance), so the footer gap collapses when the dock hides.
+  Scoped to main so the footer’s .page-shell is not inflated.
+*/
+@media (max-width: 767px) {
+  html.sticky-cta-clearance main .page-shell {
+    padding-bottom: calc(
+      var(--mobile-sticky-cta-height) + 24px + env(safe-area-inset-bottom, 0px)
+    );
+  }
 }
 
 @media (min-width: 640px) {
@@ -816,7 +824,7 @@ a:hover {
 
 /* —— Sticky mobile CTA dock —— */
 
-.mobile-cta-bar {
+.mobile-sticky-cta-wrapper {
   display: block;
   position: fixed;
   bottom: 0;
@@ -824,26 +832,40 @@ a:hover {
   right: 0;
   z-index: 50;
   width: 100%;
-  padding: 1rem;
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-  background: rgb(255 255 255 / 85%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgb(226 232 240 / 80%); /* slate-200/80 */
-  box-shadow: 0 -8px 24px -8px rgb(15 23 42 / 12%);
+  max-width: 100%;
+  padding-inline: 1rem;
+  padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
   /* Deferred until the video section enters view */
-  transform: translateY(100%);
+  transform: translateY(calc(100% + 12px));
   visibility: hidden;
   pointer-events: none;
+  opacity: 0;
   transition:
     transform 0.25s ease-out,
+    opacity 0.2s ease-out,
     visibility 0.25s;
 }
 
-.mobile-cta-bar.is-visible {
+.mobile-sticky-cta-wrapper.is-visible {
   transform: translateY(0);
   visibility: visible;
   pointer-events: auto;
+  opacity: 1;
+}
+
+.mobile-sticky-cta {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.75rem;
+  background: rgb(255 255 255 / 92%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgb(226 232 240 / 80%);
+  border-radius: 0.75rem;
+  box-shadow: 0 -4px 24px -8px rgb(15 23 42 / 14%);
+  box-sizing: border-box;
 }
 
 .mobile-cta-after-video-cue {
@@ -902,23 +924,32 @@ a:hover {
 }
 
 @media (min-width: 768px) {
-  .mobile-cta-bar {
+  .mobile-sticky-cta-wrapper {
     display: none;
   }
 }
 
-html.modal-open .mobile-cta-bar {
+html.modal-open .mobile-sticky-cta-wrapper {
   visibility: hidden;
   pointer-events: none;
+  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mobile-cta-bar {
+  .mobile-sticky-cta-wrapper {
     transition: none;
   }
 
-  .mobile-cta-bar:not(.is-visible) {
+  .mobile-sticky-cta-wrapper:not(.is-visible) {
     transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .mobile-sticky-cta {
+    background: #fff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
 
@@ -1275,19 +1306,54 @@ html.modal-open {
   }
 }
 
+/* Small phones: edge-to-edge form takeover (no floating card). */
+@media (max-width: 479px) {
+  .review-modal {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .review-modal-panel {
+    height: 100%;
+    max-height: none;
+    min-height: 0;
+  }
+
+  .review-modal-header {
+    padding-top: max(1.25rem, env(safe-area-inset-top, 0px));
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+  }
+
+  .review-modal-body {
+    flex: 1;
+    min-height: 0;
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+    /* bottom safe-area already on the base .review-modal-body rule */
+  }
+}
+
 /* —— Phase 7: minimal footer + page rhythm —— */
 
 .site-footer {
   border-top: 1px solid color-mix(in srgb, var(--color-line) 65%, transparent);
   background: transparent;
-  /* Extra bottom space on mobile so copyright clears the sticky CTA dock */
-  padding: 1rem 1rem calc(6.5rem + env(safe-area-inset-bottom, 0px));
+  /* Compact mobile padding — sticky clearance lives on .page-shell while dock is visible */
+  padding: 1.5rem 1rem;
   text-align: center;
 }
 
 /* Footer reuses .page-shell for horizontal inset — do not inherit its logo top padding */
 .site-footer .page-shell {
   padding-top: 0;
+  padding-bottom: 0;
 }
 
 @media (min-width: 768px) {

@@ -8,9 +8,24 @@ Required production files in this folder:
 | `legal-enquiry-review-captions.vtt` | WebVTT captions |
 | `legal-enquiry-review-poster.webp` | Real 16:9 poster preview (target under 150KB) — not a flat gradient |
 
+## Current status (external media delivery)
+
+Captions are in-repo. **MP4 and poster are not** — they are an external media
+delivery blocker, not a code defect. Do not commit invented placeholder MP4/WebP
+binaries that fake production readiness. Drop the final encoded files here using
+the exact filenames above, then re-run:
+
+```bash
+npm run check:video
+npm run check:launch
+```
+
+Until those files exist, `ops/launch-readiness.json` correctly reports
+`launch_ready: false` with the two missing-asset blockers.
+
 ## Behaviour
 
-- **Non-production:** If the MP4 is missing, the page shows a clearly labelled unavailable state. It does not pretend a finished thumbnail is present.
+- **Non-production:** If the MP4 is missing, the page shows a clearly labelled unavailable state. It does not pretend a finished thumbnail is present, and it does not request the missing MP4/poster (no media 404 console spam).
 - **Production / enforced:** `npm run build` fails when assets are missing (`VERCEL_ENV=production` or `REQUIRE_VIDEO_ASSETS=1`).
 
 ```bash

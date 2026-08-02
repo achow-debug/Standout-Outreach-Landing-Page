@@ -80,7 +80,9 @@ export function ReassuranceBlock() {
         ))}
       </ul>
       <div className="trust-methodology">
-        <p className="trust-methodology-heading">{methodology.heading}</p>
+        {methodology.heading ? (
+          <p className="trust-methodology-heading">{methodology.heading}</p>
+        ) : null}
         {methodology.body.map((paragraph, index) => (
           <p key={index} className="trust-methodology-body">
             {paragraph}

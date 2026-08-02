@@ -10,10 +10,10 @@ export const landingCopy = {
   },
   hero: {
     audience: "Exclusively for UK Law Firms",
-    h1: "Is poor enquiry handling quietly costing your firm £1 million in lost revenue?",
+    h1: "Our analysis of 100+ UK law firms found 70% are losing over £100K a year to unfollowed enquiries",
     supporting:
-      "UK legal firms lose over seven figures a year in enquiries that are never followed up properly. Find out if yours is one of them in 5 minutes.",
-    bridge: "Watch how it works, then start your free 30-day pilot.",
+      "Most of that comes down to slow or inconsistent follow-up — not a lack of leads. Starting your free pilot takes about 5 minutes.",
+    bridge: "Watch how it works.",
   },
   video: {
     sectionLabel: "Breakdown video",
@@ -35,10 +35,10 @@ export const landingCopy = {
         body: "100+ UK Law Firms analysed to design this system",
       },
       {
-        id: "enterprise",
+        id: "response-time",
         icon: "lock" as const,
-        title: "Enterprise Grade",
-        body: "Built using enterprise-grade AI infrastructure",
+        title: "5-Minute Follow-Up",
+        body: "Enquiries followed up within 5 minutes",
       },
       {
         id: "compliance",
@@ -49,9 +49,9 @@ export const landingCopy = {
     ],
     /** Risk-reversal explanation for the free 30-day pilot. */
     methodology: {
-      heading: "Why is this free?",
+      heading: "",
       body: [
-        "Because we're confident it works. We handle all the setup, for 30 days we run, measure, and share with you the results. If it doesn't move the needle, you've lost nothing. If it does, you decide whether to take it further.",
+        "We handle all the setup. For 30 days, we run, measure, and share the results with you.",
         "No pressure. No obligation. We only work together if it makes sense for both of us.",
       ],
     },

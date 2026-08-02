@@ -27,9 +27,9 @@ export default function HomePage() {
     <>
       <AnalyticsBootstrap />
       <MotionBootstrap />
-      <main id="main-content" tabIndex={-1} className="md:pb-0">
+      <main id="main-content" tabIndex={-1}>
         <ReviewRequestShell>
-          <div className="page-shell flex flex-col items-center gap-5 pb-36 md:gap-8 md:pb-8">
+          <div className="page-shell flex flex-col items-center gap-5 pb-12 md:gap-8 md:pb-8">
             <Hero />
 
             <div data-reveal>
