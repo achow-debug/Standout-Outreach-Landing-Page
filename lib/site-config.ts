@@ -17,9 +17,11 @@ export const siteConfig = {
     "Evidence before recommendations · No replacement CRM required",
   proofLineIsPlaceholder: false,
   /**
-   * Optional delivery timing for confirmation email/page.
-   * Leave null until the business can consistently meet a stated period.
-   * Example once ready: "within 3 business days"
+   * Optional extra timing line for confirmation email/page.
+   * Leave null while the default “within one business day” SLA in
+   * landingCopy.confirmation / review-request-emails is enough.
+   * If set, it must not contradict that one-business-day response promise
+   * (e.g. prefer clarifying detail, not a longer conflicting period).
    */
   reviewDeliveryTiming: null as string | null,
   video: {
@@ -38,9 +40,9 @@ export const siteConfig = {
      * controller path until the formal registered entity is published).
      */
     lawfulBasis:
-      "Review requests and related correspondence are processed because they are necessary to take steps at your request before a potential contract, and to pursue our legitimate interest in delivering and improving the review service in a way that does not override your rights.",
+      "Pilot requests and related correspondence are processed because they are necessary to take steps at your request before a potential contract, and to pursue our legitimate interest in reviewing suitability for the free 30-day pilot and communicating about that request in a way that does not override your rights.",
     retentionPeriod:
-      "Review request records, review findings and related correspondence are kept while needed to assess eligibility, deliver the agreed review, handle follow-up questions and meet legal obligations, then deleted or anonymised. Fixed calendar retention periods will be published here if adopted.",
+      "Pilot request records and related correspondence are kept while needed to assess eligibility for the free 30-day pilot, communicate about the request, handle follow-up questions and meet legal obligations, then deleted or anonymised. Fixed calendar retention periods will be published here if adopted.",
     /**
      * Live processor set for this microsite (same stack as the main Standout Group site).
      */

@@ -19,7 +19,8 @@ type ReviewIdentity = {
 
 /**
  * Confirmation and internal notification copy for the n8n workflow.
- * Keep wording aligned with the page: no calendar CTA, no fixed delivery promise.
+ * Keep wording aligned with the page: pilot request received, suitability
+ * review, respond within one business day, no work/contract started yet.
  */
 
 export function buildConfirmationEmail(payload: ReviewIdentity): {
@@ -31,9 +32,9 @@ export function buildConfirmationEmail(payload: ReviewIdentity): {
   const lines = [
     `Hello ${payload.name},`,
     "",
-    `Thank you for requesting a free Legal Enquiry Review for ${payload.firm_name} (${payload.website}).`,
+    `Thank you for requesting a free 30-day pilot for ${payload.firm_name} (${payload.website}).`,
     "",
-    "We’ll check the website details and email you with the next step. The review uses only publicly visible pages. It does not require system access, a test enquiry, or a call.",
+    "We will review your firm and respond within one business day. Submitting this form did not start work or create a contract.",
   ];
 
   if (siteConfig.reviewDeliveryTiming) {
@@ -51,7 +52,7 @@ export function buildConfirmationEmail(payload: ReviewIdentity): {
   return {
     to: payload.work_email,
     from: siteConfig.contactEmail,
-    subject: `We received your Legal Enquiry Review request — ${payload.firm_name}`,
+    subject: `We received your pilot request — ${payload.firm_name}`,
     text: lines.join("\n"),
   };
 }
@@ -65,9 +66,9 @@ export function buildInternalNotificationEmail(payload: ReviewIdentity): {
   return {
     to: siteConfig.contactEmail,
     from: siteConfig.contactEmail,
-    subject: `[Enquiry Review] ${payload.firm_name} — ${payload.lead_id}`,
+    subject: `[Pilot request] ${payload.firm_name} — ${payload.lead_id}`,
     text: [
-      "New Legal Enquiry Review request",
+      "New free 30-day pilot request",
       "",
       `lead_id: ${payload.lead_id}`,
       `requested_at: ${payload.requested_at}`,

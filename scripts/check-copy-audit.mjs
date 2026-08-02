@@ -101,6 +101,8 @@ const prohibited = [
   /increase revenue by 21 times/i,
   /conversion rates?\s+(?:increase|rise|grow|improve).{0,40}21/i,
   /21 times (?:higher|more|greater) conversion/i,
+  /100%\s*Free/i,
+  /No sales call required/i,
 ];
 
 const copySources = [

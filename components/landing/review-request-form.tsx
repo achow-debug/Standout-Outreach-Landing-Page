@@ -322,6 +322,7 @@ export function ReviewRequestForm({
         name="work_email"
         label={fields.workEmail.label}
         type="email"
+        inputMode="email"
         autoComplete={fields.workEmail.autocomplete}
         placeholder={fields.workEmail.placeholder}
         value={values.work_email}
@@ -333,6 +334,11 @@ export function ReviewRequestForm({
         onBlur={handleBlur}
       />
 
+      {/*
+        Keep type="text" + inputMode="url": schema accepts bare domains
+        (e.g. smithlaw.co.uk) and normalises https. type="url" would reject
+        those values under native constraint validation.
+      */}
       <Field
         id={fieldDomId("website")}
         name="website"
@@ -340,6 +346,7 @@ export function ReviewRequestForm({
         autoComplete={fields.website.autocomplete}
         inputMode="url"
         placeholder={fields.website.placeholder}
+        hint={fields.website.hint}
         value={values.website}
         error={fieldErrors.website}
         disabled={isSubmitting}
@@ -359,25 +366,21 @@ export function ReviewRequestForm({
             ? reviewRequest.submittingCta
             : reviewRequest.submitCta}
         </button>
-        <p className="request-trust-line">
-          <span className="request-trust-icon" aria-hidden="true">
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="5" y="11" width="14" height="10" rx="2" />
-              <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-            </svg>
-          </span>
-          <span>{reviewRequest.trustLine}</span>
+        <p className="request-expectation-line">
+          {reviewRequest.expectationLine}
         </p>
+        <ul className="request-trust-list">
+          {reviewRequest.trustItems.map((item) => (
+            <li key={item} className="request-trust-item">
+              <span className="request-trust-check" aria-hidden="true">
+                ✓
+              </span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
         <p className="request-privacy-line">
+          {reviewRequest.submitConsent}{" "}
           <a href="/privacy" className="request-privacy-link">
             {reviewRequest.privacyLinkLabel}
           </a>
@@ -393,6 +396,7 @@ type FieldProps = {
   label: string;
   value: string;
   error?: string;
+  hint?: string;
   type?: string;
   autoComplete?: string;
   inputMode?: "url" | "text" | "email";
@@ -411,6 +415,7 @@ function Field({
   label,
   value,
   error,
+  hint,
   type = "text",
   autoComplete,
   inputMode,
@@ -423,6 +428,10 @@ function Field({
   onBlur,
 }: FieldProps) {
   const errorId = `${id}-error`;
+  const hintId = `${id}-hint`;
+  const describedBy = [hint ? hintId : null, error ? errorId : null]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className={`field${error ? " field--error" : ""}`}>
@@ -440,11 +449,16 @@ function Field({
         value={value}
         disabled={disabled}
         aria-invalid={error ? true : undefined}
-        aria-describedby={error ? errorId : undefined}
+        aria-describedby={describedBy || undefined}
         onChange={(event) => onChange(event.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
       />
+      {hint ? (
+        <p id={hintId} className="field-hint">
+          {hint}
+        </p>
+      ) : null}
       {error ? (
         <p id={errorId} className="field-error" role="alert">
           {error}

@@ -132,10 +132,179 @@ const opened = await page.evaluate(() => ({
 }));
 record("modal_opens", opened.open && opened.modalOpen && opened.fields === 4);
 
-const privacyInModal = await page.evaluate(() =>
-  Boolean(document.querySelector("dialog.review-modal a[href='/privacy']")),
+const modalCopy = await page.evaluate(() => {
+  const modal = document.querySelector("dialog.review-modal");
+  if (!modal) return null;
+  const text = modal.innerText;
+  const websiteInput = modal.querySelector('input[name="website"]');
+  const hintId = websiteInput?.getAttribute("aria-describedby") ?? "";
+  const hint = hintId
+    ? modal.querySelector(`#${CSS.escape(hintId.split(/\s+/)[0])}`)
+    : modal.querySelector(".field-hint");
+  const privacyLink = modal.querySelector("a[href='/privacy']");
+  const privacyLine = modal.querySelector(".request-privacy-line");
+  return {
+    heading: modal.querySelector(".review-modal-title")?.textContent?.trim() ?? "",
+    submit: modal.querySelector('button[type="submit"]')?.textContent?.trim() ?? "",
+    hasHint: Boolean(hint?.textContent?.includes("review your current enquiry journey")),
+    hintDescribed:
+      Boolean(websiteInput) &&
+      (websiteInput.getAttribute("aria-describedby") ?? "").includes(
+        hint?.id ?? "__missing__",
+      ),
+    hasExpectation: Boolean(
+      modal.querySelector(".request-expectation-line")?.textContent?.includes(
+        "within one business day",
+      ),
+    ),
+    hasTrust: Boolean(
+      modal.querySelector(".request-trust-list")?.textContent?.includes(
+        "No setup or management fee",
+      ),
+    ),
+    privacyConsent: Boolean(
+      privacyLine?.textContent?.includes("contact you about the pilot") &&
+        privacyLink?.textContent?.trim() === "Privacy Notice",
+    ),
+    bannedLeftovers: [
+      "Start My Free",
+      "100% Free",
+      "No sales call",
+    ].filter((s) => text.includes(s)),
+  };
+});
+record(
+  "modal_request_framing",
+  modalCopy?.heading === "Request your free 30-day pilot" &&
+    modalCopy?.submit === "Request My Pilot" &&
+    modalCopy?.bannedLeftovers.length === 0,
+  JSON.stringify(modalCopy),
 );
-record("privacy_link_in_modal", privacyInModal);
+record(
+  "modal_hint_expectation_consent",
+  Boolean(
+    modalCopy?.hasHint &&
+      modalCopy?.hintDescribed &&
+      modalCopy?.hasExpectation &&
+      modalCopy?.hasTrust &&
+      modalCopy?.privacyConsent,
+  ),
+  JSON.stringify(modalCopy),
+);
+record("privacy_link_in_modal", Boolean(modalCopy?.privacyConsent));
+
+// Compact centred modal shell (design plan Phase 1 + 7) — not fullscreen
+const modalShell = await page.evaluate(() => {
+  const modal = document.querySelector("dialog.review-modal");
+  if (!modal || !modal.open) return null;
+  const rect = modal.getBoundingClientRect();
+  const styles = getComputedStyle(modal);
+  const panel = modal.querySelector(".review-modal-panel");
+  const panelRect = panel?.getBoundingClientRect();
+  const trustList = modal.querySelector(".request-trust-list");
+  const trustItems = trustList
+    ? [...trustList.querySelectorAll(".request-trust-item")].map((li) =>
+        li.textContent?.replace(/^\s*✓\s*/, "").trim(),
+      )
+    : [];
+  const brand = modal.querySelector(".review-modal-brand");
+  const close = modal.querySelector(".review-modal-close");
+  const submit = modal.querySelector(".request-submit-btn");
+  const email = modal.querySelector('input[name="work_email"]');
+  const website = modal.querySelector('input[name="website"]');
+  return {
+    width: Math.round(rect.width),
+    height: Math.round(rect.height),
+    left: Math.round(rect.left),
+    right: Math.round(window.innerWidth - rect.right),
+    top: Math.round(rect.top),
+    bottom: Math.round(window.innerHeight - rect.bottom),
+    viewportW: window.innerWidth,
+    viewportH: window.innerHeight,
+    maxWidth: styles.maxWidth,
+    heightCss: styles.height,
+    borderRadius: styles.borderRadius,
+    panelHeight: panelRect ? Math.round(panelRect.height) : null,
+    hasBrand: Boolean(brand?.textContent?.includes("Standout")),
+    trustItemCount: trustItems.length,
+    trustItems,
+    hasLockIcon: Boolean(modal.querySelector(".request-trust-icon")),
+    closeSize: close
+      ? {
+          w: Math.round(close.getBoundingClientRect().width),
+          h: Math.round(close.getBoundingClientRect().height),
+          label: close.getAttribute("aria-label"),
+        }
+      : null,
+    submitHeight: submit
+      ? Math.round(submit.getBoundingClientRect().height)
+      : null,
+    emailType: email?.getAttribute("type") ?? null,
+    emailInputMode: email?.getAttribute("inputmode") ?? null,
+    websiteType: website?.getAttribute("type") ?? null,
+    websiteInputMode: website?.getAttribute("inputmode") ?? null,
+  };
+});
+record(
+  "modal_compact_card_mobile",
+  Boolean(
+    modalShell &&
+      modalShell.viewportW <= 440 &&
+      modalShell.left >= 14 &&
+      modalShell.right >= 14 &&
+      modalShell.width <= 440 &&
+      modalShell.height < modalShell.viewportH * 0.95 &&
+      modalShell.top > 8 &&
+      modalShell.bottom > 8 &&
+      modalShell.borderRadius !== "0px" &&
+      (modalShell.maxWidth === "440px" ||
+        Number.parseFloat(modalShell.maxWidth) === 440),
+  ),
+  JSON.stringify(modalShell),
+);
+record(
+  "modal_brand_and_trust_stack",
+  Boolean(
+    modalShell?.hasBrand &&
+      modalShell.trustItemCount === 3 &&
+      !modalShell.hasLockIcon &&
+      modalShell.trustItems?.some((t) => t.includes("No payment details")),
+  ),
+  JSON.stringify({
+    hasBrand: modalShell?.hasBrand,
+    trustItems: modalShell?.trustItems,
+    hasLockIcon: modalShell?.hasLockIcon,
+  }),
+);
+record(
+  "modal_close_and_cta_targets",
+  Boolean(
+    modalShell?.closeSize &&
+      modalShell.closeSize.w >= 40 &&
+      modalShell.closeSize.h >= 40 &&
+      modalShell.closeSize.label === "Close" &&
+      modalShell.submitHeight !== null &&
+      modalShell.submitHeight >= 48 &&
+      modalShell.submitHeight <= 56,
+  ),
+  JSON.stringify({
+    close: modalShell?.closeSize,
+    submitHeight: modalShell?.submitHeight,
+  }),
+);
+record(
+  "modal_field_input_modes",
+  modalShell?.emailType === "email" &&
+    modalShell?.emailInputMode === "email" &&
+    modalShell?.websiteType === "text" &&
+    modalShell?.websiteInputMode === "url",
+  JSON.stringify({
+    emailType: modalShell?.emailType,
+    emailInputMode: modalShell?.emailInputMode,
+    websiteType: modalShell?.websiteType,
+    websiteInputMode: modalShell?.websiteInputMode,
+  }),
+);
 
 await page.keyboard.press("Escape");
 await page.waitForTimeout(120);
@@ -217,7 +386,9 @@ const success = await page.evaluate(() => ({
 record(
   "success_state",
   success.title === "Your pilot request has been received." &&
-    Boolean(success.body),
+    Boolean(success.body?.includes("within one business day")) &&
+    Boolean(success.body?.includes("did not start work or create a contract")) &&
+    !Boolean(success.body?.toLowerCase().includes("do not need to book a call")),
   JSON.stringify(success),
 );
 

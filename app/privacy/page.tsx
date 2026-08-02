@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: `${landingCopy.privacyPage.title} | ${siteConfig.businessName}`,
   description:
-    "How Standout Group handles personal data submitted through the Legal Enquiry Review request form.",
+    "How Standout Group handles personal data submitted through the free 30-day pilot request form.",
   alternates: {
     canonical: "/privacy",
   },

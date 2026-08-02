@@ -188,6 +188,7 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
   const [isComplete, setIsComplete] = useState(false);
   const [initialError, setInitialError] = useState<string | null>(null);
   const completedRef = useRef(false);
+  const [standout, group] = siteConfig.businessName.split(" ");
 
   const openModal = useCallback(
     (trigger: HTMLButtonElement | null, location: CtaLocation) => {
@@ -288,6 +289,12 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
         <div className="review-modal-panel">
           <header className="review-modal-header">
             <div className="review-modal-heading">
+              <p className="review-modal-brand brand-mark">
+                <span className="brand-mark-name">
+                  {standout}{" "}
+                  <span className="brand-mark-accent">{group}</span>
+                </span>
+              </p>
               <h2 id={titleId} className="review-modal-title">
                 {isComplete ? confirmation.heading : reviewRequest.heading}
               </h2>
@@ -302,12 +309,12 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
               aria-label="Close"
             >
               <svg
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"

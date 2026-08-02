@@ -57,50 +57,59 @@ export const landingCopy = {
     },
   },
   cta: {
-    label: "Start your free 30-day pilot",
-    mobileLabel: "Start Free 30-Day Pilot →",
+    label: "Request your free 30-day pilot",
+    mobileLabel: "Request My Pilot →",
     microcopy:
       "A free 30-day pilot to fix where your enquiries are being lost — you'll decide whether to take it further or not",
     /** Shown once after the breakdown video finishes — static cue, no motion. */
-    afterVideoCue: "Ready when you are — start your free 30-day pilot below.",
+    afterVideoCue: "Ready when you are — request your free 30-day pilot below.",
   },
   reviewRequest: {
-    heading: "Start your free 30-day pilot",
-    subtitle: "Where should we send your free 30-day pilot details?",
-    submitCta: "Start My Free 30-Day Pilot →",
+    heading: "Request your free 30-day pilot",
+    subtitle:
+      "Tell us about your firm and we will review your current enquiry journey before confirming the next steps.",
+    submitCta: "Request My Pilot",
     submittingCta: "Sending request…",
-    trustLine:
-      "100% Free • No sales call required • No obligation to take it further",
-    privacyLinkLabel: "Privacy notice",
+    expectationLine:
+      "We will review your firm and respond within one business day. Submitting this form does not start work or create a contract.",
+    trustItems: [
+      "No setup or management fee during the pilot",
+      "No payment details",
+      "No long-term commitment",
+    ],
+    submitConsent:
+      "By submitting, you agree that Standout Group may contact you about the pilot.",
+    privacyLinkLabel: "Privacy Notice",
     errorSummaryHeading: "Please correct the following:",
     submitError:
       "Something went wrong sending your request. Please try again in a moment.",
     fields: {
       name: {
-        label: "Your Name",
+        label: "Name",
         autocomplete: "name" as const,
         placeholder: "e.g. Sarah Jenkins",
       },
       firmName: {
-        label: "Law Firm Name",
+        label: "Firm",
         autocomplete: "organization" as const,
         placeholder: "e.g. Smith & Partners Solicitors",
       },
       workEmail: {
-        label: "Work Email",
+        label: "Work email",
         autocomplete: "email" as const,
         placeholder: "sarah@smithlaw.co.uk",
       },
       website: {
-        label: "Your Firm's Website",
+        label: "Firm website",
         autocomplete: "url" as const,
         placeholder: "smithlaw.co.uk",
+        hint: "We use this to review your current enquiry journey.",
       },
     },
   },
   confirmation: {
     heading: "Your pilot request has been received.",
-    body: "We'll check the website details and email you with the next step. You do not need to book a call or provide access to anything.",
+    body: "We will review your firm and respond within one business day. Submitting this form did not start work or create a contract.",
     /** Prefixed when siteConfig.reviewDeliveryTiming is set. */
     timingPrefix: "Expected timing:",
   },
@@ -110,7 +119,7 @@ export const landingCopy = {
   privacyPage: {
     title: "Privacy Notice",
     intro:
-      "This notice explains how Standout Group handles personal data submitted through the Legal Enquiry Review request form on this page.",
+      "This notice explains how Standout Group handles personal data submitted through the free 30-day pilot request form on this page.",
     sectionHeadings: {
       controller: "Who controls the data",
       collect: "What we collect and why",
@@ -120,13 +129,13 @@ export const landingCopy = {
       rights: "Your rights",
     },
     collectBody:
-      "We collect your name, firm name, work email and website address so we can prepare and deliver a public-facing Legal Enquiry Review and communicate with you about that request.",
+      "We collect your name, firm name, work email and website address so we can review your suitability for the free 30-day pilot and contact you about this pilot request.",
     lawfulBasisPending:
       "The lawful basis for processing will be confirmed by the business after appropriate legal review and inserted here before production use.",
     processorsPending:
-      "Depending on the live configuration, processors may include hosting (for example Vercel), workflow automation (for example n8n), email delivery, analytics and spreadsheet providers used to manage review requests. Approved processor details will be listed here before production.",
+      "Depending on the live configuration, processors may include hosting (for example Vercel), workflow automation (for example n8n), email delivery, analytics and spreadsheet providers used to manage pilot requests. Approved processor details will be listed here before production.",
     retentionPending:
-      "Retention periods for review requests and unsuccessful prospects will be defined with the business and inserted here before production. Do not treat any placeholder period as policy.",
+      "Retention periods for pilot requests and unsuccessful prospects will be defined with the business and inserted here before production. Do not treat any placeholder period as policy.",
     rightsBody:
       "You may request access to, correction of, or deletion of your personal data. Contact {email} for privacy questions or rights requests.",
   },
