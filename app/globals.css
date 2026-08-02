@@ -1138,9 +1138,12 @@ html.modal-open {
 }
 
 .review-modal {
+  display: flex;
+  flex-direction: column;
   width: min(calc(100% - 2rem), 37.5rem); /* ~600px desktop; 32px screen margins */
   max-width: 37.5rem;
-  height: auto;
+  /* fit-content: UA dialog uses inset:0; height:auto would stretch full viewport */
+  height: fit-content;
   max-height: min(
     92dvh,
     calc(100% - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))
@@ -1164,9 +1167,11 @@ html.modal-open {
 .review-modal-panel {
   display: flex;
   flex-direction: column;
-  height: auto;
-  max-height: inherit;
+  flex: 1 1 auto;
+  width: 100%;
   min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .review-modal-header {
@@ -1240,6 +1245,7 @@ html.modal-open {
 }
 
 .review-modal-body {
+  flex: 1 1 auto;
   min-height: 0;
   padding: 0.75rem 1.25rem calc(1.35rem + env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
@@ -1375,7 +1381,7 @@ html.modal-open {
   .review-modal {
     width: calc(100% - 32px);
     max-width: 440px;
-    height: auto;
+    height: fit-content;
     max-height: min(
       92dvh,
       calc(100% - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))
@@ -1386,7 +1392,7 @@ html.modal-open {
 
   .review-modal-panel {
     height: auto;
-    max-height: inherit;
+    max-height: 100%;
   }
 
   .review-modal-header {

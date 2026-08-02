@@ -22,7 +22,7 @@ todos:
     status: completed
   - id: phase-7-verify
     content: "Desktop + mobile visual/a11y pass; success state still fits height:auto; acceptance/screenshot scripts if they assume fullscreen modal"
-    status: pending
+    status: completed
 isProject: false
 ---
 

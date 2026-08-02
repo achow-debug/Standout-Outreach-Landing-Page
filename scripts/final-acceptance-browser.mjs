@@ -392,6 +392,29 @@ record(
   JSON.stringify(success),
 );
 
+const successShell = await page.evaluate(() => {
+  const modal = document.querySelector("dialog.review-modal");
+  const panel = modal?.querySelector(".review-modal-panel");
+  if (!modal || !panel) return null;
+  const mr = modal.getBoundingClientRect();
+  const pr = panel.getBoundingClientRect();
+  return {
+    modalH: Math.round(mr.height),
+    panelH: Math.round(pr.height),
+    delta: Math.round(Math.abs(mr.height - pr.height)),
+    viewportH: window.innerHeight,
+  };
+});
+record(
+  "modal_success_hugs_content",
+  Boolean(
+    successShell &&
+      successShell.delta <= 2 &&
+      successShell.modalH < successShell.viewportH * 0.55,
+  ),
+  JSON.stringify(successShell),
+);
+
 // Close after success remounts fresh form
 await page.keyboard.press("Escape");
 await page.waitForTimeout(100);
@@ -479,17 +502,30 @@ record(
 // Sticky dock stays visible through trust (before footer clearance)
 await unlockMobileStickyCta();
 await page.evaluate(() => {
-  document.querySelector(".trust-grid")?.scrollIntoView({
-    block: "start",
-    behavior: "instant",
-  });
+  const trust = document.querySelector(".trust-grid");
+  const footer = document.querySelector(".site-footer");
+  if (!trust || !footer) return;
+  // Pin trust near the top, but keep enough room that the footer stays
+  // below the sticky-dock clearance band (short pages can otherwise fail).
+  const dockClearance =
+    (Number.parseFloat(
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--mobile-sticky-cta-height")
+        .trim(),
+    ) || 88) + 24;
+  const maxScroll =
+    footer.offsetTop - (window.innerHeight - dockClearance) - 8;
+  const prefer =
+    trust.getBoundingClientRect().top + window.scrollY - 24;
+  window.scrollTo(0, Math.max(0, Math.min(prefer, maxScroll)));
 });
 await page.waitForTimeout(120);
 const stickyThroughTrust = await page.evaluate(() => {
   const sticky = document.querySelector(".mobile-sticky-cta-wrapper");
   const footer = document.querySelector(".site-footer");
-  if (!sticky || !footer) {
-    return { pass: false, detail: "missing sticky or footer" };
+  const trust = document.querySelector(".trust-grid");
+  if (!sticky || !footer || !trust) {
+    return { pass: false, detail: "missing sticky, trust, or footer" };
   }
   const dockClearance =
     (Number.parseFloat(
@@ -498,14 +534,16 @@ const stickyThroughTrust = await page.evaluate(() => {
         .trim(),
     ) || 88) + 24;
   const footerTop = footer.getBoundingClientRect().top;
+  const trustRect = trust.getBoundingClientRect();
   // Matches observer: landmark must enter the area above the dock.
   const inClearance = footerTop < window.innerHeight - dockClearance;
+  const trustInView =
+    trustRect.top < window.innerHeight && trustRect.bottom > 0;
   const visible = sticky.classList.contains("is-visible");
   return {
-    // Require trust scroll position to be outside footer clearance, then
-    // the dock must still be visible (the regression this check guards).
-    pass: !inClearance && visible,
-    detail: `is-visible=${visible} footerTop=${Math.round(footerTop)} inClearance=${inClearance}`,
+    // Require trust in view, outside footer clearance, dock still visible.
+    pass: trustInView && !inClearance && visible,
+    detail: `is-visible=${visible} footerTop=${Math.round(footerTop)} inClearance=${inClearance} trustInView=${trustInView}`,
   };
 });
 record(
