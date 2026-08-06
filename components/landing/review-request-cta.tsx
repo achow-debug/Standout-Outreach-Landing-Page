@@ -373,7 +373,7 @@ export function ReviewRequestCta() {
     <section
       id="final-cta"
       className="cta-section hidden md:block"
-      aria-label="Request a pilot"
+      aria-label="Claim a free strategy call"
       data-reveal
     >
       {videoComplete ? (
@@ -441,7 +441,7 @@ export function MobileStickyCta() {
     <div
       className={`mobile-sticky-cta-wrapper md:hidden${isVisible ? " is-visible" : ""}`}
       role="region"
-      aria-label="Request a pilot"
+      aria-label="Claim a free strategy call"
       aria-hidden={!isVisible}
       inert={!isVisible}
     >

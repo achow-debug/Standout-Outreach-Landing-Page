@@ -2,17 +2,31 @@
  * Centralised copy for the Legal Enquiry Review landing page.
  */
 
+export const AREA_OF_LAW_OPTIONS = [
+  { value: "personal_injury", label: "Personal Injury" },
+  { value: "family_divorce", label: "Family / Divorce" },
+  { value: "immigration", label: "Immigration" },
+  { value: "conveyancing_property", label: "Conveyancing / Property" },
+  { value: "wills_trusts_probate", label: "Wills, Trusts & Probate" },
+  { value: "employment", label: "Employment" },
+  { value: "criminal", label: "Criminal" },
+  { value: "commercial_corporate", label: "Commercial / Corporate" },
+  { value: "other_multiple", label: "Other / Multiple" },
+] as const;
+
+export type AreaOfLawValue = (typeof AREA_OF_LAW_OPTIONS)[number]["value"];
+
 export const landingCopy = {
   meta: {
     title: "Legal Enquiry Review | Standout Group",
     description:
-      "Poor enquiry handling can cost UK law firms over £1 million a year in lost revenue. Watch how Standout Group’s review works, then request yours free.",
+      "Poor enquiry handling can cost UK law firms over £1 million a year in lost revenue. Watch how Standout Group’s review works, then claim your free strategy call.",
   },
   hero: {
     audience: "Exclusively for UK Law Firms",
     h1: "Our analysis of 100+ UK law firms found 70% are losing over £100K a year to unfollowed enquiries",
     supporting:
-      "Most of that comes down to slow or inconsistent follow-up — not a lack of leads. Starting your free pilot takes about 5 minutes.",
+      "Most of that comes down to slow or inconsistent follow-up — not a lack of leads. Find out if your firm is one of the 70% in 5 minutes.",
     bridge: "Watch how it works.",
   },
   video: {
@@ -57,28 +71,25 @@ export const landingCopy = {
     },
   },
   cta: {
-    label: "Request your free 30-day pilot",
-    mobileLabel: "Request My Pilot →",
+    label: "Claim My Free Strategy Call",
+    mobileLabel: "Claim My Free Strategy Call",
     microcopy:
-      "A free 30-day pilot to fix where your enquiries are being lost — you'll decide whether to take it further or not",
+      "A free strategy call to see where enquiries are being lost — then a free 30-day pilot if it makes sense for both of us",
     /** Shown once after the breakdown video finishes — static cue, no motion. */
-    afterVideoCue: "Ready when you are — request your free 30-day pilot below.",
+    afterVideoCue: "Ready when you are — claim your free strategy call below.",
   },
   reviewRequest: {
-    heading: "Request your free 30-day pilot",
+    heading: "Claim your free strategy call",
     subtitle:
       "Tell us about your firm and we will review your current enquiry journey before confirming the next steps.",
-    submitCta: "Request My Pilot",
+    submitCta: "Claim My Free Strategy Call",
     submittingCta: "Sending request…",
-    expectationLine:
-      "We will review your firm and respond within one business day. Submitting this form does not start work or create a contract.",
     trustItems: [
-      "No setup or management fee during the pilot",
-      "No payment details",
-      "No long-term commitment",
+      "Free throughout the 30-day pilot — no card required",
+      "No contract, no long-term commitment",
     ],
     submitConsent:
-      "By submitting, you agree that Standout Group may contact you about the pilot.",
+      "By submitting, you agree that Standout Group may contact you about this call.",
     privacyLinkLabel: "Privacy Notice",
     errorSummaryHeading: "Please correct the following:",
     submitError:
@@ -88,11 +99,6 @@ export const landingCopy = {
         label: "Name",
         autocomplete: "name" as const,
         placeholder: "e.g. Sarah Jenkins",
-      },
-      firmName: {
-        label: "Firm",
-        autocomplete: "organization" as const,
-        placeholder: "e.g. Smith & Partners Solicitors",
       },
       workEmail: {
         label: "Work email",
@@ -105,11 +111,16 @@ export const landingCopy = {
         placeholder: "smithlaw.co.uk",
         hint: "We use this to review your current enquiry journey.",
       },
+      prioritisedAreaOfLaw: {
+        label: "Prioritised area of law",
+        placeholder: "Select an area of law",
+        hint: "Choose the practice area you want us to prioritise.",
+      },
     },
   },
   confirmation: {
-    heading: "Your pilot request has been received.",
-    body: "We will review your firm and respond within one business day. Submitting this form did not start work or create a contract.",
+    heading: "Your strategy call request has been received.",
+    body: "We'll review your firm and be in touch.",
     /** Prefixed when siteConfig.reviewDeliveryTiming is set. */
     timingPrefix: "Expected timing:",
   },
@@ -119,7 +130,7 @@ export const landingCopy = {
   privacyPage: {
     title: "Privacy Notice",
     intro:
-      "This notice explains how Standout Group handles personal data submitted through the free 30-day pilot request form on this page.",
+      "This notice explains how Standout Group handles personal data submitted through the free strategy call request form on this page.",
     sectionHeadings: {
       controller: "Who controls the data",
       collect: "What we collect and why",
@@ -129,13 +140,13 @@ export const landingCopy = {
       rights: "Your rights",
     },
     collectBody:
-      "We collect your name, firm name, work email and website address so we can review your suitability for the free 30-day pilot and contact you about this pilot request.",
+      "We collect your name, work email, website address and prioritised area of law so we can review your suitability for a free strategy call and contact you about this request.",
     lawfulBasisPending:
       "The lawful basis for processing will be confirmed by the business after appropriate legal review and inserted here before production use.",
     processorsPending:
-      "Depending on the live configuration, processors may include hosting (for example Vercel), workflow automation (for example n8n), email delivery, analytics and spreadsheet providers used to manage pilot requests. Approved processor details will be listed here before production.",
+      "Depending on the live configuration, processors may include hosting (for example Vercel), workflow automation (for example n8n), email delivery, analytics and spreadsheet providers used to manage strategy call requests. Approved processor details will be listed here before production.",
     retentionPending:
-      "Retention periods for pilot requests and unsuccessful prospects will be defined with the business and inserted here before production. Do not treat any placeholder period as policy.",
+      "Retention periods for strategy call requests and unsuccessful prospects will be defined with the business and inserted here before production. Do not treat any placeholder period as policy.",
     rightsBody:
       "You may request access to, correction of, or deletion of your personal data. Contact {email} for privacy questions or rights requests.",
   },

@@ -1,12 +1,13 @@
 import { siteConfig } from "@/lib/site-config";
+import { areaOfLawLabel } from "@/lib/review-request-schema";
 
 type ReviewIdentity = {
   lead_id: string;
   requested_at: string;
   name: string;
-  firm_name: string;
   work_email: string;
   website: string;
+  prioritised_area_of_law: string;
   source: string | null;
   medium: string | null;
   campaign: string | null;
@@ -19,8 +20,8 @@ type ReviewIdentity = {
 
 /**
  * Confirmation and internal notification copy for the n8n workflow.
- * Keep wording aligned with the page: pilot request received, suitability
- * review, respond within one business day, no work/contract started yet.
+ * Keep wording aligned with the page: strategy call request received,
+ * we'll review and be in touch — no fixed response-time SLA.
  */
 
 export function buildConfirmationEmail(payload: ReviewIdentity): {
@@ -29,12 +30,13 @@ export function buildConfirmationEmail(payload: ReviewIdentity): {
   subject: string;
   text: string;
 } {
+  const areaLabel = areaOfLawLabel(payload.prioritised_area_of_law);
   const lines = [
     `Hello ${payload.name},`,
     "",
-    `Thank you for requesting a free 30-day pilot for ${payload.firm_name} (${payload.website}).`,
+    `Thank you for claiming a free strategy call for ${payload.website} (${areaLabel}).`,
     "",
-    "We will review your firm and respond within one business day. Submitting this form did not start work or create a contract.",
+    "We'll review your firm and be in touch.",
   ];
 
   if (siteConfig.reviewDeliveryTiming) {
@@ -52,7 +54,7 @@ export function buildConfirmationEmail(payload: ReviewIdentity): {
   return {
     to: payload.work_email,
     from: siteConfig.contactEmail,
-    subject: `We received your pilot request — ${payload.firm_name}`,
+    subject: `We received your strategy call request — ${payload.website}`,
     text: lines.join("\n"),
   };
 }
@@ -66,14 +68,14 @@ export function buildInternalNotificationEmail(payload: ReviewIdentity): {
   return {
     to: siteConfig.contactEmail,
     from: siteConfig.contactEmail,
-    subject: `[Pilot request] ${payload.firm_name} — ${payload.lead_id}`,
+    subject: `[Strategy call] ${payload.website} — ${payload.lead_id}`,
     text: [
-      "New free 30-day pilot request",
+      "New free strategy call request",
       "",
       `lead_id: ${payload.lead_id}`,
       `requested_at: ${payload.requested_at}`,
-      `firm_name: ${payload.firm_name}`,
       `website: ${payload.website}`,
+      `prioritised_area_of_law: ${areaOfLawLabel(payload.prioritised_area_of_law)}`,
       `name: ${payload.name}`,
       `work_email: ${payload.work_email}`,
       `source: ${payload.source ?? "—"}`,
@@ -93,9 +95,9 @@ export const ENQUIRY_REVIEWS_SHEET_COLUMNS = [
   "lead_id",
   "requested_at",
   "name",
-  "firm_name",
   "work_email",
   "website",
+  "prioritised_area_of_law",
   "source",
   "medium",
   "campaign",

@@ -345,30 +345,67 @@ a:hover {
     box-shadow 0.2s ease;
 }
 
+.field select {
+  min-height: var(--control-min-height);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 1rem; /* ≥16px — prevents iOS zoom */
+  color: #0f172a; /* slate-900 */
+  background-color: rgb(248 250 252 / 50%); /* slate-50/50 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  background-size: 1rem;
+  border: 1px solid #cbd5e1; /* slate-300 */
+  border-radius: 0.75rem; /* rounded-xl */
+  max-width: 100%;
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.field select:invalid,
+.field select:has(option[value=""]:checked) {
+  color: #94a3b8; /* slate-400 — placeholder look */
+}
+
+.field select option {
+  color: #0f172a;
+}
+
 .field input::placeholder {
   color: #94a3b8; /* slate-400 — secondary to typed input */
 }
 
-.field input:disabled {
+.field input:disabled,
+.field select:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
 .field input:focus,
-.field input:focus-visible {
-  background: #fff;
+.field input:focus-visible,
+.field select:focus,
+.field select:focus-visible {
+  background-color: #fff;
   border-color: #3b2c4d;
   outline: none;
   box-shadow: 0 0 0 3px rgb(59 44 77 / 22%); /* plum focus ring */
 }
 
-.field--error input {
+.field--error input,
+.field--error select {
   border-color: var(--color-error);
-  background: var(--color-error-bg);
+  background-color: var(--color-error-bg);
 }
 
 .field--error input:focus,
-.field--error input:focus-visible {
+.field--error input:focus-visible,
+.field--error select:focus,
+.field--error select:focus-visible {
   border-color: var(--color-error);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 22%, transparent);
 }
@@ -389,11 +426,13 @@ a:hover {
 }
 
 @media (forced-colors: active) {
-  .field input {
+  .field input,
+  .field select {
     border: 1px solid CanvasText;
   }
 
-  .field--error input {
+  .field--error input,
+  .field--error select {
     border: 2px solid Mark;
   }
 
@@ -1138,8 +1177,8 @@ html.modal-open {
 }
 
 .review-modal {
-  display: flex;
-  flex-direction: column;
+  /* Do not set display here — closed <dialog> must stay display:none (UA default).
+     display:flex on the closed dialog made the form appear inline and hide the footer. */
   width: min(calc(100% - 2rem), 37.5rem); /* ~600px desktop; 32px screen margins */
   max-width: 37.5rem;
   /* fit-content: UA dialog uses inset:0; height:auto would stretch full viewport */
@@ -1156,6 +1195,11 @@ html.modal-open {
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); /* shadow-2xl */
   color: var(--color-ink);
   overflow: hidden;
+}
+
+.review-modal[open] {
+  display: flex;
+  flex-direction: column;
 }
 
 .review-modal::backdrop {
@@ -1294,20 +1338,12 @@ html.modal-open {
   outline-offset: 3px;
 }
 
-.request-expectation-line {
-  margin: 0.75rem 0 0;
-  font-size: 0.8125rem; /* 13px — next-step / expectation */
-  line-height: 1.45;
-  text-align: center;
-  color: #475569; /* slate-600 */
-}
-
 .request-trust-list {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.3rem;
-  margin: 0.625rem 0 0;
+  margin: 0.75rem 0 0;
   padding: 0;
   list-style: none;
   font-size: 0.8125rem; /* 13px */

@@ -152,31 +152,29 @@ const modalCopy = await page.evaluate(() => {
       (websiteInput.getAttribute("aria-describedby") ?? "").includes(
         hint?.id ?? "__missing__",
       ),
-    hasExpectation: Boolean(
-      modal.querySelector(".request-expectation-line")?.textContent?.includes(
-        "within one business day",
-      ),
-    ),
+    hasExpectation: Boolean(modal.querySelector(".request-expectation-line")),
     hasTrust: Boolean(
       modal.querySelector(".request-trust-list")?.textContent?.includes(
-        "No setup or management fee",
+        "no card required",
       ),
     ),
     privacyConsent: Boolean(
-      privacyLine?.textContent?.includes("contact you about the pilot") &&
+      privacyLine?.textContent?.includes("contact you about this call") &&
         privacyLink?.textContent?.trim() === "Privacy Notice",
     ),
     bannedLeftovers: [
       "Start My Free",
       "100% Free",
       "No sales call",
-    ].filter((s) => text.includes(s)),
+      "within one business day",
+      "within 1 business day",
+    ].filter((s) => text.toLowerCase().includes(s.toLowerCase())),
   };
 });
 record(
   "modal_request_framing",
-  modalCopy?.heading === "Request your free 30-day pilot" &&
-    modalCopy?.submit === "Request My Pilot" &&
+  modalCopy?.heading === "Claim your free strategy call" &&
+    modalCopy?.submit === "Claim My Free Strategy Call" &&
     modalCopy?.bannedLeftovers.length === 0,
   JSON.stringify(modalCopy),
 );
@@ -185,7 +183,7 @@ record(
   Boolean(
     modalCopy?.hasHint &&
       modalCopy?.hintDescribed &&
-      modalCopy?.hasExpectation &&
+      !modalCopy?.hasExpectation &&
       modalCopy?.hasTrust &&
       modalCopy?.privacyConsent,
   ),
@@ -266,9 +264,10 @@ record(
   "modal_brand_and_trust_stack",
   Boolean(
     modalShell?.hasBrand &&
-      modalShell.trustItemCount === 3 &&
+      modalShell.trustItemCount === 2 &&
       !modalShell.hasLockIcon &&
-      modalShell.trustItems?.some((t) => t.includes("No payment details")),
+      modalShell.trustItems?.some((t) => t.includes("no card required")) &&
+      modalShell.trustItems?.some((t) => t.includes("No contract")),
   ),
   JSON.stringify({
     hasBrand: modalShell?.hasBrand,
@@ -358,9 +357,9 @@ await page.route("**/api/review-request", async (route) => {
 });
 
 await page.fill('input[name="name"]', "Alex Test");
-await page.fill('input[name="firm_name"]', "Test Firm LLP");
 await page.fill('input[name="work_email"]', "alex@testfirm.co.uk");
 await page.fill('input[name="website"]', "testfirm.co.uk");
+await page.selectOption('select[name="prioritised_area_of_law"]', "personal_injury");
 
 const [response] = await Promise.all([
   page.waitForResponse(
@@ -385,9 +384,9 @@ const success = await page.evaluate(() => ({
 }));
 record(
   "success_state",
-  success.title === "Your pilot request has been received." &&
-    Boolean(success.body?.includes("within one business day")) &&
-    Boolean(success.body?.includes("did not start work or create a contract")) &&
+  success.title === "Your strategy call request has been received." &&
+    Boolean(success.body?.includes("We'll review your firm and be in touch")) &&
+    !Boolean(success.body?.toLowerCase().includes("business day")) &&
     !Boolean(success.body?.toLowerCase().includes("do not need to book a call")),
   JSON.stringify(success),
 );
@@ -443,9 +442,9 @@ await page.route("**/api/review-request", async (route) => {
   });
 });
 await page.fill('input[name="name"]', "Alex Test");
-await page.fill('input[name="firm_name"]', "Test Firm LLP");
 await page.fill('input[name="work_email"]', "alex@testfirm.co.uk");
 await page.fill('input[name="website"]', "testfirm.co.uk");
+await page.selectOption('select[name="prioritised_area_of_law"]', "personal_injury");
 await page.click('button[type="submit"]');
 await page.waitForSelector(".form-error-summary", { timeout: 5000 });
 const serverError = await page.evaluate(
@@ -470,9 +469,9 @@ await page.route("**/api/review-request", async (route) => {
   });
 });
 await page.fill('input[name="name"]', "Alex Test");
-await page.fill('input[name="firm_name"]', "Test Firm LLP");
 await page.fill('input[name="work_email"]', "alex@testfirm.co.uk");
 await page.fill('input[name="website"]', "testfirm.co.uk");
+await page.selectOption('select[name="prioritised_area_of_law"]', "personal_injury");
 await page.evaluate(() => {
   const btn = document.querySelector('button[type="submit"]');
   btn?.click();

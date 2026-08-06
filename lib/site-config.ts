@@ -18,10 +18,8 @@ export const siteConfig = {
   proofLineIsPlaceholder: false,
   /**
    * Optional extra timing line for confirmation email/page.
-   * Leave null while the default “within one business day” SLA in
-   * landingCopy.confirmation / review-request-emails is enough.
-   * If set, it must not contradict that one-business-day response promise
-   * (e.g. prefer clarifying detail, not a longer conflicting period).
+   * Leave null by default — the page does not promise a fixed response SLA.
+   * If set, keep it honest and non-committal (e.g. clarifying detail only).
    */
   reviewDeliveryTiming: null as string | null,
   video: {

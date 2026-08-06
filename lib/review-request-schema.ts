@@ -1,8 +1,16 @@
 import { z } from "zod";
+import {
+  AREA_OF_LAW_OPTIONS,
+  type AreaOfLawValue,
+} from "@/lib/landing-copy";
 
-export const REVIEW_REQUEST_SCHEMA_VERSION = "1.0";
+export const REVIEW_REQUEST_SCHEMA_VERSION = "1.1";
 
 export const FORMULA_INJECTION_PREFIX = /^[=+\-@\t\r]/;
+
+const AREA_OF_LAW_VALUES = AREA_OF_LAW_OPTIONS.map(
+  (option) => option.value,
+) as [AreaOfLawValue, ...AreaOfLawValue[]];
 
 /** Characters that can trigger spreadsheet formula injection when a cell starts with them. */
 export function sanitizeSheetCell(value: string): string {
@@ -77,6 +85,16 @@ const websiteField = z
     }
   });
 
+const prioritisedAreaOfLawField = z
+  .string()
+  .trim()
+  .min(1, "Select a prioritised area of law")
+  .refine(
+    (value): value is AreaOfLawValue =>
+      (AREA_OF_LAW_VALUES as string[]).includes(value),
+    { message: "Select a prioritised area of law from the list" },
+  );
+
 /** Fields the browser may submit. Attribution is optional and allowlisted server-side. */
 export const reviewRequestFormSchema = z.object({
   name: z
@@ -84,11 +102,6 @@ export const reviewRequestFormSchema = z.object({
     .trim()
     .min(2, "Enter a name of at least 2 characters")
     .max(80, "Name must be 80 characters or fewer"),
-  firm_name: z
-    .string()
-    .trim()
-    .min(2, "Enter a firm name of at least 2 characters")
-    .max(120, "Firm name must be 120 characters or fewer"),
   work_email: z
     .string()
     .trim()
@@ -96,6 +109,7 @@ export const reviewRequestFormSchema = z.object({
     .max(254, "Email must be 254 characters or fewer")
     .email("Enter a valid work email address"),
   website: websiteField,
+  prioritised_area_of_law: prioritisedAreaOfLawField,
   /** Invisible honeypot — must remain empty. */
   company_website: z.string().optional().default(""),
   /** Client-rendered timestamp (ms) for timing checks. */
@@ -112,13 +126,17 @@ export const reviewRequestFormSchema = z.object({
 export type ReviewRequestFormInput = z.input<typeof reviewRequestFormSchema>;
 export type ReviewRequestFormValues = z.output<typeof reviewRequestFormSchema>;
 
-export type FieldName = "name" | "firm_name" | "work_email" | "website";
+export type FieldName =
+  | "name"
+  | "work_email"
+  | "website"
+  | "prioritised_area_of_law";
 
 export const VISIBLE_FIELD_NAMES: FieldName[] = [
   "name",
-  "firm_name",
   "work_email",
   "website",
+  "prioritised_area_of_law",
 ];
 
 export type FieldErrors = Partial<Record<FieldName, string>>;
@@ -133,14 +151,14 @@ export function validateReviewRequestFields(
   fieldErrors: FieldErrors;
   values?: Pick<
     ReviewRequestFormValues,
-    "name" | "firm_name" | "work_email" | "website"
+    "name" | "work_email" | "website" | "prioritised_area_of_law"
   >;
 } {
   const visibleSchema = reviewRequestFormSchema.pick({
     name: true,
-    firm_name: true,
     work_email: true,
     website: true,
+    prioritised_area_of_law: true,
   });
 
   const result = visibleSchema.safeParse(raw);
@@ -192,4 +210,9 @@ export function pickAttribution(
     }
   }
   return out;
+}
+
+export function areaOfLawLabel(value: string): string {
+  const match = AREA_OF_LAW_OPTIONS.find((option) => option.value === value);
+  return match?.label ?? value;
 }

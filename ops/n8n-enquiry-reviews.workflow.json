@@ -2,7 +2,7 @@
   "name": "Standout Enquiry Reviews",
   "meta": {
     "description": "Receives signed review requests from the landing page, upserts the Enquiry Reviews sheet, and sends confirmation + internal emails.",
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "expected_headers": {
       "X-Standout-Timestamp": "Unix ms string",
       "X-Standout-Signature": "HMAC-SHA256 hex of `${timestamp}.${rawBody}` using N8N_WEBHOOK_SECRET",
@@ -13,9 +13,9 @@
       "lead_id",
       "requested_at",
       "name",
-      "firm_name",
       "work_email",
       "website",
+      "prioritised_area_of_law",
       "source",
       "medium",
       "campaign",
@@ -32,7 +32,7 @@
       "internal_to": "achow@standoutgroup.net",
       "source": "Use payload.emails.confirmation and payload.emails.internal (subject + text) prepared by the landing API",
       "rules": [
-        "Confirm firm and website",
+        "Confirm website and prioritised area of law",
         "Explain next step in 2–3 sentences",
         "Repeat: public information only, no test enquiry",
         "Provide reply address for corrections",
@@ -43,11 +43,11 @@
     "n8n_steps": [
       "1. Webhook (POST) — production URL path only; do not expose to the browser",
       "2. Verify HMAC: compute hex(hmac_sha256(secret, `${X-Standout-Timestamp}.${rawBody}`)) and compare to X-Standout-Signature; reject if timestamp skew > 5 minutes",
-      "3. Validate required fields: lead_id, name, firm_name, work_email, website, requested_at",
+      "3. Validate required fields: lead_id, name, work_email, website, prioritised_area_of_law, requested_at",
       "4. Google Sheets lookup by lead_id — if found, return 200 { ok: true, duplicate: true }",
       "5. Append row with status=Requested and updated_at=now; leave commercial/delivery columns empty",
       "6. Send confirmation email to work_email from achow@standoutgroup.net",
-      "7. Send internal notification with lead_id, firm, website, source, campaign",
+      "7. Send internal notification with lead_id, website, prioritised_area_of_law, source, campaign",
       "8. Update confirmation_email_sent_at on success; write last_error and alert on failure",
       "9. Respond 200 { ok: true, lead_id }"
     ],
@@ -68,9 +68,9 @@
       "lead_id",
       "requested_at",
       "name",
-      "firm_name",
       "work_email",
       "website",
+      "prioritised_area_of_law",
       "source",
       "medium",
       "campaign",

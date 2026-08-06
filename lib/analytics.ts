@@ -33,6 +33,8 @@ const BLOCKED_PROP_KEYS = new Set([
   "phone",
   "message",
   "company_website",
+  "prioritised_area_of_law",
+  "area_of_law",
   "value",
   "submitted_value",
 ]);

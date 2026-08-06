@@ -6,7 +6,7 @@
     "join_key": "lead_id — the only lead identifier allowed in analytics events"
   },
   "privacy_rules": [
-    "Do not send name, email, firm name, or full submitted URLs into analytics",
+    "Do not send name, email, prioritised area of law, or full submitted URLs into analytics",
     "lead_id is the only lead identifier in analytics",
     "UTM params must never contain prospect email, name or company"
   ],

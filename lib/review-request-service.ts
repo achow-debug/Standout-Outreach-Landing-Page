@@ -5,6 +5,7 @@ import {
 } from "@/lib/review-request-emails";
 import {
   ATTRIBUTION_KEYS,
+  areaOfLawLabel,
   pickAttribution,
   REVIEW_REQUEST_SCHEMA_VERSION,
   reviewRequestFormSchema,
@@ -20,9 +21,9 @@ export type ReviewRequestPayload = {
   lead_id: string;
   requested_at: string;
   name: string;
-  firm_name: string;
   work_email: string;
   website: string;
+  prioritised_area_of_law: string;
   source: string | null;
   medium: string | null;
   campaign: string | null;
@@ -185,9 +186,11 @@ export async function processReviewRequest(
     lead_id: leadId,
     requested_at: requestedAt,
     name: sanitizeSheetCell(data.name),
-    firm_name: sanitizeSheetCell(data.firm_name),
     work_email: data.work_email.trim().toLowerCase(),
     website: data.website,
+    prioritised_area_of_law: sanitizeSheetCell(
+      areaOfLawLabel(data.prioritised_area_of_law),
+    ),
     source: attribution.source,
     medium: attribution.medium,
     campaign: attribution.campaign,

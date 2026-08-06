@@ -7,6 +7,7 @@ import {
   useState,
   type FormEvent,
   type FocusEvent,
+  type ChangeEvent,
 } from "react";
 import {
   ensureAttributionCaptured,
@@ -17,7 +18,7 @@ import {
   getDeviceCategory,
   trackEvent,
 } from "@/lib/analytics";
-import { landingCopy } from "@/lib/landing-copy";
+import { AREA_OF_LAW_OPTIONS, landingCopy } from "@/lib/landing-copy";
 import {
   type FieldErrors,
   type FieldName,
@@ -29,9 +30,9 @@ type FormValues = Record<FieldName, string>;
 
 const EMPTY_VALUES: FormValues = {
   name: "",
-  firm_name: "",
   work_email: "",
   website: "",
+  prioritised_area_of_law: "",
 };
 
 type ReviewRequestFormProps = {
@@ -40,6 +41,8 @@ type ReviewRequestFormProps = {
   /** Prefill a form-level error (e.g. after a no-JS redirect). */
   initialError?: string | null;
 };
+
+type FocusTarget = "summary" | FieldName;
 
 /**
  * Enquiry-review form for the page modal: four required fields,
@@ -58,6 +61,9 @@ export function ReviewRequestForm({
   const formStartTrackedRef = useRef(false);
   const submitGenerationRef = useRef(0);
   const isSubmittingRef = useRef(false);
+  const pendingFocusRef = useRef<FocusTarget | null>(null);
+  /** Fields that have already shown an error — switch these to live validation. */
+  const liveFieldsRef = useRef<Set<FieldName>>(new Set());
 
   const [values, setValues] = useState<FormValues>(EMPTY_VALUES);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
@@ -67,7 +73,7 @@ export function ReviewRequestForm({
   const errorEntries = VISIBLE_FIELD_NAMES.filter((name) => fieldErrors[name]).map(
     (name) => ({ name, message: fieldErrors[name]! }),
   );
-  const hasErrors = errorEntries.length > 0 || Boolean(formError);
+  const showSummary = Boolean(formError) || errorEntries.length >= 2;
 
   useEffect(() => {
     ensureAttributionCaptured();
@@ -76,14 +82,35 @@ export function ReviewRequestForm({
   useEffect(() => {
     if (initialError) {
       setFormError(initialError);
+      pendingFocusRef.current = "summary";
     }
   }, [initialError]);
 
   useEffect(() => {
-    if (hasErrors && summaryRef.current) {
+    const target = pendingFocusRef.current;
+    if (!target) return;
+    pendingFocusRef.current = null;
+
+    const modalBody = document.querySelector(".review-modal-body");
+
+    if (target === "summary" && summaryRef.current) {
+      if (modalBody instanceof HTMLElement) {
+        modalBody.scrollTop = 0;
+      }
       summaryRef.current.focus();
+      return;
     }
-  }, [hasErrors, fieldErrors, formError]);
+
+    if (target !== "summary") {
+      const field = document.getElementById(`${idPrefix}-${target}`);
+      if (field instanceof HTMLElement) {
+        field.scrollIntoView({ block: "center", behavior: "smooth" });
+        field.focus();
+      } else if (modalBody instanceof HTMLElement) {
+        modalBody.scrollTop = 0;
+      }
+    }
+  }, [fieldErrors, formError, idPrefix, showSummary]);
 
   function fieldDomId(name: FieldName) {
     return `${idPrefix}-${name}`;
@@ -105,27 +132,53 @@ export function ReviewRequestForm({
     }
   }
 
-  function updateField(name: FieldName, value: string) {
-    setValues((prev) => ({ ...prev, [name]: value }));
-  }
+  function applyFieldValidation(name: FieldName, nextValues: FormValues) {
+    const result = validateReviewRequestFields(nextValues);
+    const message = result.fieldErrors[name];
 
-  function validateField(name: FieldName) {
-    const result = validateReviewRequestFields({ [name]: values[name], ...values });
     setFieldErrors((prev) => {
       const next = { ...prev };
-      if (result.fieldErrors[name]) {
-        next[name] = result.fieldErrors[name];
+      if (message) {
+        next[name] = message;
       } else {
         delete next[name];
       }
       return next;
     });
+
+    if (message) {
+      liveFieldsRef.current.add(name);
+    }
   }
 
-  function handleBlur(event: FocusEvent<HTMLInputElement>) {
+  function updateField(name: FieldName, value: string) {
+    const nextValues = { ...values, [name]: value };
+    setValues(nextValues);
+    if (liveFieldsRef.current.has(name)) {
+      applyFieldValidation(name, nextValues);
+    }
+  }
+
+  function handleBlur(event: FocusEvent<HTMLInputElement | HTMLSelectElement>) {
     const name = event.target.name as FieldName;
     if (!VISIBLE_FIELD_NAMES.includes(name)) return;
-    validateField(name);
+    applyFieldValidation(name, {
+      ...values,
+      [name]: event.target.value,
+    });
+  }
+
+  function queueFocusAfterSubmit(errors: FieldErrors, nextFormError: string | null) {
+    const errored = VISIBLE_FIELD_NAMES.filter((name) => errors[name]);
+    for (const name of errored) {
+      liveFieldsRef.current.add(name);
+    }
+
+    if (nextFormError || errored.length >= 2) {
+      pendingFocusRef.current = "summary";
+    } else if (errored.length === 1) {
+      pendingFocusRef.current = errored[0];
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -140,6 +193,7 @@ export function ReviewRequestForm({
     const result = validateReviewRequestFields(values);
     if (!result.success || !result.values) {
       setFieldErrors(result.fieldErrors);
+      queueFocusAfterSubmit(result.fieldErrors, null);
       for (const name of Object.keys(result.fieldErrors) as FieldName[]) {
         trackEvent("review_form_error", {
           field: name,
@@ -184,6 +238,7 @@ export function ReviewRequestForm({
       if (!response.ok || !data.ok) {
         if (data.fieldErrors) {
           setFieldErrors(data.fieldErrors);
+          queueFocusAfterSubmit(data.fieldErrors, null);
           trackEvent("review_form_error", {
             field: "form",
             error_category: "validation",
@@ -191,7 +246,9 @@ export function ReviewRequestForm({
             device_category: getDeviceCategory(),
           });
         } else {
-          setFormError(data.error ?? reviewRequest.submitError);
+          const message = data.error ?? reviewRequest.submitError;
+          setFormError(message);
+          pendingFocusRef.current = "summary";
           trackEvent("review_form_error", {
             field: "form",
             error_category: "submission",
@@ -217,6 +274,7 @@ export function ReviewRequestForm({
     } catch {
       if (generation !== submitGenerationRef.current) return;
       setFormError(reviewRequest.submitError);
+      pendingFocusRef.current = "summary";
       trackEvent("review_form_error", {
         field: "form",
         error_category: "network",
@@ -243,7 +301,7 @@ export function ReviewRequestForm({
       noValidate
       onSubmit={handleSubmit}
     >
-      {hasErrors ? (
+      {showSummary ? (
         <div
           ref={summaryRef}
           className="form-error-summary"
@@ -302,22 +360,6 @@ export function ReviewRequestForm({
       />
 
       <Field
-        id={fieldDomId("firm_name")}
-        name="firm_name"
-        label={fields.firmName.label}
-        autoComplete={fields.firmName.autocomplete}
-        placeholder={fields.firmName.placeholder}
-        value={values.firm_name}
-        error={fieldErrors.firm_name}
-        minLength={2}
-        maxLength={120}
-        disabled={isSubmitting}
-        onChange={(value) => updateField("firm_name", value)}
-        onFocus={markFormStarted}
-        onBlur={handleBlur}
-      />
-
-      <Field
         id={fieldDomId("work_email")}
         name="work_email"
         label={fields.workEmail.label}
@@ -355,6 +397,20 @@ export function ReviewRequestForm({
         onBlur={handleBlur}
       />
 
+      <SelectField
+        id={fieldDomId("prioritised_area_of_law")}
+        name="prioritised_area_of_law"
+        label={fields.prioritisedAreaOfLaw.label}
+        placeholder={fields.prioritisedAreaOfLaw.placeholder}
+        hint={fields.prioritisedAreaOfLaw.hint}
+        value={values.prioritised_area_of_law}
+        error={fieldErrors.prioritised_area_of_law}
+        disabled={isSubmitting}
+        onChange={(value) => updateField("prioritised_area_of_law", value)}
+        onFocus={markFormStarted}
+        onBlur={handleBlur}
+      />
+
       <div className="request-submit">
         <button
           type="submit"
@@ -366,9 +422,6 @@ export function ReviewRequestForm({
             ? reviewRequest.submittingCta
             : reviewRequest.submitCta}
         </button>
-        <p className="request-expectation-line">
-          {reviewRequest.expectationLine}
-        </p>
         <ul className="request-trust-list">
           {reviewRequest.trustItems.map((item) => (
             <li key={item} className="request-trust-item">
@@ -406,7 +459,7 @@ type FieldProps = {
   disabled?: boolean;
   onChange: (value: string) => void;
   onFocus: () => void;
-  onBlur: (event: FocusEvent<HTMLInputElement>) => void;
+  onBlur: (event: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
 };
 
 function Field({
@@ -454,6 +507,81 @@ function Field({
         onFocus={onFocus}
         onBlur={onBlur}
       />
+      {hint ? (
+        <p id={hintId} className="field-hint">
+          {hint}
+        </p>
+      ) : null}
+      {error ? (
+        <p id={errorId} className="field-error" role="alert">
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+type SelectFieldProps = {
+  id: string;
+  name: FieldName;
+  label: string;
+  value: string;
+  placeholder: string;
+  error?: string;
+  hint?: string;
+  disabled?: boolean;
+  onChange: (value: string) => void;
+  onFocus: () => void;
+  onBlur: (event: FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
+};
+
+function SelectField({
+  id,
+  name,
+  label,
+  value,
+  placeholder,
+  error,
+  hint,
+  disabled,
+  onChange,
+  onFocus,
+  onBlur,
+}: SelectFieldProps) {
+  const errorId = `${id}-error`;
+  const hintId = `${id}-hint`;
+  const describedBy = [hint ? hintId : null, error ? errorId : null]
+    .filter(Boolean)
+    .join(" ");
+
+  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
+    onChange(event.target.value);
+  }
+
+  return (
+    <div className={`field${error ? " field--error" : ""}`}>
+      <label htmlFor={id}>{label}</label>
+      <select
+        id={id}
+        name={name}
+        required
+        value={value}
+        disabled={disabled}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy || undefined}
+        onChange={handleChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+      >
+        <option value="" disabled>
+          {placeholder}
+        </option>
+        {AREA_OF_LAW_OPTIONS.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       {hint ? (
         <p id={hintId} className="field-hint">
           {hint}
