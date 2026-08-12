@@ -37,8 +37,10 @@ export function EnquiryVideoPlayer({
   playLabel = "Play the full breakdown",
 }: EnquiryVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const pendingPlayRef = useRef(false);
   const [playbackFailed, setPlaybackFailed] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  const [shouldMountVideo, setShouldMountVideo] = useState(false);
   const durationRef = useRef<number | null>(null);
 
   const videoMeta = useCallback(() => {
@@ -56,6 +58,19 @@ export function EnquiryVideoPlayer({
           ? Math.round(duration)
           : null,
     };
+  }, []);
+
+  // Defer <video>/<source> until after critical first paint (or earlier on play).
+  useEffect(() => {
+    const arm = () => setShouldMountVideo(true);
+
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(arm, { timeout: 2000 });
+      return () => window.cancelIdleCallback(id);
+    }
+
+    const t = window.setTimeout(arm, 1);
+    return () => window.clearTimeout(t);
   }, []);
 
   useEffect(() => {
@@ -114,18 +129,35 @@ export function EnquiryVideoPlayer({
       video.removeEventListener("ended", onEnded);
       video.removeEventListener("error", onError);
     };
-  }, [videoMeta]);
+  }, [videoMeta, shouldMountVideo]);
 
-  async function startPlayback() {
+  useEffect(() => {
+    if (!shouldMountVideo || !pendingPlayRef.current || playbackFailed) return;
+    pendingPlayRef.current = false;
     const video = videoRef.current;
-    if (!video || playbackFailed) return;
+    if (!video) return;
+    void video.play().then(
+      () => setHasStarted(true),
+      () => setPlaybackFailed(true),
+    );
+  }, [shouldMountVideo, playbackFailed]);
 
-    try {
-      await video.play();
-      setHasStarted(true);
-    } catch {
-      setPlaybackFailed(true);
+  function startPlayback() {
+    if (playbackFailed) return;
+
+    if (!shouldMountVideo) {
+      pendingPlayRef.current = true;
+      setShouldMountVideo(true);
+      return;
     }
+
+    const video = videoRef.current;
+    if (!video) return;
+
+    void video.play().then(
+      () => setHasStarted(true),
+      () => setPlaybackFailed(true),
+    );
   }
 
   if (playbackFailed) {
@@ -146,26 +178,36 @@ export function EnquiryVideoPlayer({
   return (
     <div className="video-player">
       <div className="video-player-frame">
-        <video
-          ref={videoRef}
-          className="video-player-media"
-          controls={hasStarted}
-          playsInline
-          preload="metadata"
-          poster={hasPoster && posterPath ? posterPath : undefined}
-        >
-          <source src={mp4Path} type="video/mp4" />
-          {hasCaptions ? (
-            <track
-              kind="captions"
-              src={captionsPath}
-              srcLang="en-GB"
-              label="English"
-              default
-            />
-          ) : null}
-          {fallbackMessage} <a href={mp4Path}>{directLinkLabel}</a>
-        </video>
+        {shouldMountVideo ? (
+          <video
+            ref={videoRef}
+            className="video-player-media"
+            controls={hasStarted}
+            playsInline
+            preload="none"
+            poster={hasPoster && posterPath ? posterPath : undefined}
+          >
+            <source src={mp4Path} type="video/mp4" />
+            {hasCaptions ? (
+              <track
+                kind="captions"
+                src={captionsPath}
+                srcLang="en-GB"
+                label="English"
+                default
+              />
+            ) : null}
+            {fallbackMessage} <a href={mp4Path}>{directLinkLabel}</a>
+          </video>
+        ) : hasPoster && posterPath ? (
+          <img
+            className="video-player-media"
+            src={posterPath}
+            alt=""
+            decoding="async"
+            fetchPriority="high"
+          />
+        ) : null}
 
         {!hasStarted ? (
           <button

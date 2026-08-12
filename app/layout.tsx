@@ -64,6 +64,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-GB" className={sourceSans.variable} suppressHydrationWarning>
+      <head>
+        {posterAvailable ? (
+          <link
+            rel="preload"
+            as="image"
+            href={siteConfig.video.posterPath}
+            fetchPriority="high"
+            type="image/webp"
+          />
+        ) : null}
+      </head>
       <body className="font-sans antialiased">
         {/*
           Enables CSS load/scroll motion only when JS runs and the visitor
