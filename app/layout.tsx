@@ -71,7 +71,7 @@ export default function RootLayout({
             as="image"
             href={siteConfig.video.posterPath}
             fetchPriority="high"
-            type="image/webp"
+            type="image/jpeg"
           />
         ) : null}
       </head>

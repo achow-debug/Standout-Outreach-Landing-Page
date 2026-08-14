@@ -10,7 +10,6 @@ import {
   ReviewRequestShell,
 } from "@/components/landing/review-request-cta";
 import { VideoBridgeLink } from "@/components/landing/video-bridge-link";
-import { VideoPosterPlaceholder } from "@/components/landing/video-poster-placeholder";
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
 import { getVideoAssetStatus } from "@/lib/video-assets";
@@ -42,23 +41,15 @@ export default function HomePage() {
               aria-label={video.sectionLabel}
               data-reveal
             >
-              {status.ready ? (
-                <EnquiryVideoPlayer
-                  mp4Path={assets.mp4Path}
-                  captionsPath={assets.captionsPath}
-                  posterPath={status.poster ? assets.posterPath : null}
-                  hasCaptions={status.captions}
-                  hasPoster={status.poster}
-                  fallbackMessage={video.fallbackMessage}
-                  directLinkLabel={video.directLinkLabel}
-                  playLabel={video.playLabel}
-                />
-              ) : (
-                <VideoPosterPlaceholder
-                  title={video.posterTitle}
-                  subtitle={video.posterSubtitle}
-                />
-              )}
+              <EnquiryVideoPlayer
+                src={assets.mp4Path}
+                captionsPath={assets.captionsPath}
+                posterPath={status.poster ? assets.posterPath : null}
+                hasCaptions={status.captions}
+                fallbackMessage={video.fallbackMessage}
+                directLinkLabel={video.directLinkLabel}
+                playLabel={video.playLabel}
+              />
             </section>
 
             <ReassuranceBlock />

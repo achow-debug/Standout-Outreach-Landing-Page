@@ -13,9 +13,9 @@ const root = path.join(__dirname, "..");
 const videoDir = path.join(root, "public", "video");
 
 const required = [
-  "legal-enquiry-review.mp4",
+  "breakdown.mp4",
   "legal-enquiry-review-captions.vtt",
-  "legal-enquiry-review-poster.webp",
+  "poster.jpg",
 ];
 
 const enforce =

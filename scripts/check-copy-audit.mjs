@@ -26,8 +26,8 @@ const passed = [];
 
 // Video assets
 const videoFiles = [
-  "public/video/legal-enquiry-review.mp4",
-  "public/video/legal-enquiry-review-poster.webp",
+  "public/video/breakdown.mp4",
+  "public/video/poster.jpg",
   "public/video/legal-enquiry-review-captions.vtt",
 ];
 for (const file of videoFiles) {

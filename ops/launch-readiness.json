@@ -1,6 +1,8 @@
 {
-  "generated_at": "2026-08-03T23:11:19.154Z",
+  "generated_at": "2026-08-14T11:35:35.166Z",
   "passed": [
+    "Asset present: public/video/breakdown.mp4",
+    "Asset present: public/video/poster.jpg",
     "Asset present: public/video/legal-enquiry-review-captions.vtt",
     "No draft transcript placeholder wording in landing copy",
     "Proof line placeholder flag cleared",
@@ -13,9 +15,6 @@
   "warnings": [
     "Captions still note proofreading against the final spoken recording — align VTT to the finished MP4 before launch"
   ],
-  "blockers": [
-    "Missing production asset: public/video/legal-enquiry-review.mp4",
-    "Missing production asset: public/video/legal-enquiry-review-poster.webp"
-  ],
-  "launch_ready": false
+  "blockers": [],
+  "launch_ready": true
 }

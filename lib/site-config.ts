@@ -25,9 +25,9 @@ export const siteConfig = {
   video: {
     id: "legal-enquiry-review",
     version: "1.0",
-    mp4Path: "/video/legal-enquiry-review.mp4",
+    mp4Path: "/video/breakdown.mp4",
     captionsPath: "/video/legal-enquiry-review-captions.vtt",
-    posterPath: "/video/legal-enquiry-review-poster.webp",
+    posterPath: "/video/poster.jpg",
     durationLabel: "5-minute",
   },
   privacy: {

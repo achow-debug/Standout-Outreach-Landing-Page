@@ -10,38 +10,40 @@ import { VIDEO_COMPLETE_EVENT } from "@/lib/landing-events";
 import { siteConfig } from "@/lib/site-config";
 
 const PROGRESS_MILESTONES = [25, 50, 75, 90] as const;
+const DEFAULT_VIDEO_SRC = "/video/breakdown.mp4";
+const DEFAULT_POSTER_SRC = "/video/poster.jpg";
 
 type EnquiryVideoPlayerProps = {
-  mp4Path: string;
-  captionsPath: string;
-  posterPath: string | null;
-  hasCaptions: boolean;
-  hasPoster: boolean;
+  /** MP4 path. Defaults to `/video/breakdown.mp4`. */
+  src?: string;
+  captionsPath?: string;
+  posterPath?: string | null;
+  hasCaptions?: boolean;
   fallbackMessage: string;
   directLinkLabel: string;
   playLabel?: string;
 };
 
 /**
- * Focal breakdown player: custom play control until playback starts,
- * then native controls. No autoplay.
+ * Focal breakdown player: poster facade until the visitor clicks play.
+ * The MP4 is not requested until that click.
  */
 export function EnquiryVideoPlayer({
-  mp4Path,
+  src = DEFAULT_VIDEO_SRC,
   captionsPath,
-  posterPath,
-  hasCaptions,
-  hasPoster,
+  posterPath = DEFAULT_POSTER_SRC,
+  hasCaptions = false,
   fallbackMessage,
   directLinkLabel,
   playLabel = "Play the full breakdown",
 }: EnquiryVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const pendingPlayRef = useRef(false);
   const [playbackFailed, setPlaybackFailed] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-  const [shouldMountVideo, setShouldMountVideo] = useState(false);
+  const [hasActivated, setHasActivated] = useState(false);
+  const [posterFailed, setPosterFailed] = useState(false);
   const durationRef = useRef<number | null>(null);
+
+  const showPoster = Boolean(posterPath) && !posterFailed;
 
   const videoMeta = useCallback(() => {
     const duration =
@@ -60,22 +62,16 @@ export function EnquiryVideoPlayer({
     };
   }, []);
 
-  // Defer <video>/<source> until after critical first paint (or earlier on play).
   useEffect(() => {
-    const arm = () => setShouldMountVideo(true);
+    if (!hasActivated || playbackFailed) return;
 
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(arm, { timeout: 2000 });
-      return () => window.cancelIdleCallback(id);
-    }
-
-    const t = window.setTimeout(arm, 1);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
+    if (video.error) {
+      setPlaybackFailed(true);
+      return;
+    }
 
     const onLoadedMetadata = () => {
       if (Number.isFinite(video.duration)) {
@@ -84,7 +80,6 @@ export function EnquiryVideoPlayer({
     };
 
     const onPlay = () => {
-      setHasStarted(true);
       const flag = `video_play:${siteConfig.video.id}:${siteConfig.video.version}`;
       if (hasSessionFlag(flag)) return;
       setSessionFlag(flag);
@@ -122,6 +117,10 @@ export function EnquiryVideoPlayer({
     video.addEventListener("ended", onEnded);
     video.addEventListener("error", onError);
 
+    void video.play().catch(() => {
+      // Autoplay may be blocked; native controls remain available.
+    });
+
     return () => {
       video.removeEventListener("loadedmetadata", onLoadedMetadata);
       video.removeEventListener("play", onPlay);
@@ -129,35 +128,11 @@ export function EnquiryVideoPlayer({
       video.removeEventListener("ended", onEnded);
       video.removeEventListener("error", onError);
     };
-  }, [videoMeta, shouldMountVideo]);
-
-  useEffect(() => {
-    if (!shouldMountVideo || !pendingPlayRef.current || playbackFailed) return;
-    pendingPlayRef.current = false;
-    const video = videoRef.current;
-    if (!video) return;
-    void video.play().then(
-      () => setHasStarted(true),
-      () => setPlaybackFailed(true),
-    );
-  }, [shouldMountVideo, playbackFailed]);
+  }, [videoMeta, hasActivated, playbackFailed]);
 
   function startPlayback() {
-    if (playbackFailed) return;
-
-    if (!shouldMountVideo) {
-      pendingPlayRef.current = true;
-      setShouldMountVideo(true);
-      return;
-    }
-
-    const video = videoRef.current;
-    if (!video) return;
-
-    void video.play().then(
-      () => setHasStarted(true),
-      () => setPlaybackFailed(true),
-    );
+    if (playbackFailed || hasActivated) return;
+    setHasActivated(true);
   }
 
   if (playbackFailed) {
@@ -167,7 +142,7 @@ export function EnquiryVideoPlayer({
           <div className="video-player-error">
             <p className="video-player-error-message">{fallbackMessage}</p>
             <p className="m-0">
-              <a href={mp4Path}>{directLinkLabel}</a>
+              <a href={src}>{directLinkLabel}</a>
             </p>
           </div>
         </div>
@@ -178,17 +153,22 @@ export function EnquiryVideoPlayer({
   return (
     <div className="video-player">
       <div className="video-player-frame">
-        {shouldMountVideo ? (
+        {hasActivated ? (
           <video
             ref={videoRef}
             className="video-player-media"
-            controls={hasStarted}
+            controls
+            autoPlay
             playsInline
-            preload="none"
-            poster={hasPoster && posterPath ? posterPath : undefined}
+            preload="metadata"
+            poster={showPoster ? posterPath! : undefined}
           >
-            <source src={mp4Path} type="video/mp4" />
-            {hasCaptions ? (
+            <source
+              src={src}
+              type="video/mp4"
+              onError={() => setPlaybackFailed(true)}
+            />
+            {hasCaptions && captionsPath ? (
               <track
                 kind="captions"
                 src={captionsPath}
@@ -197,32 +177,35 @@ export function EnquiryVideoPlayer({
                 default
               />
             ) : null}
-            {fallbackMessage} <a href={mp4Path}>{directLinkLabel}</a>
+            {fallbackMessage}{" "}
+            <a href={src}>{directLinkLabel}</a>
           </video>
-        ) : hasPoster && posterPath ? (
-          <img
-            className="video-player-media"
-            src={posterPath}
-            alt=""
-            decoding="async"
-            fetchPriority="high"
-          />
-        ) : null}
-
-        {!hasStarted ? (
-          <button
-            type="button"
-            className="video-player-play"
-            aria-label={playLabel}
-            onClick={startPlayback}
-          >
-            <span className="video-player-play-icon" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M9 5.5v17l14-8.5L9 5.5z" fill="currentColor" />
-              </svg>
-            </span>
-          </button>
-        ) : null}
+        ) : (
+          <>
+            {showPoster ? (
+              <img
+                className="video-player-media"
+                src={posterPath!}
+                alt=""
+                decoding="async"
+                fetchPriority="high"
+                onError={() => setPosterFailed(true)}
+              />
+            ) : null}
+            <button
+              type="button"
+              className="video-player-play"
+              aria-label={playLabel}
+              onClick={startPlayback}
+            >
+              <span className="video-player-play-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <path d="M9 5.5v17l14-8.5L9 5.5z" fill="currentColor" />
+                </svg>
+              </span>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

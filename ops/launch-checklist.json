@@ -16,13 +16,13 @@
   "production_blockers": [
     {
       "id": "final-mp4",
-      "status": "open",
-      "detail": "Add public/video/legal-enquiry-review.mp4 (real commercial breakdown)"
+      "status": "done",
+      "detail": "Add public/video/breakdown.mp4 (real commercial breakdown)"
     },
     {
       "id": "final-poster",
-      "status": "open",
-      "detail": "Add public/video/legal-enquiry-review-poster.webp (real 16:9 preview, target <150KB)"
+      "status": "done",
+      "detail": "Add public/video/poster.jpg (real 16:9 preview, target <150KB)"
     },
     {
       "id": "captions-proofread",
