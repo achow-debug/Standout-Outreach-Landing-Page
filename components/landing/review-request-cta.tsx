@@ -455,8 +455,9 @@ export function MobileStickyCta() {
           tabIndex={isVisible ? 0 : -1}
           onClick={() => openModal(buttonRef.current, "sticky_mobile")}
         >
-          {cta.mobileLabel}
+          {cta.label}
         </button>
+        <p className="mobile-cta-microcopy">{cta.microcopy}</p>
       </div>
     </div>
   );

@@ -73,7 +73,7 @@ export const landingCopy = {
     microcopy:
       "No obligation. We only work together if it makes sense for both of us.",
     /** Shown once after the breakdown video finishes — static cue, no motion. */
-    afterVideoCue: "Ready when you are — claim your free strategy call below.",
+    afterVideoCue: "Ready when you are — claim your free strategy call.",
   },
   reviewRequest: {
     heading: "Claim your free strategy call",
