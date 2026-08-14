@@ -24,10 +24,10 @@ export const landingCopy = {
   },
   hero: {
     audience: "Exclusively for UK Law Firms",
-    h1: "Our analysis of 100+ UK law firms found 70% are losing over £100K a year to unfollowed enquiries",
+    h1: "We analysed 100+ UK law firms. 70% are leaking money the exact same way. See it in 90 seconds.",
     supporting:
-      "Most of that comes down to slow or inconsistent follow-up — not a lack of leads. Find out if your firm is one of the 70% in 5 minutes.",
-    bridge: "Watch how it works.",
+      "Most firms assume this isn't happening at theirs. That's exactly what the other 70% assumed too.",
+    bridge: "Check for yourself →",
   },
   video: {
     sectionLabel: "Breakdown video",
@@ -45,8 +45,8 @@ export const landingCopy = {
       {
         id: "data",
         icon: "chart" as const,
-        title: "Data-Backed",
-        body: "100+ UK Law Firms analysed to design this system",
+        title: "Live-Tracked",
+        body: "Every result is measured and shared with you as it happens- nothing to just take our word for.",
       },
       {
         id: "response-time",
@@ -58,23 +58,20 @@ export const landingCopy = {
         id: "compliance",
         icon: "shield" as const,
         title: "SRA Compliant",
-        body: "Fully SRA and GDPR compliant by design",
+        body: "Built to SRA Transparency Rules requirements from day one",
       },
     ],
     /** Risk-reversal explanation for the free 30-day pilot. */
     methodology: {
       heading: "",
-      body: [
-        "We handle all the setup. For 30 days, we run, measure, and share the results with you.",
-        "No pressure. No obligation. We only work together if it makes sense for both of us.",
-      ],
+      body: [] as string[],
     },
   },
   cta: {
     label: "Claim My Free Strategy Call",
     mobileLabel: "Claim My Free Strategy Call",
     microcopy:
-      "A free strategy call to see where enquiries are being lost — then a free 30-day pilot if it makes sense for both of us",
+      "No obligation. We only work together if it makes sense for both of us.",
     /** Shown once after the breakdown video finishes — static cue, no motion. */
     afterVideoCue: "Ready when you are — claim your free strategy call below.",
   },

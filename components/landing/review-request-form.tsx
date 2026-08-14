@@ -422,16 +422,6 @@ export function ReviewRequestForm({
             ? reviewRequest.submittingCta
             : reviewRequest.submitCta}
         </button>
-        <ul className="request-trust-list">
-          {reviewRequest.trustItems.map((item) => (
-            <li key={item} className="request-trust-item">
-              <span className="request-trust-check" aria-hidden="true">
-                ✓
-              </span>
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
         <p className="request-privacy-line">
           {reviewRequest.submitConsent}{" "}
           <a href="/privacy" className="request-privacy-link">

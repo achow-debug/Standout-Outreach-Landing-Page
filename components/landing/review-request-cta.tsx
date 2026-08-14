@@ -298,9 +298,6 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
               <h2 id={titleId} className="review-modal-title">
                 {isComplete ? confirmation.heading : reviewRequest.heading}
               </h2>
-              {!isComplete ? (
-                <p className="review-modal-subtitle">{reviewRequest.subtitle}</p>
-              ) : null}
             </div>
             <button
               type="button"

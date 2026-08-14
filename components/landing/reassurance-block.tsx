@@ -79,16 +79,18 @@ export function ReassuranceBlock() {
           </li>
         ))}
       </ul>
-      <div className="trust-methodology">
-        {methodology.heading ? (
-          <p className="trust-methodology-heading">{methodology.heading}</p>
-        ) : null}
-        {methodology.body.map((paragraph, index) => (
-          <p key={index} className="trust-methodology-body">
-            {paragraph}
-          </p>
-        ))}
-      </div>
+      {methodology.heading || methodology.body.length > 0 ? (
+        <div className="trust-methodology">
+          {methodology.heading ? (
+            <p className="trust-methodology-heading">{methodology.heading}</p>
+          ) : null}
+          {methodology.body.map((paragraph, index) => (
+            <p key={index} className="trust-methodology-body">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      ) : null}
     </section>
   );
 }
