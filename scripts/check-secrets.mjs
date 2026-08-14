@@ -11,8 +11,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 
 const SECRET_PATTERNS = [
+  {
+    name: "outreach_Strategy_Call_request assignment in client",
+    re: /outreach_Strategy_Call_request\s*=\s*['"`]https?:\/\//,
+  },
   { name: "N8N_WEBHOOK_URL assignment in client", re: /N8N_WEBHOOK_URL\s*=\s*['"`]https?:\/\// },
   { name: "N8N_WEBHOOK_SECRET with value", re: /N8N_WEBHOOK_SECRET\s*=\s*['"`][^'"`]+['"`]/ },
+  {
+    name: "process.env.outreach_Strategy_Call_request in client",
+    re: /process\.env\.outreach_Strategy_Call_request/,
+  },
   { name: "process.env.N8N in client components", re: /process\.env\.N8N_/ },
 ];
 
@@ -61,6 +69,14 @@ for (const file of files) {
     if (file.endsWith(".env.example")) {
       const text = fs.readFileSync(file, "utf8");
       for (const line of text.split("\n")) {
+        if (
+          /^outreach_Strategy_Call_request=.+/.test(line) &&
+          !/^outreach_Strategy_Call_request=\s*$/.test(line)
+        ) {
+          findings.push(
+            `${file}: outreach_Strategy_Call_request must remain empty in .env.example`,
+          );
+        }
         if (/^N8N_WEBHOOK_URL=.+/.test(line) && !/^N8N_WEBHOOK_URL=\s*$/.test(line)) {
           findings.push(`${file}: N8N_WEBHOOK_URL must remain empty in .env.example`);
         }

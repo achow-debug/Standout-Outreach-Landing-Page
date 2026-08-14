@@ -20,7 +20,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Copy `.env.example` to `.env.local`. Without `N8N_WEBHOOK_URL` / `N8N_WEBHOOK_SECRET`, local submissions are accepted in development only (no sheet/email).
+Copy `.env.example` to `.env.local`. Without `outreach_Strategy_Call_request`, local submissions are accepted in development only (no sheet/email).
 
 ## Configuration
 

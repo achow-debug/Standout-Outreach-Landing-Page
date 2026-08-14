@@ -215,10 +215,14 @@ export async function processReviewRequest(
   }
   seenLeadIds.set(leadId, { seenAt: now });
 
-  const webhookUrl = process.env.N8N_WEBHOOK_URL;
-  const webhookSecret = process.env.N8N_WEBHOOK_SECRET;
+  const webhookUrl = (
+    process.env.outreach_Strategy_Call_request ||
+    process.env.N8N_WEBHOOK_URL ||
+    ""
+  ).trim();
+  const webhookSecret = process.env.N8N_WEBHOOK_SECRET?.trim();
 
-  if (!webhookUrl || !webhookSecret) {
+  if (!webhookUrl) {
     if (process.env.NODE_ENV === "development") {
       console.info("[review-request] dev_accept_without_webhook", {
         lead_id: leadId,
@@ -240,7 +244,18 @@ export async function processReviewRequest(
 
   const body = JSON.stringify(payload);
   const timestamp = String(now);
-  const signature = signReviewRequestPayload(body, webhookSecret, timestamp);
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "X-Standout-Timestamp": timestamp,
+    "X-Standout-Lead-Id": leadId,
+  };
+  if (webhookSecret) {
+    headers["X-Standout-Signature"] = signReviewRequestPayload(
+      body,
+      webhookSecret,
+      timestamp,
+    );
+  }
 
   try {
     const controller = new AbortController();
@@ -248,12 +263,7 @@ export async function processReviewRequest(
 
     const response = await fetch(webhookUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Standout-Timestamp": timestamp,
-        "X-Standout-Signature": signature,
-        "X-Standout-Lead-Id": leadId,
-      },
+      headers,
       body,
       signal: controller.signal,
     });
