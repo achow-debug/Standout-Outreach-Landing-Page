@@ -73,10 +73,17 @@ export function EnquiryVideoPlayer({
       return;
     }
 
+    const disableCaptions = () => {
+      for (const textTrack of video.textTracks) {
+        textTrack.mode = "disabled";
+      }
+    };
+
     const onLoadedMetadata = () => {
       if (Number.isFinite(video.duration)) {
         durationRef.current = video.duration;
       }
+      disableCaptions();
     };
 
     const onPlay = () => {
@@ -111,7 +118,9 @@ export function EnquiryVideoPlayer({
       setPlaybackFailed(true);
     };
 
+    disableCaptions();
     video.addEventListener("loadedmetadata", onLoadedMetadata);
+    video.addEventListener("loadeddata", disableCaptions);
     video.addEventListener("play", onPlay);
     video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("ended", onEnded);
@@ -123,6 +132,7 @@ export function EnquiryVideoPlayer({
 
     return () => {
       video.removeEventListener("loadedmetadata", onLoadedMetadata);
+      video.removeEventListener("loadeddata", disableCaptions);
       video.removeEventListener("play", onPlay);
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("ended", onEnded);
@@ -174,7 +184,6 @@ export function EnquiryVideoPlayer({
                 src={captionsPath}
                 srcLang="en-GB"
                 label="English"
-                default
               />
             ) : null}
             {fallbackMessage}{" "}
