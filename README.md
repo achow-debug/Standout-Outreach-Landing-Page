@@ -20,12 +20,25 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Copy `.env.example` to `.env.local`. Without `outreach_Strategy_Call_request`, local submissions are accepted in development only (no sheet/email).
+Copy `.env.example` to `.env.local`. Without `n8n_connection_outreachpage`, local submissions are accepted in development only (no sheet/email).
 
 ## Configuration
 
 Editable business identity, proof line, video paths and optional delivery timing live in `lib/site-config.ts`.  
 Page copy lives in `lib/landing-copy.ts`.
+
+## Strategy call booking (Calendly embed)
+
+The primary CTA opens a branded modal with Calendly’s **inline embed** (no Scheduling API). Event types, invitee questions and locations are edited in Calendly, not on this site.
+
+Set in `.env.local` / Vercel:
+
+- `NEXT_PUBLIC_CALENDLY_EVENT_URL` — public event-type URL (`https://calendly.com/...`)
+- `NEXT_PUBLIC_CALENDLY_ENABLED=1` — use the widget; omit or `0` to keep the on-site form fallback
+- `NEXT_PUBLIC_CALENDLY_EMBED_MODE=inline` — or `popup` for Calendly’s overlay
+- `NEXT_PUBLIC_CALENDLY_HIDE_GDPR_BANNER=0` — leave Calendly’s GDPR banner on for UK launch
+
+`widget.js` loads only after the CTA is clicked. If the widget fails, the modal offers a new-tab link to the same Calendly URL.
 
 ## Review request workflow
 

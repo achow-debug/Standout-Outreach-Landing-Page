@@ -13,11 +13,16 @@ import {
 } from "react";
 import { VIDEO_COMPLETE_EVENT } from "@/lib/landing-events";
 import { ReviewRequestForm } from "@/components/landing/review-request-form";
+import { CalendlyEmbed } from "@/components/landing/calendly-embed";
 import {
   attributionProps,
   getDeviceCategory,
   trackEvent,
 } from "@/lib/analytics";
+import {
+  getCalendlyEmbedMode,
+  isCalendlyEnabled,
+} from "@/lib/calendly-config";
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
 
@@ -183,19 +188,21 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const lastLocationRef = useRef<CtaLocation>("inline_desktop");
   const successRef = useRef<HTMLDivElement>(null);
   const [formKey, setFormKey] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [initialError, setInitialError] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const completedRef = useRef(false);
   const [standout, group] = siteConfig.businessName.split(" ");
+  const calendlyEnabled = isCalendlyEnabled();
+  const calendlyMode = getCalendlyEmbedMode();
 
   const openModal = useCallback(
     (trigger: HTMLButtonElement | null, location: CtaLocation) => {
-      const dialog = dialogRef.current;
-      if (!dialog) return;
       lastTriggerRef.current = trigger;
-      if (dialog.open) return;
+      lastLocationRef.current = location;
 
       trackEvent("review_cta_open", {
         ...attributionProps(),
@@ -203,12 +210,24 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
         device_category: getDeviceCategory(),
         landing_path:
           typeof window !== "undefined" ? window.location.pathname : "/",
+        embed_mode: calendlyEnabled ? calendlyMode : null,
       });
+
+      if (calendlyEnabled && calendlyMode === "popup") {
+        document.documentElement.classList.add("modal-open");
+        setDialogOpen(true);
+        return;
+      }
+
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      if (dialog.open) return;
 
       document.documentElement.classList.add("modal-open");
       dialog.showModal();
+      setDialogOpen(true);
     },
-    [],
+    [calendlyEnabled, calendlyMode],
   );
 
   useEffect(() => {
@@ -217,6 +236,7 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
 
     function handleClose() {
       document.documentElement.classList.remove("modal-open");
+      setDialogOpen(false);
       if (completedRef.current) {
         completedRef.current = false;
         setIsComplete(false);
@@ -239,6 +259,8 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
   }, [isComplete]);
 
   useEffect(() => {
+    if (calendlyEnabled) return;
+
     const params = new URLSearchParams(window.location.search);
     const status = params.get("request");
     if (!status) return;
@@ -253,16 +275,26 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
         setInitialError(landingCopy.reviewRequest.submitError);
       }
       dialog.showModal();
+      setDialogOpen(true);
     }
 
     params.delete("request");
     const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}${window.location.hash}`;
     window.history.replaceState({}, "", next);
-  }, []);
+  }, [calendlyEnabled]);
 
   function closeModal() {
     dialogRef.current?.close();
   }
+
+  const handlePopupClosed = useCallback(() => {
+    document.documentElement.classList.remove("modal-open");
+    setDialogOpen(false);
+    const trigger = lastTriggerRef.current;
+    requestAnimationFrame(() => {
+      trigger?.focus();
+    });
+  }, []);
 
   function handleBackdropClick(event: MouseEvent<HTMLDialogElement>) {
     if (event.target === event.currentTarget) {
@@ -280,9 +312,16 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
     <ReviewModalContext.Provider value={openModal}>
       {children}
 
+      {calendlyEnabled && calendlyMode === "popup" && dialogOpen ? (
+        <CalendlyEmbed
+          ctaLocation={lastLocationRef.current}
+          onPopupClosed={handlePopupClosed}
+        />
+      ) : null}
+
       <dialog
         ref={dialogRef}
-        className="review-modal"
+        className={`review-modal${calendlyEnabled ? " review-modal--calendly" : ""}`}
         aria-labelledby={titleId}
         onClick={handleBackdropClick}
       >
@@ -323,7 +362,11 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
           </header>
 
           <div className="review-modal-body">
-            {isComplete ? (
+            {calendlyEnabled ? (
+              calendlyMode === "inline" && dialogOpen ? (
+                <CalendlyEmbed ctaLocation={lastLocationRef.current} />
+              ) : null
+            ) : isComplete ? (
               <div
                 ref={successRef}
                 className="review-modal-success"

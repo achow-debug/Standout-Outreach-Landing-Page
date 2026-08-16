@@ -50,6 +50,7 @@ export const siteConfig = {
       "Lead storage (Google Sheets)",
       "Transactional email (Resend)",
       "Analytics (Plausible Analytics)",
+      "Scheduling (Calendly)",
     ],
   },
   /**

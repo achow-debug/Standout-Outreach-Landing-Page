@@ -91,6 +91,15 @@ export const landingCopy = {
     errorSummaryHeading: "Please correct the following:",
     submitError:
       "Something went wrong sending your request. Please try again in a moment.",
+    calendly: {
+      loading: "Loading calendar…",
+      iframeTitle: "Book a free strategy call",
+      fallbackHeading: "The calendar could not be loaded.",
+      fallbackBody:
+        "Open the booking page in a new tab to choose a time for your free strategy call.",
+      fallbackLink: "Open the calendar in a new tab",
+      emailFallback: "Or email {email}",
+    },
     fields: {
       name: {
         label: "Name",
@@ -127,7 +136,7 @@ export const landingCopy = {
   privacyPage: {
     title: "Privacy Notice",
     intro:
-      "This notice explains how Standout Group handles personal data submitted through the free strategy call request form on this page.",
+      "This notice explains how Standout Group handles personal data submitted when you claim a free strategy call on this page, including details you enter in the Calendly booking widget.",
     sectionHeadings: {
       controller: "Who controls the data",
       collect: "What we collect and why",
@@ -137,7 +146,7 @@ export const landingCopy = {
       rights: "Your rights",
     },
     collectBody:
-      "We collect your name, work email, website address and prioritised area of law so we can review your suitability for a free strategy call and contact you about this request.",
+      "When you book a free strategy call, Calendly collects your name, work email, timezone and any invitee questions configured for that event (for example firm website and prioritised area of law). If the on-site request form is shown instead, we collect your name, work email, website address and prioritised area of law so we can review suitability and contact you about this request.",
     lawfulBasisPending:
       "The lawful basis for processing will be confirmed by the business after appropriate legal review and inserted here before production use.",
     processorsPending:

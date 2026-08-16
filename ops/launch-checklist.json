@@ -1,6 +1,6 @@
 {
   "title": "Launch checklist — redesign (improvements plan v2)",
-  "updated_at": "2026-07-12T22:20:00.000Z",
+  "updated_at": "2026-08-16T02:08:00.000Z",
   "plan": "improvements plan v2.md Phases 1–8",
   "engineering_status": "complete",
   "phases": {
@@ -32,7 +32,22 @@
     {
       "id": "n8n-webhook",
       "status": "open",
-      "detail": "Set N8N_WEBHOOK_URL and N8N_WEBHOOK_SECRET in production; sheet + SPF/DKIM/DMARC"
+      "detail": "Set n8n_connection_outreachpage and N8N_WEBHOOK_SECRET in production; sheet + SPF/DKIM/DMARC. Form path is the Calendly kill-switch fallback."
+    },
+    {
+      "id": "calendly-event-url",
+      "status": "open",
+      "detail": "Set NEXT_PUBLIC_CALENDLY_EVENT_URL and NEXT_PUBLIC_CALENDLY_ENABLED=1 on Vercel Preview and Production. Confirm invitee questions (name, work email, firm website) in Calendly."
+    },
+    {
+      "id": "calendly-csp-booking",
+      "status": "open",
+      "detail": "On Preview, complete a test booking and confirm CSP does not block Calendly or Recaptcha (curl -I Content-Security-Policy)."
+    },
+    {
+      "id": "calendly-privacy-processor",
+      "status": "done",
+      "detail": "Privacy notice and siteConfig.privacy.processors include Scheduling (Calendly)."
     }
   ],
   "not_blockers_for_redesign": [

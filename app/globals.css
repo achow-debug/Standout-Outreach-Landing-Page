@@ -1306,6 +1306,80 @@ html.modal-open {
   overflow: visible;
 }
 
+/* Calendly inline widget — min-height reserved before iframe paint (CLS).
+   Iframe internals cannot use Source Sans 3 or --radius-md. */
+.review-modal.review-modal--calendly {
+  width: min(calc(100% - 2rem), 52rem);
+  max-width: 52rem;
+}
+
+.review-modal--calendly .review-modal-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.calendly-embed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.calendly-embed-status {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--color-ink-muted);
+}
+
+.calendly-embed-host {
+  position: relative;
+  width: 100%;
+  min-height: 42rem;
+}
+
+.calendly-embed-host iframe {
+  min-width: 100%;
+}
+
+.calendly-embed-fallback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.calendly-embed-fallback-heading {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.calendly-embed-fallback-body,
+.calendly-embed-fallback-email {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-ink-muted);
+}
+
+.calendly-embed-fallback-link {
+  font-weight: 600;
+  color: var(--color-handoff);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.calendly-embed-fallback-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calendly-embed-host {
+    scroll-behavior: auto;
+  }
+}
+
 .review-modal-success {
   outline: none;
 }
@@ -1433,6 +1507,15 @@ html.modal-open {
     );
     margin: auto;
     border-radius: var(--radius-large);
+  }
+
+  .review-modal.review-modal--calendly {
+    width: calc(100% - 16px);
+    max-width: none;
+  }
+
+  .calendly-embed-host {
+    min-height: min(36rem, 70dvh);
   }
 
   .review-modal-panel {

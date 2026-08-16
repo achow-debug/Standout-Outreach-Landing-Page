@@ -13,7 +13,9 @@ export type AnalyticsEventName =
   | "review_cta_open"
   | "review_form_start"
   | "review_form_error"
-  | "review_request_success";
+  | "review_request_success"
+  | "calendly_event_scheduled"
+  | "calendly_embed_error";
 
 export type AnalyticsProps = Record<
   string,
@@ -58,6 +60,7 @@ const ALLOWED_PROP_KEYS = new Set([
   "content",
   "term",
   "referrer_domain",
+  "embed_mode",
 ]);
 
 type PlausibleFn = (

@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: `${landingCopy.privacyPage.title} | ${siteConfig.businessName}`,
   description:
-    "How Standout Group handles personal data submitted through the free 30-day pilot request form.",
+    "How Standout Group handles personal data when you book a free strategy call, including the Calendly scheduling widget.",
   alternates: {
     canonical: "/privacy",
   },
@@ -20,13 +20,13 @@ function buildPrivacySections() {
 
   const processorBody =
     privacy.processors.length > 0
-      ? `Personal data submitted through this form may be processed by: ${privacy.processors.join("; ")}.`
+      ? `Personal data from a strategy call booking or request may be processed by: ${privacy.processors.join("; ")}.`
       : privacyPage.processorsPending;
 
   return [
     {
       heading: privacyPage.sectionHeadings.controller,
-      body: `${privacy.controllerName} is the controller of personal data submitted through this form. Contact: ${email}.`,
+      body: `${privacy.controllerName} is the controller of personal data collected through this booking page and related correspondence. Contact: ${email}.`,
     },
     {
       heading: privacyPage.sectionHeadings.collect,
