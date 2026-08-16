@@ -36,7 +36,6 @@ Set in `.env.local` / Vercel:
 - `NEXT_PUBLIC_CALENDLY_EVENT_URL` — public event-type URL (`https://calendly.com/...`)
 - `NEXT_PUBLIC_CALENDLY_ENABLED=1` — use the widget; omit or `0` to keep the on-site form fallback
 - `NEXT_PUBLIC_CALENDLY_EMBED_MODE=inline` — or `popup` for Calendly’s overlay
-- `NEXT_PUBLIC_CALENDLY_HIDE_GDPR_BANNER=0` — leave Calendly’s GDPR banner on for UK launch
 
 `widget.js` loads only after the CTA is clicked. If the widget fails, the modal offers a new-tab link to the same Calendly URL.
 

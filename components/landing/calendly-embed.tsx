@@ -12,11 +12,11 @@ import {
   CALENDLY_WIDGET_STYLESHEET_HREF,
   getCalendlyEmbedMode,
   getCalendlyEventUrl,
-  shouldHideCalendlyGdprBanner,
   type CalendlyPrefill,
 } from "@/lib/calendly-config";
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
+import type { CalendlyMessagePayload } from "@/types/calendly";
 
 const SCRIPT_ID = "calendly-widget-js";
 const STYLESHEET_ID = "calendly-widget-css";
@@ -106,6 +106,33 @@ function titleInlineIframe(host: HTMLElement, title: string) {
   }
 }
 
+/** Calendly’s default inline embed height; used until `page_height` arrives. */
+const DEFAULT_EMBED_HEIGHT_PX = 700;
+
+function parsePageHeightPx(payload: unknown): number | null {
+  if (!payload || typeof payload !== "object" || !("height" in payload)) {
+    return null;
+  }
+  const raw = (payload as { height?: unknown }).height;
+  if (typeof raw === "number" && Number.isFinite(raw) && raw > 0) {
+    return raw;
+  }
+  if (typeof raw === "string") {
+    const parsed = Number.parseFloat(raw);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  return null;
+}
+
+function applyEmbedHeight(host: HTMLElement, px: number) {
+  const next = `${Math.round(px)}px`;
+  host.style.height = next;
+  const iframe = host.querySelector("iframe");
+  if (iframe) {
+    iframe.style.height = next;
+  }
+}
+
 export function CalendlyEmbed({
   ctaLocation,
   prefill,
@@ -138,9 +165,7 @@ export function CalendlyEmbed({
     let observer: MutationObserver | null = null;
     let timeoutId = 0;
 
-    const embedUrl = buildCalendlyEmbedUrl(bookingUrl, {
-      hideGdprBanner: shouldHideCalendlyGdprBanner(),
-    });
+    const embedUrl = buildCalendlyEmbedUrl(bookingUrl);
 
     function markReady() {
       if (cancelled) return;
@@ -149,6 +174,12 @@ export function CalendlyEmbed({
       if (host) {
         titleInlineIframe(host, copy.iframeTitle);
       }
+    }
+
+    function syncHeightFromPayload(payload: unknown) {
+      if (!host) return;
+      const px = parsePageHeightPx(payload);
+      if (px) applyEmbedHeight(host, px);
     }
 
     function markError() {
@@ -171,10 +202,15 @@ export function CalendlyEmbed({
       const name = calendlyEventName(event);
       if (!name) return;
 
+      if (name === "calendly.page_height") {
+        syncHeightFromPayload((event.data as CalendlyMessagePayload).payload);
+        markReady();
+        return;
+      }
+
       if (
         name === "calendly.event_type_viewed" ||
-        name === "calendly.popup_widget_ready" ||
-        name === "calendly.page_height"
+        name === "calendly.popup_widget_ready"
       ) {
         markReady();
       }
@@ -225,6 +261,7 @@ export function CalendlyEmbed({
         }
 
         host.replaceChildren();
+        applyEmbedHeight(host, DEFAULT_EMBED_HEIGHT_PX);
         window.Calendly.initInlineWidget({
           url: embedUrl,
           parentElement: host,
@@ -234,6 +271,10 @@ export function CalendlyEmbed({
         titleInlineIframe(host, copy.iframeTitle);
         observer = new MutationObserver(() => {
           titleInlineIframe(host, copy.iframeTitle);
+          const iframe = host.querySelector("iframe");
+          if (iframe && !iframe.style.height) {
+            applyEmbedHeight(host, DEFAULT_EMBED_HEIGHT_PX);
+          }
         });
         observer.observe(host, { childList: true, subtree: true });
       })

@@ -84,10 +84,6 @@ export function getCalendlyEmbedMode(): CalendlyEmbedMode {
   return mode === "popup" ? "popup" : "inline";
 }
 
-export function shouldHideCalendlyGdprBanner(): boolean {
-  return envFlagEnabled(process.env.NEXT_PUBLIC_CALENDLY_HIDE_GDPR_BANNER);
-}
-
 export function isCalendlyEnabled(): boolean {
   return (
     envFlagEnabled(process.env.NEXT_PUBLIC_CALENDLY_ENABLED) &&
@@ -97,19 +93,15 @@ export function isCalendlyEnabled(): boolean {
 
 /**
  * Build the embed URL with colour / chrome params.
- * hide_event_type_details stays off so invitees still see duration and location.
+ * Event-type details and GDPR banner are hidden in the iframe chrome.
  */
-export function buildCalendlyEmbedUrl(
-  eventUrl: string,
-  options?: { hideGdprBanner?: boolean },
-): string {
+export function buildCalendlyEmbedUrl(eventUrl: string): string {
   const url = new URL(eventUrl);
   url.searchParams.set("primary_color", CALENDLY_EMBED_COLORS.primary);
   url.searchParams.set("text_color", CALENDLY_EMBED_COLORS.text);
   url.searchParams.set("background_color", CALENDLY_EMBED_COLORS.background);
   url.searchParams.set("hide_landing_page_details", "1");
-  if (options?.hideGdprBanner) {
-    url.searchParams.set("hide_gdpr_banner", "1");
-  }
+  url.searchParams.set("hide_event_type_details", "1");
+  url.searchParams.set("hide_gdpr_banner", "1");
   return url.toString();
 }

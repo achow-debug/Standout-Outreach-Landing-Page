@@ -132,6 +132,9 @@ export const landingCopy = {
   },
   footer: {
     copyright: "© 2026 Standout Group. All rights reserved.",
+    /** Modal chrome — same identity, without “All rights reserved”. */
+    copyrightShort: "© 2026 Standout Group",
+    compliance: "SRA and GDPR compliant.",
   },
   privacyPage: {
     title: "Privacy Notice",

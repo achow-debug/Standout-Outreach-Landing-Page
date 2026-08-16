@@ -322,7 +322,10 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
       <dialog
         ref={dialogRef}
         className={`review-modal${calendlyEnabled ? " review-modal--calendly" : ""}`}
-        aria-labelledby={titleId}
+        aria-labelledby={calendlyEnabled ? undefined : titleId}
+        aria-label={
+          calendlyEnabled ? reviewRequest.calendly.iframeTitle : undefined
+        }
         onClick={handleBackdropClick}
       >
         <div className="review-modal-panel">
@@ -334,9 +337,11 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
                   <span className="brand-mark-accent">{group}</span>
                 </span>
               </p>
-              <h2 id={titleId} className="review-modal-title">
-                {isComplete ? confirmation.heading : reviewRequest.heading}
-              </h2>
+              {calendlyEnabled ? null : (
+                <h2 id={titleId} className="review-modal-title">
+                  {isComplete ? confirmation.heading : reviewRequest.heading}
+                </h2>
+              )}
             </div>
             <button
               type="button"
@@ -390,6 +395,26 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
               />
             )}
           </div>
+
+          {calendlyEnabled ? (
+            <footer className="review-modal-footer">
+              <p className="review-modal-footer-copy">
+                <span>{landingCopy.footer.copyrightShort}</span>
+                <span className="review-modal-footer-sep" aria-hidden="true">
+                  {" "}
+                  ·{" "}
+                </span>
+                <span>{landingCopy.footer.compliance}</span>
+                <span className="review-modal-footer-sep" aria-hidden="true">
+                  {" "}
+                  ·{" "}
+                </span>
+                <a href="/privacy" className="review-modal-footer-link">
+                  {reviewRequest.privacyLinkLabel}
+                </a>
+              </p>
+            </footer>
+          ) : null}
         </div>
       </dialog>
     </ReviewModalContext.Provider>

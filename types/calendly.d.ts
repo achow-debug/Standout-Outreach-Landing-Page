@@ -7,9 +7,13 @@ export type CalendlyEventName =
   | "calendly.popup_closed"
   | "calendly.popup_widget_ready";
 
+export type CalendlyPageHeightPayload = {
+  height?: string | number;
+};
+
 export type CalendlyMessagePayload = {
   event: CalendlyEventName | (string & {});
-  payload?: unknown;
+  payload?: CalendlyPageHeightPayload | unknown;
 };
 
 export type CalendlyPrefillOptions = {

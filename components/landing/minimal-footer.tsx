@@ -8,6 +8,7 @@ export function MinimalFooter() {
     <footer className="site-footer">
       <div className="page-shell">
         <p className="site-footer-copy">{landingCopy.footer.copyright}</p>
+        <p className="site-footer-compliance">{landingCopy.footer.compliance}</p>
       </div>
     </footer>
   );
