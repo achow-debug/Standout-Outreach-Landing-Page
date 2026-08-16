@@ -216,6 +216,7 @@ export async function processReviewRequest(
   seenLeadIds.set(leadId, { seenAt: now });
 
   const webhookUrl = (
+    process.env.n8n_connection_outreachpage ||
     process.env.outreach_Strategy_Call_request ||
     process.env.N8N_WEBHOOK_URL ||
     ""
