@@ -20,7 +20,7 @@ const securityHeaders = [
       "font-src 'self' data: https://assets.calendly.com",
       "style-src 'self' 'unsafe-inline' https://assets.calendly.com",
       "script-src 'self' 'unsafe-inline' https://plausible.io https://assets.calendly.com https://www.google.com https://www.gstatic.com",
-      "connect-src 'self' https://plausible.io https://calendly.com https://api.calendly.com",
+      "connect-src 'self' https://plausible.io https://calendly.com https://api.calendly.com https://vitals.vercel-insights.com",
       "frame-src https://calendly.com https://www.google.com",
       "upgrade-insecure-requests",
     ].join("; "),

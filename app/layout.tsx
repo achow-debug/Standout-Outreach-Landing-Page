@@ -1,6 +1,7 @@
 import { Source_Sans_3 } from "next/font/google";
 import type { Metadata } from "next";
 import Script from "next/script";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsProviderScript } from "@/components/landing/analytics-provider-script";
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
@@ -95,6 +96,7 @@ export default function RootLayout({
         </a>
         {children}
         <AnalyticsProviderScript />
+        <SpeedInsights />
       </body>
     </html>
   );
