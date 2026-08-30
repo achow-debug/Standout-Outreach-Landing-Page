@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import {
   hasSessionFlag,
   setSessionFlag,
@@ -192,12 +193,13 @@ export function EnquiryVideoPlayer({
         ) : (
           <>
             {showPoster ? (
-              <img
+              <Image
                 className="video-player-media"
                 src={posterPath!}
                 alt=""
-                decoding="async"
-                fetchPriority="high"
+                fill
+                sizes="(min-width: 768px) 68rem, 100vw"
+                priority
                 onError={() => setPosterFailed(true)}
               />
             ) : null}

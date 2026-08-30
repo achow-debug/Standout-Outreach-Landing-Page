@@ -153,8 +153,8 @@ function FaqBody() {
   return (
     <div className="info-dialog-stack">
       {items.map((item) => {
-        const paragraphs = Array.isArray(item.answer)
-          ? item.answer
+        const paragraphs: string[] = Array.isArray(item.answer)
+          ? [...item.answer]
           : [item.answer];
         return (
           <section key={item.question} className="info-dialog-block">

@@ -26,16 +26,18 @@ export function Hero() {
 
   return (
     <header className="hero-surface flex flex-col items-center gap-5 pt-8 pb-6 md:gap-6 md:pt-6 md:pb-8">
-      <p className="brand-mark text-center motion-enter motion-enter--0">
-        <span className="brand-mark-name">
-          {standout}{" "}
-          <span className="brand-mark-accent">{group}</span>
-        </span>
-      </p>
+      <div className="flex flex-col items-center gap-2">
+        <p className="brand-mark text-center motion-enter motion-enter--0">
+          <span className="brand-mark-name">
+            {standout}{" "}
+            <span className="brand-mark-accent">{group}</span>
+          </span>
+        </p>
 
-      <p className="hero-audience motion-enter motion-enter--1 inline-block bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full text-center">
-        {hero.audience}
-      </p>
+        <p className="hero-audience motion-enter motion-enter--1 inline-block bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full text-center">
+          {hero.audience}
+        </p>
+      </div>
 
       <h1 className="hero-title motion-enter motion-enter--2 w-full text-center text-slate-950">
         {accentPhrase(hero.h1, "£100K")}

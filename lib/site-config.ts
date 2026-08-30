@@ -37,23 +37,16 @@ export const siteConfig = {
     controllerName: "Standout Group",
     controllerEmail: "achow@standoutgroup.net",
     /**
-     * Aligned with the confirmed Standout Group privacy notice (trading-name
-     * controller path until the formal registered entity is published).
+     * Aligned with the 30 August 2026 Privacy Policy on /privacy.
      */
     lawfulBasis:
-      "Pilot requests and related correspondence are processed because they are necessary to take steps at your request before a potential contract, and to pursue our legitimate interest in reviewing suitability for the free 30-day pilot and communicating about that request in a way that does not override your rights.",
+      "Legitimate interests — responding to an enquiry audit request the visitor has actively initiated. Consent — for any follow-up communications beyond delivering the audit itself, which is optional and can be withdrawn at any time.",
     retentionPeriod:
-      "Pilot request records and related correspondence are kept while needed to assess eligibility for the free 30-day pilot, communicate about the request, handle follow-up questions and meet legal obligations, then deleted or anonymised. Fixed calendar retention periods will be published here if adopted.",
-    /**
-     * Live processor set for this microsite (same stack as the main Standout Group site).
-     */
+      "We retain enquiry audit request data only for as long as necessary to deliver the audit and provide any related follow-up, after which it is deleted.",
     processors: [
-      "Hosting (Vercel)",
       "Workflow automation (n8n)",
       "Lead storage (Google Sheets)",
-      "Transactional email (Resend)",
-      "Analytics (Plausible Analytics)",
-      "Scheduling (Calendly)",
+      "Hosting (Vercel)",
     ],
   },
   /**

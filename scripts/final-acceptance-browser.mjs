@@ -162,7 +162,7 @@ const modalCopy = await page.evaluate(() => {
     ),
     privacyConsent: Boolean(
       privacyLine?.textContent?.includes("contact you about this call") &&
-        privacyLink?.textContent?.trim() === "Privacy Notice",
+        privacyLink?.textContent?.trim() === "Privacy Policy",
     ),
     bannedLeftovers: [
       "Start My Free",

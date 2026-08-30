@@ -52,7 +52,7 @@ export const landingCopy = {
         id: "response-time",
         icon: "clock" as const,
         title: "Serious prospects prevented from going cold",
-        body: "Personalised, automated follow-up gives enquirers a clear next step, so their enquiry reaches your team instead of sitting in an inbox.",
+        body: "Personalised, automated follow-up acknowledges enquirers & gives them a clear next step, so your team receives clearer information. (Without the back & forth).",
       },
       {
         id: "compliance",
@@ -85,7 +85,7 @@ export const landingCopy = {
     ],
     submitConsent:
       "By submitting, you agree that Standout Group may contact you about this call.",
-    privacyLinkLabel: "Privacy Notice",
+    privacyLinkLabel: "Privacy Policy",
     errorSummaryHeading: "Please correct the following:",
     submitError:
       "Something went wrong sending your request. Please try again in a moment.",
@@ -200,26 +200,174 @@ export const landingCopy = {
     },
   },
   privacyPage: {
-    title: "Privacy Notice",
+    title: "Privacy Policy",
+    lastUpdated: "30 August 2026",
     intro:
-      "This notice explains how Standout Group handles personal data submitted when you claim a free strategy call on this page, including details you enter in the Calendly booking widget.",
-    sectionHeadings: {
-      controller: "Who controls the data",
-      collect: "What we collect and why",
-      lawfulBasis: "Lawful basis",
-      processors: "Processors",
-      retention: "Retention",
-      rights: "Your rights",
-    },
-    collectBody:
-      "When you book a free strategy call, Calendly collects your name, work email, timezone and any invitee questions configured for that event (for example firm website and prioritised area of law). If the on-site request form is shown instead, we collect your name, work email, website address and prioritised area of law so we can review suitability and contact you about this request.",
-    lawfulBasisPending:
-      "The lawful basis for processing will be confirmed by the business after appropriate legal review and inserted here before production use.",
-    processorsPending:
-      "Depending on the live configuration, processors may include hosting (for example Vercel), workflow automation (for example n8n), email delivery, analytics and spreadsheet providers used to manage strategy call requests. Approved processor details will be listed here before production.",
-    retentionPending:
-      "Retention periods for strategy call requests and unsuccessful prospects will be defined with the business and inserted here before production. Do not treat any placeholder period as policy.",
-    rightsBody:
-      "You may request access to, correction of, or deletion of your personal data. Contact {email} for privacy questions or rights requests.",
+      "This Privacy Policy explains how Standout Group (\"we\", \"us\", \"our\") collects, uses, and protects the personal data of visitors to standoutgroup.net (the \"Site\"), including anyone who submits our free enquiry audit request form.",
+    sections: [
+      {
+        heading: "Who we are",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "Standout Group is the data controller responsible for the personal data described in this policy. If you have any questions about how we handle your data, you can contact us at achow@standoutgroup.net.",
+          },
+        ],
+      },
+      {
+        heading: "What data we collect",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "When you request your free enquiry audit, we collect:",
+          },
+          {
+            type: "bullets" as const,
+            items: [
+              "Your name",
+              "Your work email address",
+              "Your firm's website",
+              "Your priority area of law",
+            ],
+          },
+          {
+            type: "paragraph" as const,
+            text: "We also record the timestamp of your submission.",
+          },
+        ],
+      },
+      {
+        heading: "How and why we use your data",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "We use the information you submit to:",
+          },
+          {
+            type: "bullets" as const,
+            items: [
+              "Deliver the enquiry audit you requested and follow up with you about it",
+              "Contact you about related services, where you've given us consent to do so",
+            ],
+          },
+          {
+            type: "paragraph" as const,
+            text: "Our legal basis for processing this data is:",
+          },
+          {
+            type: "bullets" as const,
+            items: [
+              "Legitimate interests — responding to an enquiry audit request you've actively initiated",
+              "Consent — for any follow-up communications beyond delivering the audit itself, which is optional and which you can withdraw at any time",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Who we share your data with",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "We use the following third-party services to operate the Site and process your request. Each acts as a data processor on our behalf:",
+          },
+          {
+            type: "bullets" as const,
+            items: [
+              "n8n — receives your form submission and passes it through our workflow automation",
+              "Google Sheets — stores submitted enquiry audit requests",
+              "Vercel — hosts the Site",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "International data transfers",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "All personal data collected through the Site is handled and stored within the UK. We do not transfer your personal data outside the UK.",
+          },
+        ],
+      },
+      {
+        heading: "How long we keep your data",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "We retain your data only for as long as necessary to deliver your enquiry audit and provide any related follow-up, after which it is deleted.",
+          },
+        ],
+      },
+      {
+        heading: "Cookies and analytics",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "The Site uses Vercel Analytics to understand website traffic. Vercel Analytics does not use cookies — visitors are identified anonymously via a hashed value generated from the incoming request, and only aggregated, anonymised data is collected. No personal identifiers or cross-site tracking are used.",
+          },
+        ],
+      },
+      {
+        heading: "Your rights",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "Under UK GDPR, you have the right to:",
+          },
+          {
+            type: "bullets" as const,
+            items: [
+              "Access the personal data we hold about you",
+              "Request correction of inaccurate data",
+              "Request erasure of your data",
+              "Restrict how we process your data",
+              "Receive your data in a portable format",
+              "Object to our processing of your data",
+              "Lodge a complaint with the Information Commissioner's Office (ICO) if you believe your data has been mishandled",
+            ],
+          },
+          {
+            type: "paragraph" as const,
+            text: "To exercise any of these rights, contact us at achow@standoutgroup.net.",
+          },
+        ],
+      },
+      {
+        heading: "Marketing and opt-out",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "If we send you any communications beyond delivering your requested enquiry audit that count as marketing, you can opt out of these at any time using the unsubscribe link provided, in line with PECR requirements.",
+          },
+        ],
+      },
+      {
+        heading: "Security",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "We take appropriate technical and organisational measures to protect your personal data against unauthorised access, loss, or misuse.",
+          },
+        ],
+      },
+      {
+        heading: "Changes to this policy",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated \"last updated\" date.",
+          },
+        ],
+      },
+      {
+        heading: "Contact us",
+        blocks: [
+          {
+            type: "paragraph" as const,
+            text: "If you have any questions about this Privacy Policy or how your data is handled, please contact us at achow@standoutgroup.net.",
+          },
+        ],
+      },
+    ],
   },
 } as const;
