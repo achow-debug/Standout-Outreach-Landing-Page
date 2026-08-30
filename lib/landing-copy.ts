@@ -24,10 +24,10 @@ export const landingCopy = {
   },
   hero: {
     audience: "Exclusively for UK Law Firms",
-    h1: "We analysed 100+ UK law firms. 70% are leaking money the exact same way. See it in 90 seconds.",
+    h1: "We mystery-shopped 100+ UK law firms. Here’s what happened after we submitted an enquiry.",
     supporting:
-      "Most firms assume this isn't happening at theirs. That's exactly what the other 70% assumed too.",
-    bridge: "Check for yourself →",
+      "Your team thinks every enquiry gets handled. We found out what actually happens.",
+    bridge: "Watch the 90-second breakdown",
   },
   video: {
     sectionLabel: "Breakdown video",
@@ -44,21 +44,21 @@ export const landingCopy = {
     items: [
       {
         id: "data",
-        icon: "chart" as const,
-        title: "Live-Tracked",
-        body: "Every result is measured and shared with you as it happens- nothing to just take our word for.",
+        icon: "check" as const,
+        title: "Spend time on qualified, serious enquiries",
+        body: "A landing page that qualifies leads so you can offer free consultations to prospects with real intent, not time-wasters.",
       },
       {
         id: "response-time",
-        icon: "lock" as const,
-        title: "5-Minute Follow-Up",
-        body: "Enquiries followed up within 5 minutes",
+        icon: "clock" as const,
+        title: "Serious prospects prevented from going cold",
+        body: "Personalised, automated follow-up gives enquirers a clear next step, so their enquiry reaches your team instead of sitting in an inbox.",
       },
       {
         id: "compliance",
-        icon: "shield" as const,
-        title: "SRA Compliant",
-        body: "Built to SRA Transparency Rules requirements from day one",
+        icon: "calendar" as const,
+        title: "30-day free trial",
+        body: "We offer a risk-free trial with no obligation. Choose to continue only after you see live results. We’re fully transparent about fees.",
       },
     ],
     /** Risk-reversal explanation for the free 30-day pilot. */
@@ -70,8 +70,6 @@ export const landingCopy = {
   cta: {
     label: "Claim My Free Strategy Call",
     mobileLabel: "Claim My Free Strategy Call",
-    microcopy:
-      "No obligation. We only work together if it makes sense for both of us.",
     /** Shown once after the breakdown video finishes — static cue, no motion. */
     afterVideoCue: "Ready when you are — claim your free strategy call.",
   },
@@ -134,7 +132,72 @@ export const landingCopy = {
     copyright: "© 2026 Standout Group. All rights reserved.",
     /** Modal chrome — same identity, without “All rights reserved”. */
     copyrightShort: "© 2026 Standout Group",
+    /** Review-modal chrome only — the page footer uses legalNotice. */
     compliance: "SRA and GDPR compliant.",
+    about:
+      "We're a specialist growth agency for UK law firms, engineering the systems that turn existing & paid traffic into profitable, retained matters. Founder Alex set out to qualify as a solicitor, before building Standout Group in 2025, after watching firms sold generic 'more leads' promises by cookie-cutter agencies. Since our first contract in January 2026, we've been growing with firms across Staffordshire & beyond.",
+    legalNotice:
+      "Standout Group are registered with the Information Commissioner's Office (ICO) and strictly operate in compliance with the UK GDPR and PECR. All outbound email and telemarketing activities are processed under the lawful basis of Legitimate Interests.",
+    nav: {
+      whyChooseUs: "Why choose us?",
+      faq: "FAQ",
+      contact: "Contact",
+      privacyPolicy: "Privacy Policy",
+    },
+    whyChooseUs: {
+      title: "Why choose us?",
+      items: [
+        {
+          heading: "Built for law firms, not “businesses”",
+          body: "Every system we build is designed around how legal enquiries actually convert, not repurposed from a generic marketing template.",
+        },
+        {
+          heading: "Built around your SRA duties",
+          body: "Nothing bypasses your client care process. Every enquiry's logged, tracked, and handled to GDPR standard- the way your SRA obligations already require.",
+        },
+        {
+          heading: "A 24/7 accessible client-focused support",
+          body: "A collaborative & supportive team, listening, adapting, even for complex requirements.",
+        },
+      ],
+    },
+    faq: {
+      title: "FAQ",
+      items: [
+        {
+          question:
+            "How will Standout Group affect our firm's client care process?",
+          answer:
+            "It won't, our process runs inside your existing SRA obligations, not around them. Every enquiry that comes through during the 30 days is still logged and actioned the way your client care and complaints process already requires. Client data is handled to GDPR standard throughout. We're not a regulated entity ourselves, so we're not claiming compliance on our own behalf, the point is that the process is built to protect the compliance you already have in place.",
+        },
+        {
+          question: "Is there a contract or commitment after trial ends?",
+          answer: [
+            "None. You decide whether to continue based on the results we've generated for you. Every enquiry we recover is yours to keep, whatever you decide.",
+            "The landing page and workflows we build are simply the engine that powers the trial — so if you choose not to continue, that engine winds down. The enquiries it's already generated for you don't go anywhere.",
+          ],
+        },
+        {
+          question: "How much time will this take from me or my team?",
+          answer: [
+            "Next to none. We handle the setup and build your page — all of it, for free. The only thing we need from you is a high-quality version of your logo, and we take it from there.",
+            "From here, the next step is a free 30-minute strategy call, where we'll show you exactly how our enquiry recovery system can start recovering the enquiries you're currently losing.",
+          ],
+        },
+        {
+          question:
+            "What happens to our enquiry and client data during the trial?",
+          answer:
+            "Your enquiry and client data stays on your firm's own systems throughout. We never store, copy, or move it elsewhere. Access is limited to our team working directly with you, and it's only ever used to run it. We take privacy seriously and include a data processing agreement (DPA) in line with UK GDPR.",
+        },
+      ],
+    },
+    contact: {
+      title: "Contact",
+      emailLabel: "Email",
+      phoneLabel: "Phone",
+      whatsappLabel: "WhatsApp",
+    },
   },
   privacyPage: {
     title: "Privacy Notice",

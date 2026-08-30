@@ -1,7 +1,7 @@
 import { AnalyticsBootstrap } from "@/components/landing/analytics-bootstrap";
 import { EnquiryVideoPlayer } from "@/components/landing/enquiry-video-player";
 import { Hero } from "@/components/landing/hero";
-import { MinimalFooter } from "@/components/landing/minimal-footer";
+import { SiteFooter } from "@/components/landing/site-footer";
 import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
 import { ReassuranceBlock } from "@/components/landing/reassurance-block";
 import {
@@ -59,7 +59,7 @@ export default function HomePage() {
           <MobileStickyCta />
         </ReviewRequestShell>
       </main>
-      <MinimalFooter />
+      <SiteFooter />
     </>
   );
 }

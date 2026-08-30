@@ -469,7 +469,6 @@ export function ReviewRequestCta() {
           </svg>
         </span>
       </button>
-      <p className="cta-microcopy text-slate-900">{cta.microcopy}</p>
     </section>
   );
 }
@@ -485,7 +484,6 @@ export function MobileStickyCta() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const unlocked = useStickyCtaUnlocked();
   const suppressed = useStickyCtaSuppressed();
-  const videoComplete = useVideoCompleteFlag();
   const isVisible = unlocked && !suppressed;
 
   useEffect(() => {
@@ -511,11 +509,6 @@ export function MobileStickyCta() {
       inert={!isVisible}
     >
       <div className="mobile-sticky-cta">
-        {videoComplete ? (
-          <p className="mobile-cta-after-video-cue" role="status">
-            {cta.afterVideoCue}
-          </p>
-        ) : null}
         <button
           ref={buttonRef}
           type="button"
@@ -525,7 +518,6 @@ export function MobileStickyCta() {
         >
           {cta.label}
         </button>
-        <p className="mobile-cta-microcopy">{cta.microcopy}</p>
       </div>
     </div>
   );

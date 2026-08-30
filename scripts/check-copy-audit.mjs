@@ -73,15 +73,15 @@ if (/retentionPeriod:\s*null/.test(siteConfig)) {
 }
 
 if (/companyNumber:\s*null/.test(siteConfig)) {
-  // Redesign footer is copyright-only; registration details are not shown on-page.
+  // Footer does not render company number; unset is acceptable.
   passed.push(
-    "Company number unset is acceptable — redesign footer is copyright-only (not rendered)",
+    "Company number unset is acceptable — not rendered in the footer",
   );
 }
 
 if (/registeredAddress:\s*null/.test(siteConfig)) {
   passed.push(
-    "Registered address unset is acceptable — redesign footer is copyright-only (not rendered)",
+    "Registered address unset is acceptable — not rendered in the footer",
   );
 }
 

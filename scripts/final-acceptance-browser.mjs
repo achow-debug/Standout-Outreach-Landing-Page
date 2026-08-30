@@ -80,18 +80,19 @@ const scope = await page.evaluate(() => {
     stickyDeferred: sticky
       ? !sticky.classList.contains("is-visible")
       : false,
-    dialogCount: document.querySelectorAll("dialog.review-modal").length,
+    dialogCount: document.querySelectorAll(
+      "dialog.review-modal:not(.info-dialog)",
+    ).length,
     banned: [
       "Book a strategy call",
       "transcript",
       "MIT study",
       "Helping UK law firms convert more",
     ].filter((s) => text.toLowerCase().includes(s.toLowerCase())),
-    hasPrivacyLinkInChrome: Boolean(
-      document.querySelector(
-        '.page-shell a[href="/privacy"], .site-footer a[href="/privacy"], .hero-surface a[href="/privacy"]',
-      ),
+    hasPrivacyLinkInFooter: Boolean(
+      document.querySelector('.site-footer a[href="/privacy"]'),
     ),
+    hasCookieSettings: /cookie settings/i.test(text),
   };
 });
 record("single_h1", scope.h1Count === 1, scope.h1);
@@ -107,7 +108,8 @@ record(
 record("sticky_cta_deferred_until_video", scope.stickyDeferred);
 record("dialog_present", scope.dialogCount === 1);
 record("no_banned_copy", scope.banned.length === 0, scope.banned.join(", "));
-record("no_privacy_link_on_landing_chrome", !scope.hasPrivacyLinkInChrome);
+record("privacy_link_in_footer", scope.hasPrivacyLinkInFooter);
+record("no_cookie_settings", !scope.hasCookieSettings);
 
 await unlockMobileStickyCta();
 const unlockedCta = await page.evaluate(() => {
@@ -126,14 +128,14 @@ record("one_page_cta", unlockedCta === 1, `visible=${unlockedCta}`);
 // Modal open / Escape / focus return (mobile viewport → sticky dock CTA)
 await page.click(".mobile-sticky-cta-wrapper .btn-cta");
 const opened = await page.evaluate(() => ({
-  open: document.querySelector("dialog.review-modal")?.open ?? false,
+  open: document.querySelector("dialog.review-modal:not(.info-dialog)")?.open ?? false,
   modalOpen: document.documentElement.classList.contains("modal-open"),
   fields: document.querySelectorAll(".request-form .field").length,
 }));
 record("modal_opens", opened.open && opened.modalOpen && opened.fields === 4);
 
 const modalCopy = await page.evaluate(() => {
-  const modal = document.querySelector("dialog.review-modal");
+  const modal = document.querySelector("dialog.review-modal:not(.info-dialog)");
   if (!modal) return null;
   const text = modal.innerText;
   const websiteInput = modal.querySelector('input[name="website"]');
@@ -193,7 +195,7 @@ record("privacy_link_in_modal", Boolean(modalCopy?.privacyConsent));
 
 // Compact centred modal shell (design plan Phase 1 + 7) — not fullscreen
 const modalShell = await page.evaluate(() => {
-  const modal = document.querySelector("dialog.review-modal");
+  const modal = document.querySelector("dialog.review-modal:not(.info-dialog)");
   if (!modal || !modal.open) return null;
   const rect = modal.getBoundingClientRect();
   const styles = getComputedStyle(modal);
@@ -308,7 +310,7 @@ record(
 await page.keyboard.press("Escape");
 await page.waitForTimeout(120);
 const closed = await page.evaluate(() => ({
-  open: document.querySelector("dialog.review-modal")?.open ?? false,
+  open: document.querySelector("dialog.review-modal:not(.info-dialog)")?.open ?? false,
   modalOpen: document.documentElement.classList.contains("modal-open"),
   focus: document.activeElement?.className ?? "",
 }));
@@ -392,7 +394,7 @@ record(
 );
 
 const successShell = await page.evaluate(() => {
-  const modal = document.querySelector("dialog.review-modal");
+  const modal = document.querySelector("dialog.review-modal:not(.info-dialog)");
   const panel = modal?.querySelector(".review-modal-panel");
   if (!modal || !panel) return null;
   const mr = modal.getBoundingClientRect();

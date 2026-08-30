@@ -16,31 +16,29 @@ function TrustSignalIcon({ name }: { name: TrustIcon }) {
     "aria-hidden": true as const,
   };
 
-  if (name === "chart") {
+  if (name === "check") {
     return (
       <svg {...common}>
-        <path d="M4 19V5" />
-        <path d="M4 19h16" />
-        <path d="M8 15v-3" />
-        <path d="M12 15V8" />
-        <path d="M16 15v-5" />
+        <path d="M20 6 9 17l-5-5" />
       </svg>
     );
   }
 
-  if (name === "lock") {
+  if (name === "clock") {
     return (
       <svg {...common}>
-        <rect x="5" y="11" width="14" height="10" rx="2" />
-        <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 6v6l4 2" />
       </svg>
     );
   }
 
   return (
     <svg {...common}>
-      <path d="M12 3 5 6v5c0 4.5 3 8.2 7 9.5 4-1.3 7-5 7-9.5V6l-7-3Z" />
-      <path d="M9.5 12.5 11.5 14.5 15 11" />
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4" />
+      <path d="M8 2v4" />
+      <path d="M3 10h18" />
     </svg>
   );
 }

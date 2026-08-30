@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MinimalFooter } from "@/components/landing/minimal-footer";
+import { SiteFooter } from "@/components/landing/site-footer";
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
 
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
           })}
         </div>
       </main>
-      <MinimalFooter />
+      <SiteFooter />
     </>
   );
 }
