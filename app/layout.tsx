@@ -4,9 +4,8 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsProviderScript } from "@/components/landing/analytics-provider-script";
-import { landingCopy } from "@/lib/landing-copy";
+import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
-import { getVideoAssetStatus } from "@/lib/video-assets";
 import "./globals.css";
 
 const sourceSans = Source_Sans_3({
@@ -15,11 +14,9 @@ const sourceSans = Source_Sans_3({
   variable: "--font-source-sans",
 });
 
-const posterAvailable = getVideoAssetStatus().poster;
-
 export const metadata: Metadata = {
-  title: landingCopy.meta.title,
-  description: landingCopy.meta.description,
+  title: officialCopy.meta.title,
+  description: officialCopy.meta.description,
   metadataBase: new URL(siteConfig.productionDomain),
   alternates: {
     canonical: siteConfig.canonicalPath,
@@ -32,30 +29,17 @@ export const metadata: Metadata = {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
-    title: landingCopy.meta.title,
-    description: landingCopy.meta.description,
+    title: officialCopy.meta.title,
+    description: officialCopy.meta.description,
     url: siteConfig.canonicalPath,
     siteName: siteConfig.businessName,
     type: "website",
     locale: "en_GB",
-    ...(posterAvailable
-      ? {
-          images: [
-            {
-              url: siteConfig.video.posterPath,
-              width: 1280,
-              height: 720,
-              alt: "Legal Enquiry Review video poster",
-            },
-          ],
-        }
-      : {}),
   },
   twitter: {
-    card: posterAvailable ? "summary_large_image" : "summary",
-    title: landingCopy.meta.title,
-    description: landingCopy.meta.description,
-    ...(posterAvailable ? { images: [siteConfig.video.posterPath] } : {}),
+    card: "summary",
+    title: officialCopy.meta.title,
+    description: officialCopy.meta.description,
   },
 };
 

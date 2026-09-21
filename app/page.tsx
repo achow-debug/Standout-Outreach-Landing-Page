@@ -1,65 +1,38 @@
-import { AnalyticsBootstrap } from "@/components/landing/analytics-bootstrap";
-import { EnquiryVideoPlayer } from "@/components/landing/enquiry-video-player";
-import { Hero } from "@/components/landing/hero";
-import { SiteFooter } from "@/components/landing/site-footer";
 import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
-import { ReassuranceBlock } from "@/components/landing/reassurance-block";
+import { MeetTheFounder } from "@/components/official/meet-the-founder";
+import { OfficialHero } from "@/components/official/official-hero";
+import { ProofStrip } from "@/components/official/proof-strip";
 import {
-  MobileStickyCta,
-  ReviewRequestCta,
-  ReviewRequestShell,
-} from "@/components/landing/review-request-cta";
-import { VideoBridgeLink } from "@/components/landing/video-bridge-link";
-import { landingCopy } from "@/lib/landing-copy";
-import { siteConfig } from "@/lib/site-config";
-import { getVideoAssetStatus } from "@/lib/video-assets";
+  OfficialSectionStubs,
+  SectionMarquee,
+} from "@/components/official/section-marquee";
+import { SiteHeader } from "@/components/official/site-header";
+import { WhatWeCover } from "@/components/official/what-we-cover";
+import { WhatPartnersSay } from "@/components/official/what-partners-say";
+import { WhatYouGet } from "@/components/official/what-you-get";
+import { WhoItsFor } from "@/components/official/who-its-for";
 
 /**
- * Landing page: hero → bridge → video → trust → CTA → footer.
+ * Official homepage: sticky header → full-bleed dark hero → light proof →
+ * who it’s for → what we cover → what you get → what partners say →
+ * founder accordion → marquee → section stubs.
  */
 export default function HomePage() {
-  const { video } = landingCopy;
-  const assets = siteConfig.video;
-  const status = getVideoAssetStatus();
-
   return (
-    <>
-      <AnalyticsBootstrap />
+    <main id="main-content" tabIndex={-1}>
       <MotionBootstrap />
-      <main id="main-content" tabIndex={-1}>
-        <ReviewRequestShell>
-          <div className="page-shell flex flex-col items-center gap-5 pb-12 md:gap-8 md:pb-8">
-            <Hero />
-
-            <div data-reveal>
-              <VideoBridgeLink />
-            </div>
-
-            <section
-              id="video"
-              className="video-section w-full"
-              aria-label={video.sectionLabel}
-              data-reveal
-            >
-              <EnquiryVideoPlayer
-                src={assets.mp4Path}
-                captionsPath={assets.captionsPath}
-                posterPath={status.poster ? assets.posterPath : null}
-                hasCaptions={status.captions}
-                fallbackMessage={video.fallbackMessage}
-                directLinkLabel={video.directLinkLabel}
-                playLabel={video.playLabel}
-              />
-            </section>
-
-            <ReassuranceBlock />
-
-            <ReviewRequestCta />
-          </div>
-          <MobileStickyCta />
-        </ReviewRequestShell>
-      </main>
-      <SiteFooter />
-    </>
+      <SiteHeader />
+      <OfficialHero />
+      <div className="page-shell official-proof-shell">
+        <ProofStrip />
+      </div>
+      <WhoItsFor />
+      <WhatWeCover />
+      <WhatYouGet />
+      <WhatPartnersSay />
+      <MeetTheFounder />
+      <SectionMarquee />
+      <OfficialSectionStubs />
+    </main>
   );
 }
