@@ -23,7 +23,12 @@ const STYLESHEET_ID = "calendly-widget-css";
 const LOAD_TIMEOUT_MS = 8000;
 const CALENDLY_ORIGIN = "https://calendly.com";
 
-export type CalendlyCtaLocation = "inline_desktop" | "sticky_mobile";
+export type CalendlyCtaLocation =
+  | "inline_desktop"
+  | "sticky_mobile"
+  | "official_apply"
+  | "official_header"
+  | "official_how";
 
 type EmbedStatus = "loading" | "ready" | "error";
 

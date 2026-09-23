@@ -1,26 +1,86 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import Image from "next/image";
 import {
   officialCopy,
   type OfficialPartnersItem,
 } from "@/lib/official-copy";
+import type { ReactNode } from "react";
 
-const ITEM_DELAYS = ["motion-enter--0", "motion-enter--1"] as const;
+function publicFileExists(src: string) {
+  return existsSync(join(process.cwd(), "public", src.replace(/^\//, "")));
+}
 
-function PartnerCard({
-  item,
-  delayClass,
-}: {
-  item: OfficialPartnersItem;
-  delayClass: string;
-}) {
+function initialsFromName(name: string) {
+  const parts = name.split(/\s+/).filter(Boolean);
+  const first = parts[0]?.[0] ?? "";
+  const last = parts.at(-1)?.[0] ?? "";
+  return `${first}${last}`.toUpperCase();
+}
+
+function emphasize(quote: string, phrase?: string): ReactNode {
+  if (!phrase) return quote;
+  const index = quote.indexOf(phrase);
+  if (index === -1) return quote;
   return (
-    <li className={`official-partners-card motion-enter ${delayClass}`}>
+    <>
+      {quote.slice(0, index)}
+      <strong>{phrase}</strong>
+      {quote.slice(index + phrase.length)}
+    </>
+  );
+}
+
+function PartnerAvatar({ item }: { item: OfficialPartnersItem }) {
+  const photo = item.photo ?? item.portraitSrc;
+  if (photo && publicFileExists(photo)) {
+    return (
+      <Image
+        src={photo}
+        alt={item.portraitAlt}
+        width={56}
+        height={56}
+        className="official-partners-avatar"
+      />
+    );
+  }
+
+  return (
+    <span className="official-partners-avatar official-partners-avatar--mono" aria-hidden="true">
+      {initialsFromName(item.name)}
+    </span>
+  );
+}
+
+function PartnerCard({ item }: { item: OfficialPartnersItem }) {
+  return (
+    <li className="official-partners-card">
+      <span className="official-partners-mark" aria-hidden="true">
+        “
+      </span>
       <figure className="official-partners-figure">
         <blockquote className="official-partners-quote">
-          <p>{item.quote}</p>
+          <p className="t-body">
+            <span className="official-partners-quote-mark" aria-hidden="true">
+              “
+            </span>
+            {emphasize(item.quote, item.emphasis)}
+            <span className="official-partners-quote-mark" aria-hidden="true">
+              ”
+            </span>
+          </p>
         </blockquote>
         <figcaption className="official-partners-caption">
-          <p className="official-partners-name">{item.name}</p>
-          <p className="official-partners-role">{item.role}</p>
+          <PartnerAvatar item={item} />
+          <div className="official-partners-identity">
+            <p className="official-partners-name t-body">{item.name}</p>
+            {item.role ? (
+              <p className="official-partners-role t-small">{item.role}</p>
+            ) : null}
+            {item.firm ? (
+              <p className="official-partners-firm t-small">{item.firm}</p>
+            ) : null}
+          </div>
         </figcaption>
       </figure>
     </li>
@@ -28,35 +88,27 @@ function PartnerCard({
 }
 
 /**
- * Light corroboration band: full-width intro, two equal 12px quote cards.
+ * Stacked partner quotes. Photos, firm and role render when the data has them.
  */
 export function WhatPartnersSay() {
-  const { eyebrow, heading, items } = officialCopy.partners;
+  const { heading, items } = officialCopy.partners;
 
   return (
     <section
       className="official-partners"
-      id="what-partners-say"
+      id="partners"
       aria-labelledby="official-partners-heading"
       tabIndex={-1}
     >
       <div className="page-shell official-partners-inner">
-        <div className="official-partners-intro motion-enter motion-enter--0">
-          <p className="official-partners-eyebrow">{eyebrow}</p>
-          <h2
-            id="official-partners-heading"
-            className="official-partners-heading"
-          >
+        <div className="official-partners-intro">
+          <h2 id="official-partners-heading" className="official-partners-heading t-h2">
             {heading}
           </h2>
         </div>
         <ul className="official-partners-grid">
-          {items.map((item, index) => (
-            <PartnerCard
-              key={item.id}
-              item={item}
-              delayClass={ITEM_DELAYS[index] ?? "motion-enter--0"}
-            />
+          {items.map((item) => (
+            <PartnerCard key={item.id} item={item} />
           ))}
         </ul>
       </div>

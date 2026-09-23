@@ -1,36 +1,21 @@
 import { officialCopy, type OfficialWhoItsForItem } from "@/lib/official-copy";
 
-const ITEM_DELAYS = [
-  "motion-enter--0",
-  "motion-enter--1",
-  "motion-enter--2",
-] as const;
-
-function WhoItem({
-  item,
-  delayClass,
-}: {
-  item: OfficialWhoItsForItem;
-  delayClass: string;
-}) {
+function WhoItem({ item }: { item: OfficialWhoItsForItem }) {
   return (
-    <li className={`official-who-item motion-enter ${delayClass}`}>
-      <span className="official-who-index" aria-hidden="true">
-        {item.index}
-      </span>
-      <div className="official-who-item-copy">
-        <h3 className="official-who-item-title">{item.title}</h3>
-        <p className="official-who-item-body">{item.body}</p>
-      </div>
+    <li className="official-who-item">
+      <span className="official-who-rule" aria-hidden="true" />
+      <h3 className="official-who-item-title t-h3">{item.title}</h3>
+      <p className="official-who-item-body t-body">{item.body}</p>
     </li>
   );
 }
 
 /**
- * Light qualification band: headline left, A/B/C audience list right.
+ * Qualification band. Items use a short purple rule instead of A/B/C letters.
  */
 export function WhoItsFor() {
-  const { eyebrow, heading, supporting, items } = officialCopy.whoItsFor;
+  const { eyebrow, heading, headingAccent, supporting, items } =
+    officialCopy.whoItsFor;
 
   return (
     <section
@@ -41,19 +26,16 @@ export function WhoItsFor() {
     >
       <div className="page-shell official-who-inner">
         <div className="official-who-intro">
-          <p className="official-who-eyebrow">{eyebrow}</p>
-          <h2 id="official-who-heading" className="official-who-heading">
-            {heading}
+          <p className="official-who-eyebrow t-label">{eyebrow}</p>
+          <h2 id="official-who-heading" className="official-who-heading t-h2-feature">
+            <span className="official-who-heading-line">{heading}</span>
+            <span className="official-who-heading-line">{headingAccent}</span>
           </h2>
-          <p className="official-who-supporting">{supporting}</p>
+          <p className="official-who-supporting t-lead">{supporting}</p>
         </div>
         <ol className="official-who-list">
-          {items.map((item, index) => (
-            <WhoItem
-              key={item.id}
-              item={item}
-              delayClass={ITEM_DELAYS[index] ?? "motion-enter--0"}
-            />
+          {items.map((item) => (
+            <WhoItem key={item.id} item={item} />
           ))}
         </ol>
       </div>

@@ -1,5 +1,5 @@
 import { Source_Sans_3 } from "next/font/google";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -10,9 +10,16 @@ import "./globals.css";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
   display: "swap",
   variable: "--font-source-sans",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: officialCopy.meta.title,
@@ -50,6 +57,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-GB" className={sourceSans.variable} suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://assets.calendly.com" />
+        <link rel="preconnect" href="https://calendly.com" />
+      </head>
       <body className="font-sans antialiased">
         {/*
           Enables CSS load/scroll motion only when JS runs and the visitor

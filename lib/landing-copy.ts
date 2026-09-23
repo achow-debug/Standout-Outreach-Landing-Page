@@ -74,7 +74,7 @@ export const landingCopy = {
     afterVideoCue: "Ready when you are — claim your free strategy call.",
   },
   reviewRequest: {
-    heading: "Claim your free strategy call",
+    heading: "Claim My Free Strategy Call",
     subtitle:
       "Tell us about your firm and we will review your current enquiry journey before confirming the next steps.",
     submitCta: "Claim My Free Strategy Call",
@@ -135,7 +135,7 @@ export const landingCopy = {
     /** Review-modal chrome only — the page footer uses legalNotice. */
     compliance: "SRA and GDPR compliant.",
     about:
-      "We're a specialist growth agency for UK law firms, engineering the systems that turn existing & paid traffic into profitable, retained matters. Founder Alex set out to qualify as a solicitor, before building Standout Group in 2025, after watching firms sold generic 'more leads' promises by cookie-cutter agencies. Since our first contract in January 2026, we've been growing with firms across Staffordshire & beyond.",
+      "We're a specialist growth agency for UK law firms, engineering the systems that turn existing and paid traffic into profitable, retained matters.",
     legalNotice:
       "Standout Group are registered with the Information Commissioner's Office (ICO) and strictly operate in compliance with the UK GDPR and PECR. All outbound email and telemarketing activities are processed under the lawful basis of Legitimate Interests.",
     nav: {

@@ -26,7 +26,12 @@ import {
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
 
-type CtaLocation = "inline_desktop" | "sticky_mobile";
+export type CtaLocation =
+  | "inline_desktop"
+  | "sticky_mobile"
+  | "official_apply"
+  | "official_header"
+  | "official_how";
 
 type OpenFn = (
   trigger: HTMLButtonElement | null,
@@ -34,6 +39,14 @@ type OpenFn = (
 ) => void;
 
 const ReviewModalContext = createContext<OpenFn | null>(null);
+
+export function useReviewModal(): OpenFn {
+  const openModal = useContext(ReviewModalContext);
+  if (!openModal) {
+    throw new Error("useReviewModal must be used inside ReviewRequestShell");
+  }
+  return openModal;
+}
 
 function useVideoCompleteFlag() {
   const [complete, setComplete] = useState(false);
@@ -426,13 +439,9 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
  */
 export function ReviewRequestCta() {
   const { cta } = landingCopy;
-  const openModal = useContext(ReviewModalContext);
+  const openModal = useReviewModal();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const videoComplete = useVideoCompleteFlag();
-
-  if (!openModal) {
-    throw new Error("ReviewRequestCta must be used inside ReviewRequestShell");
-  }
 
   return (
     <section
@@ -480,7 +489,7 @@ export function ReviewRequestCta() {
  */
 export function MobileStickyCta() {
   const { cta } = landingCopy;
-  const openModal = useContext(ReviewModalContext);
+  const openModal = useReviewModal();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const unlocked = useStickyCtaUnlocked();
   const suppressed = useStickyCtaSuppressed();
@@ -495,10 +504,6 @@ export function MobileStickyCta() {
       document.documentElement.classList.remove("sticky-cta-clearance");
     };
   }, [isVisible]);
-
-  if (!openModal) {
-    throw new Error("MobileStickyCta must be used inside ReviewRequestShell");
-  }
 
   return (
     <div

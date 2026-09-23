@@ -50,6 +50,9 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  images: {
+    qualities: [75, 80],
+  },
   async headers() {
     return [
       {

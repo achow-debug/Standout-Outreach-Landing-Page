@@ -1,27 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useState } from "react";
 import { officialCopy } from "@/lib/official-copy";
 
 /**
- * Navy accordion modelled on Student Venture’s “Built around you” band.
- * Opens when the visitor arrives on #founder.
+ * Full-bleed navy on mobile. The longer bio stays behind "Read Alex's story".
  */
 export function MeetTheFounder() {
-  const detailsRef = useRef<HTMLDetailsElement>(null);
-  const { heading, portraitAlt, portraitSrc, paragraphs } =
-    officialCopy.founder;
-  const [lead, ...rest] = paragraphs;
+  const panelId = useId();
+  const [open, setOpen] = useState(false);
+  const {
+    heading,
+    caption,
+    readMore,
+    portraitAlt,
+    portraitSrc,
+    paragraphs,
+  } = officialCopy.founder;
+  const [statement, bioLead, ...bioRest] = paragraphs;
 
   useEffect(() => {
-    const details = detailsRef.current;
-    if (!details) return;
-
     const openIfFounderHash = () => {
-      if (window.location.hash === "#founder") {
-        details.open = true;
-      }
+      if (window.location.hash === "#founder") setOpen(true);
     };
 
     openIfFounderHash();
@@ -30,9 +31,7 @@ export function MeetTheFounder() {
     const onClick = (event: MouseEvent) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest('a[href="#founder"]')) {
-        details.open = true;
-      }
+      if (target.closest('a[href="#founder"]')) setOpen(true);
     };
     document.addEventListener("click", onClick);
 
@@ -50,38 +49,58 @@ export function MeetTheFounder() {
       tabIndex={-1}
     >
       <div className="page-shell official-founder-inner">
-        <details ref={detailsRef} className="official-founder-panel">
-          <summary className="official-founder-summary">
-            <span className="official-founder-summary-copy">
-              <h2
-                id="official-founder-heading"
-                className="official-founder-eyebrow"
-              >
-                {heading}
-              </h2>
-              <span className="official-founder-lead">{lead}</span>
-            </span>
-            <span className="official-founder-chevron" aria-hidden="true" />
-          </summary>
-          <div className="official-founder-body">
-            <div className="official-founder-portrait">
+        <div className="official-founder-panel">
+          <h2
+            id="official-founder-heading"
+            className="official-founder-eyebrow t-label t-label--on-dark"
+          >
+            {heading}
+          </h2>
+          <figure className="official-founder-portrait">
+            <div className="official-founder-photo-frame">
               <Image
                 src={portraitSrc}
                 alt={portraitAlt}
                 fill
                 className="official-founder-photo"
-                sizes="(min-width: 768px) 28rem, 20rem"
+                sizes="(min-width: 1024px) 40vw, 100vw"
               />
             </div>
-            <div className="official-founder-copy-stack">
-              {rest.map((paragraph) => (
-                <p key={paragraph} className="official-founder-copy">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+            <figcaption className="official-founder-caption t-small">
+              {caption}
+            </figcaption>
+          </figure>
+          <div className="official-founder-copy-col">
+            <p className="official-founder-statement t-h3">{statement}</p>
+            {bioLead ? <p className="official-founder-copy t-body">{bioLead}</p> : null}
+            {bioRest.length > 0 ? (
+              <>
+                <button
+                  type="button"
+                  className="official-founder-more"
+                  aria-expanded={open}
+                  aria-controls={panelId}
+                  onClick={() => setOpen((value) => !value)}
+                >
+                  {readMore}
+                </button>
+                <div
+                  id={panelId}
+                  className="expand"
+                  data-open={open ? "true" : "false"}
+                >
+                  <div className="official-founder-rest">
+                    {bioRest.map((paragraph) => (
+                      <p key={paragraph} className="official-founder-copy t-body">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : null}
           </div>
-        </details>
+        </div>
       </div>
     </section>
   );

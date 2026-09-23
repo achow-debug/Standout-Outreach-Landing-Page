@@ -19,7 +19,7 @@ export const CALENDLY_WIDGET_STYLESHEET_HREF =
 
 /** Hex without `#` — Calendly embed query params. Mirrors app/globals.css. */
 export const CALENDLY_EMBED_COLORS = {
-  primary: "6b2c5f",
+  primary: "4F3192",
   text: "0f172a",
   background: "ffffff",
 } as const;
