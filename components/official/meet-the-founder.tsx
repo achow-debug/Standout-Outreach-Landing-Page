@@ -12,7 +12,6 @@ export function MeetTheFounder() {
   const [open, setOpen] = useState(false);
   const {
     heading,
-    caption,
     readMore,
     portraitAlt,
     portraitSrc,
@@ -52,7 +51,7 @@ export function MeetTheFounder() {
         <div className="official-founder-panel">
           <h2
             id="official-founder-heading"
-            className="official-founder-eyebrow t-label t-label--on-dark"
+            className="official-founder-eyebrow t-kicker t-kicker--on-dark"
           >
             {heading}
           </h2>
@@ -66,9 +65,6 @@ export function MeetTheFounder() {
                 sizes="(min-width: 1024px) 40vw, 100vw"
               />
             </div>
-            <figcaption className="official-founder-caption t-small">
-              {caption}
-            </figcaption>
           </figure>
           <div className="official-founder-copy-col">
             <p className="official-founder-statement t-h3">{statement}</p>

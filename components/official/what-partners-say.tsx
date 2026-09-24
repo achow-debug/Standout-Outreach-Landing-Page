@@ -5,7 +5,6 @@ import {
   officialCopy,
   type OfficialPartnersItem,
 } from "@/lib/official-copy";
-import type { ReactNode } from "react";
 
 function publicFileExists(src: string) {
   return existsSync(join(process.cwd(), "public", src.replace(/^\//, "")));
@@ -16,19 +15,6 @@ function initialsFromName(name: string) {
   const first = parts[0]?.[0] ?? "";
   const last = parts.at(-1)?.[0] ?? "";
   return `${first}${last}`.toUpperCase();
-}
-
-function emphasize(quote: string, phrase?: string): ReactNode {
-  if (!phrase) return quote;
-  const index = quote.indexOf(phrase);
-  if (index === -1) return quote;
-  return (
-    <>
-      {quote.slice(0, index)}
-      <strong>{phrase}</strong>
-      {quote.slice(index + phrase.length)}
-    </>
-  );
 }
 
 function PartnerAvatar({ item }: { item: OfficialPartnersItem }) {
@@ -64,7 +50,7 @@ function PartnerCard({ item }: { item: OfficialPartnersItem }) {
             <span className="official-partners-quote-mark" aria-hidden="true">
               “
             </span>
-            {emphasize(item.quote, item.emphasis)}
+            {item.quote}
             <span className="official-partners-quote-mark" aria-hidden="true">
               ”
             </span>

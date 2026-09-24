@@ -2,7 +2,6 @@
 
 import { useId, useState } from "react";
 import { officialCopy } from "@/lib/official-copy";
-import { siteConfig } from "@/lib/site-config";
 
 function Chevron({ open }: { open: boolean }) {
   return (
@@ -28,8 +27,7 @@ function Chevron({ open }: { open: boolean }) {
  * Several items can be open at once.
  */
 export function Faq() {
-  const { heading, prompt, emailLabel, whatsAppLabel, items } =
-    officialCopy.faq;
+  const { heading, items } = officialCopy.faq;
   const baseId = useId();
   const [openIds, setOpenIds] = useState<string[]>([]);
 
@@ -77,30 +75,16 @@ export function Faq() {
                   aria-labelledby={buttonId}
                 >
                   <div>
-                    <p className="official-faq-answer t-body">{item.answer}</p>
+                    {item.answer.split("\n\n").map((paragraph) => (
+                      <p key={paragraph} className="official-faq-answer t-body">
+                        {paragraph}
+                      </p>
+                    ))}
                   </div>
                 </div>
               </div>
             );
           })}
-        </div>
-        <div className="official-faq-contact">
-          <h3 className="official-faq-prompt t-h3">{prompt}</h3>
-          <a
-            className="official-faq-contact-link"
-            href={`mailto:${siteConfig.contactEmail}`}
-          >
-            {emailLabel}
-            <span>{siteConfig.contactEmail}</span>
-          </a>
-          <a
-            className="official-faq-contact-link"
-            href={siteConfig.contactWhatsAppHref}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {whatsAppLabel}
-          </a>
         </div>
       </div>
     </section>

@@ -49,7 +49,7 @@ export function OfficialHero() {
     >
       <div className="page-shell official-hero-inner">
         <div className="official-hero-copy">
-          <p className="official-hero-eyebrow t-label t-label--on-dark">{eyebrow}</p>
+          <p className="official-hero-eyebrow t-kicker t-kicker--on-dark">{eyebrow}</p>
           <h1 id="official-hero-heading" className="official-hero-title t-display">
             <span className="official-hero-title-lead">{h1}</span>
             <span className="official-hero-title-accent">{h1Accent}</span>
@@ -58,7 +58,7 @@ export function OfficialHero() {
           <button
             id="hero-cta"
             type="button"
-            className="btn btn-primary btn-cta official-hero-cta"
+            className="btn btn-primary btn-on-dark btn-cta official-hero-cta"
             data-booking-cta=""
             onClick={() => openBooking("hero")}
           >

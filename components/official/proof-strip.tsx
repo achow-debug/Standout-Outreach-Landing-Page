@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { officialCopy, type OfficialProofItem } from "@/lib/official-copy";
 import type { ReactNode } from "react";
 
-const ACCENT_SPAN = "text-[var(--color-accent)] font-bold";
+const ACCENT_SPAN = "font-bold text-[var(--official-headline-ink)]";
 const COUNT_MS = 900;
 
 function accentPhrase(text: string, phrase?: string): ReactNode {
@@ -102,7 +102,7 @@ export function ProofStrip() {
 
   return (
     <section ref={sectionRef} className="official-proof" aria-label={eyebrow}>
-      <p className="official-proof-eyebrow t-small">{eyebrow}</p>
+      <p className="official-proof-eyebrow t-kicker">{eyebrow}</p>
       <div className="official-proof-grid">
         {items.map((item) => (
           <ProofItem key={item.id} item={item} progress={progress} />

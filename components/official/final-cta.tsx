@@ -14,11 +14,9 @@ export function OfficialFinalCta() {
     eyebrow,
     heading,
     headingAccent,
-    supporting,
     buttonLabel,
     nextLabel,
     nextSteps,
-    withAlex,
   } = officialCopy.finalCta;
   const thankYou = officialCopy.thankYou;
   const { portraitSrc, portraitAlt } = officialCopy.founder;
@@ -35,13 +33,15 @@ export function OfficialFinalCta() {
         <div className={booked ? "official-apply-panel is-thanks" : "official-apply-panel"}>
           {booked ? (
             <div className="official-apply-thanks">
-              <Image
-                src={portraitSrc}
-                alt={portraitAlt}
-                width={400}
-                height={500}
-                className="official-apply-thanks-photo"
-              />
+              <div className="official-apply-thanks-frame">
+                <Image
+                  src={portraitSrc}
+                  alt={portraitAlt}
+                  width={400}
+                  height={400}
+                  className="official-apply-thanks-photo"
+                />
+              </div>
               <h2 id="official-apply-heading" className="official-apply-heading t-h2">
                 {thankYou.heading}
               </h2>
@@ -68,7 +68,7 @@ export function OfficialFinalCta() {
             </div>
           ) : (
             <>
-              <p className="official-apply-eyebrow t-label t-label--on-dark">
+              <p className="official-apply-eyebrow t-kicker t-kicker--on-dark">
                 {eyebrow}
               </p>
               <h2 id="official-apply-heading" className="official-apply-heading t-h2">
@@ -77,9 +77,8 @@ export function OfficialFinalCta() {
                 </span>{" "}
                 <span className="official-apply-heading-line">{headingAccent}</span>
               </h2>
-              <p className="official-apply-supporting t-lead">{supporting}</p>
               <div className="official-apply-next">
-                <p className="official-apply-next-label t-label t-label--on-dark">
+                <p className="official-apply-next-label t-kicker t-kicker--on-dark">
                   {nextLabel}
                 </p>
                 <ol className="official-apply-steps official-apply-steps--row">
@@ -93,19 +92,9 @@ export function OfficialFinalCta() {
                   ))}
                 </ol>
               </div>
-              <p className="official-apply-alex t-small">
-                <Image
-                  src={portraitSrc}
-                  alt=""
-                  width={40}
-                  height={40}
-                  className="official-apply-alex-photo"
-                />
-                {withAlex}
-              </p>
               <button
                 type="button"
-                className="btn btn-primary btn-cta official-apply-cta"
+                className="btn btn-primary btn-on-dark btn-cta official-apply-cta"
                 data-booking-cta=""
                 onClick={() => openBooking("final")}
               >

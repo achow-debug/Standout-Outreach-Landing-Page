@@ -5,7 +5,7 @@ import { useBooking } from "@/components/official/booking-provider";
 import { useInView } from "@/hooks/use-in-view";
 import { officialCopy } from "@/lib/official-copy";
 
-const ACCENT_SPAN = "text-[var(--color-accent)] font-bold";
+const ACCENT_SPAN = "font-bold text-[var(--official-headline-ink)]";
 
 function accentPhrase(text: string, phrase?: string): ReactNode {
   if (!phrase) return text;
@@ -117,9 +117,10 @@ export function HowItWorks() {
       tabIndex={-1}
     >
       <div className="page-shell official-how-inner">
-        <div className="official-how-sticky">
+        <div className="official-how-stage">
+          <div className="official-how-sticky">
           <div className="official-how-intro">
-            <p className="official-how-eyebrow t-label">{eyebrow}</p>
+            <p className="official-how-eyebrow t-kicker">{eyebrow}</p>
             <h2 id="official-how-heading" className="official-how-heading t-h2">
               <span className="official-how-heading-line">{heading}</span>
               <span className="official-how-heading-line">{headingSecond}</span>
@@ -142,9 +143,9 @@ export function HowItWorks() {
             </button>
             <p className="official-how-cta-note t-small">{ctaNote}</p>
           </div>
-        </div>
+          </div>
 
-        <div className="official-how-main">
+          <div className="official-how-main">
           <div className="official-how-panel">
             <p className="official-how-pill t-small">{pill}</p>
             <ol className="official-how-steps">
@@ -177,6 +178,7 @@ export function HowItWorks() {
             <h3 className="official-how-step-title t-h3">{addOn.title}</h3>
             <p className="official-how-step-body t-body">{addOn.body}</p>
           </div>
+          </div>
         </div>
 
         <div
@@ -185,7 +187,7 @@ export function HowItWorks() {
           aria-labelledby="official-how-compliance-heading"
         >
           <div className="official-how-compliance-lead">
-            <p className="official-how-compliance-label t-label">
+            <p className="official-how-compliance-label t-kicker">
               <ShieldIcon />
               {compliance.kicker}
             </p>

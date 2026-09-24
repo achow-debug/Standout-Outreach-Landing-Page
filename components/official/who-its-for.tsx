@@ -26,7 +26,7 @@ export function WhoItsFor() {
     >
       <div className="page-shell official-who-inner">
         <div className="official-who-intro">
-          <p className="official-who-eyebrow t-label">{eyebrow}</p>
+          <p className="official-who-eyebrow t-kicker">{eyebrow}</p>
           <h2 id="official-who-heading" className="official-who-heading t-h2-feature">
             <span className="official-who-heading-line">{heading}</span>
             <span className="official-who-heading-line">{headingAccent}</span>

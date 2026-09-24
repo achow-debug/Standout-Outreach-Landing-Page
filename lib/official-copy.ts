@@ -14,17 +14,17 @@ export const officialCopy = {
     applyHref: "#book",
   },
   hero: {
-    eyebrow: "Growth consultancy for law firms",
+    eyebrow: "Law firm growth partner",
     h1: "Enabling ambitious law firms to thrive",
     h1Accent: "in 2026 and beyond.",
-    supporting: "The UK’s most innovative legal growth agency.",
+    supporting: "The UK’s most innovative law firm growth partner.",
     ctaLabel: "Claim My Free Strategy Call",
     secondaryLabel: "See how the pilot works",
     secondaryHref: "#how-it-works",
     reassurance: [
       "Free 30-day pilot",
       "Built around SRA/BSB and GDPR",
-      "20-minute video call",
+      "20-minute strategy call",
     ],
     imageSrc: "/images/hero-business-cards.jpg",
     imageAlt: "Standout Group business cards on a balcony overlooking the city.",
@@ -51,7 +51,7 @@ export const officialCopy = {
       { id: "who-its-for", label: "Who it’s for" },
       { id: "how-it-works", label: "How it works" },
       { id: "founder", label: "Founder" },
-      { id: "faq", label: "FAQ" },
+      { id: "faq", label: "FAQs" },
     ],
   },
   whoItsFor: {
@@ -114,7 +114,7 @@ export const officialCopy = {
     timeline: [
       {
         id: "start",
-        label: "20-minute call.",
+        label: "20-minute strategy call.",
         caption: "Where it starts.",
       },
       {
@@ -141,7 +141,7 @@ export const officialCopy = {
       body: "Legal marketing runs on rules general marketing doesn’t. Every page, form and follow-up sequence we build is designed around SRA/BSB compliance and GDPR from the start, not added afterward as a disclaimer at the bottom of the page.",
     },
     ctaLabel: "Claim My Free Strategy Call",
-    ctaNote: "Free 20-minute video call",
+    ctaNote: "A 20-minute collaborative conversation",
   },
   partners: {
     eyebrow: "What partners say",
@@ -151,7 +151,6 @@ export const officialCopy = {
         id: "florenda-abdo",
         quote:
           "Alex didn’t promise a fancy website redesign or a flood of new clients. He proposed diagnosing first, fixing our highest-value law pages, then improving how we captured and tracked enquiries. I agreed to expand only once we could see it working. That phased approach, not a big-bang relaunch, is why we said yes.",
-        emphasis: "That phased approach, not a big-bang relaunch",
         name: "Florenda Abdo",
         role: "Conveyancing Law Specialist",
         firm: undefined,
@@ -160,66 +159,63 @@ export const officialCopy = {
         portraitAlt: "Portrait of Florenda Abdo, Conveyancing Law Specialist",
       },
       {
-        id: "brian-kamgue-kargan",
+        id: "jayden-chow",
         quote:
           "I found Alex after he emailed me — an email that described problems I recognised. When he reached out, I didn’t book a call straight away. I looked into them first, the way I’d expect a client to look into us. What got me on the call was that it was framed as a collaboration, not a sales pitch.",
-        emphasis: "framed as a collaboration, not a sales pitch",
-        name: "Brian Kamgue-Kargan",
+        name: "Jayden Chow",
         role: "Family Law Specialist",
         firm: undefined,
         photo: undefined,
-        portraitSrc: "/images/partners/brian-kamgue-kargan.jpg",
-        portraitAlt:
-          "Portrait of Brian Kamgue-Kargan, Family Law Specialist",
+        portraitSrc: "/images/partners/jayden-chow.jpg",
+        portraitAlt: "Portrait of Jayden Chow, Family Law Specialist",
       },
     ],
   },
   faq: {
-    heading: "Questions before you book",
-    prompt: "Still have a question?",
-    emailLabel: "Email",
-    whatsAppLabel: "WhatsApp",
+    heading: "FAQs",
     items: [
       {
-        id: "catch",
-        question: "What’s the catch with a free pilot?",
-        answer: "TODO: Alex.",
+        id: "existing-setup",
+        question:
+          "We already have a website and a marketing agency. Where does this fit?",
+        answer:
+          "Alongside them. We don’t replace your website or your agency. Most firms’ sites look fine; the losses happen after someone gets in touch, through a slow reply, no follow-up, or an enquiry that never becomes a consultation. Depending on your setup, the pilot runs on your existing site or from a standalone page, including if you don’t have a website yet.",
+      },
+      {
+        id: "sra-obligations",
+        question: "Will this affect our SRA obligations?",
+        answer:
+          "It’s built to keep them intact. Enquiries are logged and actioned promptly, consent and communications are tracked, and nothing bypasses your own client-care or complaints procedures.",
+      },
+      {
+        id: "time",
+        question: "How much time will this take from me or my team?",
+        answer:
+          "Next to none. We handle the setup and management for 30 days, all of it, for free. The only thing we need from you is a high-quality version of your logo, and we take it from there.\n\nFrom here, the next step is a collaborative strategy call, where we'll discuss where we can potentially help.",
+      },
+      {
+        id: "enquiry-data",
+        question: "What happens to our enquiry and client data during the pilot?",
+        answer:
+          "Your enquiry and client data stays on your firm's own systems throughout. We never store, copy, or move it elsewhere. Access is limited to our team working directly with you, and it's only ever used to run it. We take privacy seriously and include a data processing agreement (DPA) in line with UK GDPR.",
       },
       {
         id: "after-30-days",
         question: "What happens after the 30 days?",
         answer:
-          "If you continue: TODO (how pricing works). If you don’t, what we built during the pilot is switched off.",
-      },
-      {
-        id: "new-website",
-        question: "Do we need a new website?",
-        answer:
-          "No. Depending on your setup, the pilot build lives on your existing site or on a separate page.",
-      },
-      {
-        id: "sra-gdpr",
-        question: "How do you handle SRA and GDPR?",
-        answer:
-          "Everything we build keeps your own SRA obligations intact: enquiries are logged and actioned promptly, consent and communications are tracked, nothing bypasses your client-care or complaints process, and data is handled under UK GDPR and stored in the UK.",
+          "We review the results with you. If you want to keep it running, ongoing work depends on your firm’s direction, and the cost depends entirely on scope of your operation. We’re proud to be fair & transparent about our pricing. If you decide not to continue, there’s no obligation, and we switch off everything we built.",
       },
       {
         id: "the-call",
-        question: "What happens on the 20-minute call?",
-        answer: "TODO: Alex.",
-      },
-      {
-        id: "ads",
-        question: "Is ads management included?",
+        question: "What happens on the strategy call?",
         answer:
-          "Not in the pilot. Google Ads and Meta Ads management is a separate paid service.",
+          "We’ll look at how new clients reach your firm now, where they drop off, and what that’s likely costing you. If we don’t see a clear gap, we’ll say so.",
       },
     ],
   },
   founder: {
     heading: "Meet the founder",
     name: "Alex",
-    caption: "Alex, Founder",
     readMore: "Read Alex's story",
     portraitAlt: "Alex, founder of Standout Group",
     portraitSrc: "/images/founder-alex.jpg",
@@ -235,15 +231,13 @@ export const officialCopy = {
     eyebrow: "No cost. No obligation.",
     heading: "See exactly where",
     headingAccent: "your enquiries are leaking.",
-    supporting: "One 20-minute call. That’s all it takes to find out.",
     buttonLabel: "Claim My Free Strategy Call",
     nextLabel: "What happens next",
     nextSteps: [
       "Pick a time that suits you.",
-      "Have a 20-minute video call with Alex.",
+      "Identify where high-value matters are currently being lost.",
       "If there’s a fit, your free pilot starts.",
     ],
-    withAlex: "You’ll speak directly with Alex.",
   },
   thankYou: {
     heading: "Your call is booked.",

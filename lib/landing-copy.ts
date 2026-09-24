@@ -135,7 +135,7 @@ export const landingCopy = {
     /** Review-modal chrome only — the page footer uses legalNotice. */
     compliance: "SRA and GDPR compliant.",
     about:
-      "We're a specialist growth agency for UK law firms, engineering the systems that turn existing and paid traffic into profitable, retained matters.",
+      "We're a law firm growth partner for UK law firms, engineering the systems that turn existing and paid traffic into profitable, retained matters.",
     legalNotice:
       "Standout Group are registered with the Information Commissioner's Office (ICO) and strictly operate in compliance with the UK GDPR and PECR. All outbound email and telemarketing activities are processed under the lawful basis of Legitimate Interests.",
     nav: {

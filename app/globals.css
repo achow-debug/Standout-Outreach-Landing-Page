@@ -20,8 +20,8 @@
   --color-error: #9b1c1c;
   --color-error-bg: #fef2f2;
 
-  --font-sans: var(--font-source-sans), "Source Sans 3", ui-sans-serif, system-ui,
-    sans-serif;
+  --font-sans: var(--font-geist), Geist, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, monospace;
 
   --space-section: clamp(1.25rem, 3vw, 2rem);
   --measure: 36rem;
@@ -137,6 +137,20 @@
   color: var(--official-accent-on-dark, #c4b5fd);
 }
 
+.t-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  color: var(--color-ink-quiet);
+}
+
+.t-kicker--on-dark {
+  color: rgb(248 250 252 / 60%);
+}
+
 .t-small {
   font-size: var(--text-small);
   line-height: 1.5;
@@ -167,6 +181,7 @@
   --color-error: var(--color-error);
   --color-error-bg: var(--color-error-bg);
   --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 *,
@@ -400,6 +415,26 @@ a:hover {
   background-color: var(--color-accent-hover);
   background-image: none;
   color: #fff;
+}
+
+.btn-primary.btn-on-dark {
+  background-color: var(--official-accent-on-dark);
+  color: var(--color-ink);
+  border-top-color: transparent;
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .btn-primary.btn-on-dark:hover:not(:disabled) {
+    background-color: var(--official-accent-on-dark-hover);
+    color: var(--color-ink);
+    box-shadow: none;
+  }
+}
+
+.btn-primary.btn-on-dark:active {
+  background-color: var(--official-accent-on-dark-hover);
+  color: var(--color-ink);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1968,6 +2003,9 @@ html.modal-open {
 }
 
 .site-footer-legal a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 0.875rem;
   font-weight: 600;
   color: #e2e8f0;
@@ -2043,7 +2081,8 @@ html.modal-open {
   --official-ink-on-dark: var(--color-bg); /* #f8fafc */
   --official-muted-on-dark: #cbd5e1; /* footer body */
   --official-accent-on-dark: #c4b5fd; /* lavender on navy — 9.7:1 vs #0f172a */
-  --official-band-tint: #f3f1f8; /* light lavender/slate — Who it's for */
+  --official-accent-on-dark-hover: #b7a4fc;
+  --official-band-tint: #f1f5f9; /* neutral light grey — section wash */
   --official-headline-ink: #020617;
   --official-headline-muted: var(--color-ink-quiet);
   --official-header-offset: 5.5rem;
@@ -2144,9 +2183,10 @@ html.modal-open {
   .official-header-nav-link {
     position: relative;
     z-index: 1;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: none;
     text-decoration: none;
     color: var(--color-ink-muted);
@@ -2215,7 +2255,7 @@ html.modal-open {
 
 .official-hero-title-accent {
   display: block;
-  color: var(--official-accent-on-dark);
+  color: inherit;
 }
 
 .official-hero-supporting {
@@ -2233,15 +2273,14 @@ html.modal-open {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: var(--official-accent-on-dark);
+  color: var(--official-muted-on-dark);
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .official-hero-secondary:hover {
-  color: var(--official-accent-on-dark);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  color: var(--official-ink-on-dark);
 }
 
 .official-hero-reassure {
@@ -2263,7 +2302,7 @@ html.modal-open {
 .official-hero-reassure svg {
   flex-shrink: 0;
   margin-top: 0.1rem;
-  color: var(--official-accent-on-dark);
+  color: currentColor;
 }
 
 .official-hero .btn-watch-outline {
@@ -2358,8 +2397,6 @@ html.modal-open {
 .official-proof-eyebrow {
   margin: 0 0 1.25rem;
   text-align: left;
-  font-weight: 600;
-  color: #475569; /* slate-600 */
 }
 
 .official-proof-grid {
@@ -2375,7 +2412,7 @@ html.modal-open {
 
 .official-proof-figure {
   margin: 0 0 0.35rem;
-  color: var(--color-accent);
+  color: var(--official-headline-ink);
 }
 
 .official-proof-body {
@@ -2478,7 +2515,7 @@ html.modal-open {
   width: 24px;
   height: 2px;
   margin-bottom: 0.75rem;
-  background: var(--color-accent);
+  background: var(--official-headline-ink);
 }
 
 .official-who-item-copy {
@@ -2522,6 +2559,10 @@ html.modal-open {
   gap: 2rem;
   padding-top: 4rem;
   padding-bottom: 4rem;
+}
+
+.official-how-stage {
+  display: contents;
 }
 
 .official-how-sticky {
@@ -2576,7 +2617,7 @@ html.modal-open {
 
 .official-how-panel {
   padding: 1.25rem;
-  background: color-mix(in srgb, var(--color-accent) 6%, #fff);
+  background: var(--color-bg);
   border-radius: 1rem;
 }
 
@@ -2589,7 +2630,7 @@ html.modal-open {
   border-radius: 999px;
   background: #fff;
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--color-ink-quiet);
 }
 
 .official-how-steps {
@@ -2621,10 +2662,10 @@ html.modal-open {
   top: calc(0.45rem + 5px);
   bottom: calc(-0.45rem - 5px);
   width: 2px;
-  background: color-mix(in srgb, var(--color-accent) 22%, var(--color-line));
+  background: var(--color-line);
 }
 
-/* Purple fill. Static and complete unless motion is allowed. */
+/* Ink fill. Static and complete unless motion is allowed. */
 .official-how-step:not(:last-child)::after {
   content: "";
   position: absolute;
@@ -2632,7 +2673,7 @@ html.modal-open {
   top: calc(0.45rem + 5px);
   bottom: calc(-0.45rem - 5px);
   width: 2px;
-  background: var(--color-accent);
+  background: var(--official-headline-ink);
   transform-origin: top;
 }
 
@@ -2645,18 +2686,18 @@ html.modal-open {
   height: 10px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid color-mix(in srgb, var(--color-accent) 35%, var(--color-line));
+  border: 2px solid var(--color-line);
 }
 
 .official-how-step.is-reached .official-how-dot {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
+  background: var(--official-headline-ink);
+  border-color: var(--official-headline-ink);
 }
 
 .official-how-step-label {
   margin: 0 0 0.25rem;
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--color-ink-quiet);
 }
 
 .official-how-step-title {
@@ -2718,7 +2759,7 @@ html.modal-open {
   height: 11px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid var(--color-accent);
+  border: 2px solid var(--color-line);
 }
 
 .official-how-timeline-label {
@@ -2752,7 +2793,7 @@ html.modal-open {
 .official-how-compliance {
   padding: 1.25rem;
   background: var(--official-band-tint);
-  border-left: 3px solid var(--color-accent);
+  border-left: 3px solid var(--color-line);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
@@ -2784,11 +2825,10 @@ html.modal-open {
 }
 
 @media (min-width: 1024px) {
-  .page-shell.official-how-inner {
+  .official-how-stage {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: 3rem;
-    row-gap: 3rem;
     align-items: start;
   }
 
@@ -2798,7 +2838,6 @@ html.modal-open {
     align-items: flex-start;
     gap: 1.75rem;
     grid-column: 1 / 6;
-    grid-row: 1;
     position: sticky;
     top: calc(var(--header-h) + 32px);
     align-self: start;
@@ -2813,11 +2852,9 @@ html.modal-open {
 
   .official-how-main {
     grid-column: 6 / 13;
-    grid-row: 1;
   }
 
   .official-how-compliance {
-    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: 3rem;
@@ -2879,8 +2916,8 @@ html.modal-open {
 
 @media (prefers-reduced-motion: reduce) {
   .official-how-dot {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: var(--official-headline-ink);
+    border-color: var(--official-headline-ink);
   }
 }
 
@@ -2993,9 +3030,10 @@ html.modal-open {
   align-items: center;
   gap: 0.75rem;
   min-height: 44px;
-  color: var(--color-accent);
+  color: var(--color-ink);
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .official-faq-contact-link span {
@@ -3140,7 +3178,7 @@ html.modal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-accent);
+  background: var(--official-headline-ink);
   color: var(--official-ink-on-dark);
   font-size: 0.875rem;
   font-weight: 700;
@@ -3182,7 +3220,7 @@ html.modal-open {
   .official-partners-mark {
     display: block;
     margin: 0 0 0.35rem;
-    color: #c4b5fd;
+    color: #cbd5e1;
     font-size: 4.25rem;
     font-weight: 700;
     line-height: 0.7;
@@ -3207,7 +3245,7 @@ html.modal-open {
   .official-partners-mark {
     display: block;
     margin: 0 0 0.35rem;
-    color: #c4b5fd;
+    color: #cbd5e1;
     font-size: 4.25rem;
     font-weight: 700;
     line-height: 0.7;
@@ -3262,7 +3300,7 @@ html.modal-open {
   position: relative;
   width: 100%;
   max-height: 360px;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--color-handoff);
@@ -3270,7 +3308,7 @@ html.modal-open {
 
 .official-founder-photo {
   object-fit: cover;
-  object-position: top;
+  object-position: center;
 }
 
 .official-founder-caption {
@@ -3297,16 +3335,16 @@ html.modal-open {
   padding: 0.4rem 0;
   border: 0;
   background: transparent;
-  color: var(--official-accent-on-dark);
+  color: var(--official-ink-on-dark);
   font: inherit;
   font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
 }
 
 .official-founder-more:hover {
   color: var(--official-accent-on-dark);
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .official-founder-rest {
@@ -3475,7 +3513,7 @@ html.modal-open {
 .official-apply-step-num {
   flex-shrink: 0;
   font-weight: 700;
-  color: var(--official-accent-on-dark);
+  color: #cbd5e1;
 }
 
 .official-apply-alex {
@@ -3486,13 +3524,25 @@ html.modal-open {
   color: #cbd5e1;
 }
 
+.official-apply-thanks-frame {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 .official-apply-alex-photo,
 .official-apply-thanks-photo {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: top;
+  object-position: 50% 12%;
+  transform: scale(2);
+  transform-origin: 50% 8%;
 }
 
 .official-apply-thanks {
@@ -3504,8 +3554,7 @@ html.modal-open {
 }
 
 .official-apply-thanks-photo {
-  width: 72px;
-  height: 72px;
+  display: block;
 }
 
 .official-apply-contacts {
@@ -3520,9 +3569,10 @@ html.modal-open {
   align-items: center;
   gap: 0.75rem;
   min-height: 44px;
-  color: var(--official-accent-on-dark);
+  color: var(--official-muted-on-dark);
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .official-apply-contacts a span {
@@ -3621,12 +3671,17 @@ html.modal-open {
     text-align: left;
   }
 
-  .official-apply-thanks-photo {
+  .official-apply-thanks-frame {
     grid-row: 1 / span 3;
     width: 11rem;
     height: auto;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     border-radius: var(--radius-md);
+  }
+
+  .official-apply-thanks-photo {
+    object-position: center;
+    transform: none;
   }
 
   .official-apply-thanks .official-apply-steps,

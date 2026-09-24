@@ -4,18 +4,16 @@ import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
 
 /**
- * Dark site footer. Left-aligned on mobile, with email and WhatsApp as tap rows.
+ * Dark site footer. Nav links, then Privacy with the legal line.
+ * Email and WhatsApp stay off this footer until a contact form exists.
  */
 export function SiteFooter() {
   const { footer } = landingCopy;
   const [standout, group] = siteConfig.businessName.split(" ");
-  const links = [
-    ...officialCopy.nav.items.map((item) => ({
-      href: `/#${item.id}`,
-      label: item.label,
-    })),
-    { href: "/privacy", label: footer.nav.privacyPolicy },
-  ];
+  const links = officialCopy.nav.items.map((item) => ({
+    href: `/#${item.id}`,
+    label: item.label,
+  }));
 
   return (
     <footer className="site-footer" id="site-footer">
@@ -31,33 +29,17 @@ export function SiteFooter() {
         </div>
 
         <nav className="site-footer-nav" aria-label="Company">
-          {links.map((item) =>
-            item.href.startsWith("/#") ? (
-              <a key={item.href} href={item.href}>
-                {item.label}
-              </a>
-            ) : (
-              <Link key={item.href} href={item.href}>
-                {item.label}
-              </Link>
-            ),
-          )}
+          {links.map((item) => (
+            <a key={item.href} href={item.href}>
+              {item.label}
+            </a>
+          ))}
         </nav>
 
         <div className="site-footer-meta">
-          <div className="site-footer-contacts">
-            <a href={`mailto:${siteConfig.contactEmail}`}>
-              Email
-              <span>{siteConfig.contactEmail}</span>
-            </a>
-            <a
-              href={siteConfig.contactWhatsAppHref}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp
-            </a>
-          </div>
+          <p className="site-footer-legal">
+            <Link href="/privacy">{footer.nav.privacyPolicy}</Link>
+          </p>
           <p className="site-footer-compliance t-small">{footer.legalNotice}</p>
         </div>
 
