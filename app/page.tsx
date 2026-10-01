@@ -8,6 +8,7 @@ import { MeetTheFounder } from "@/components/official/meet-the-founder";
 import { OfficialHero } from "@/components/official/official-hero";
 import { TrustBadges } from "@/components/official/trust-badges";
 import { ProofStrip } from "@/components/official/proof-strip";
+import { AgencyComparison } from "@/components/official/agency-comparison";
 import { HowItWorks } from "@/components/official/how-it-works";
 import { SiteHeader } from "@/components/official/site-header";
 import { StickyCta } from "@/components/official/sticky-cta";
@@ -33,6 +34,7 @@ export default function HomePage() {
           </div>
           <WhoItsFor />
           <HowItWorks />
+          <AgencyComparison />
           <WhatPartnersSay />
           <MeetTheFounder />
           <Faq />

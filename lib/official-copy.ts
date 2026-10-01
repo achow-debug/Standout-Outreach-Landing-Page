@@ -165,6 +165,40 @@ export const officialCopy = {
     ctaLabel: "Apply For My 30-Day Pilot",
     ctaNote: "Begin with a 20-minute collaborative conversation",
   },
+  comparison: {
+    caption: "Traditional agencies and the Standout 30-day pilot",
+    columns: {
+      feature: "Feature",
+      traditional: "Traditional Marketing Agencies",
+      pilot: "Standout Group 30-Day Pilot",
+    },
+    rows: [
+      {
+        id: "contract",
+        feature: "Contract Terms",
+        traditional: "6 to 12-Month Lock-in",
+        pilot: "30-Day Proof of Concept",
+      },
+      {
+        id: "setup",
+        feature: "Setup Timeline",
+        traditional: "4–6 Weeks Onboarding",
+        pilot: "Live within 7–10 Days",
+      },
+      {
+        id: "data",
+        feature: "Data Ownership",
+        traditional: "Agency owns campaign assets",
+        pilot: "You keep 100% of leads",
+      },
+      {
+        id: "risk",
+        feature: "Regulatory Risk",
+        traditional: "Generic ads with SRA rules as an afterthought",
+        pilot: "SRA-aligned marketing assets",
+      },
+    ],
+  },
   partners: {
     eyebrow: "What partners say",
     heading: "Don’t take our word for it.",
