@@ -20,7 +20,7 @@ type ReviewIdentity = {
 
 /**
  * Confirmation and internal notification copy for the n8n workflow.
- * Keep wording aligned with the page: strategy call request received,
+ * Keep wording aligned with the page: 30-day pilot application received,
  * we'll review and be in touch — no fixed response-time SLA.
  */
 
@@ -34,7 +34,7 @@ export function buildConfirmationEmail(payload: ReviewIdentity): {
   const lines = [
     `Hello ${payload.name},`,
     "",
-    `Thank you for claiming a free strategy call for ${payload.website} (${areaLabel}).`,
+    `Thank you for applying for a 30-day pilot for ${payload.website} (${areaLabel}).`,
     "",
     "We'll review your firm and be in touch.",
   ];
@@ -54,7 +54,7 @@ export function buildConfirmationEmail(payload: ReviewIdentity): {
   return {
     to: payload.work_email,
     from: siteConfig.contactEmail,
-    subject: `We received your strategy call request — ${payload.website}`,
+    subject: `We received your 30-day pilot application — ${payload.website}`,
     text: lines.join("\n"),
   };
 }
@@ -68,9 +68,9 @@ export function buildInternalNotificationEmail(payload: ReviewIdentity): {
   return {
     to: siteConfig.contactEmail,
     from: siteConfig.contactEmail,
-    subject: `[Strategy call] ${payload.website} — ${payload.lead_id}`,
+    subject: `[30-day pilot] ${payload.website} — ${payload.lead_id}`,
     text: [
-      "New free strategy call request",
+      "New 30-day pilot application",
       "",
       `lead_id: ${payload.lead_id}`,
       `requested_at: ${payload.requested_at}`,

@@ -20,7 +20,7 @@ export const landingCopy = {
   meta: {
     title: "Legal Enquiry Review | Standout Group",
     description:
-      "Poor enquiry handling can cost UK law firms over £1 million a year in lost revenue. Watch how Standout Group’s review works, then claim your free strategy call.",
+      "Poor enquiry handling can cost UK law firms over £1 million a year in lost revenue. Watch how Standout Group’s review works, then apply for your 30-day pilot.",
   },
   hero: {
     audience: "Exclusively for UK Law Firms",
@@ -68,33 +68,33 @@ export const landingCopy = {
     },
   },
   cta: {
-    label: "Claim My Free Strategy Call",
-    mobileLabel: "Claim My Free Strategy Call",
+    label: "Apply For My 30-Day Pilot",
+    mobileLabel: "Apply For My 30-Day Pilot",
     /** Shown once after the breakdown video finishes — static cue, no motion. */
-    afterVideoCue: "Ready when you are — claim your free strategy call.",
+    afterVideoCue: "Ready when you are — apply for your 30-day pilot.",
   },
   reviewRequest: {
-    heading: "Claim My Free Strategy Call",
+    heading: "Apply For My 30-Day Pilot",
     subtitle:
       "Tell us about your firm and we will review your current enquiry journey before confirming the next steps.",
-    submitCta: "Claim My Free Strategy Call",
+    submitCta: "Apply For My 30-Day Pilot",
     submittingCta: "Sending request…",
     trustItems: [
       "Free throughout the 30-day pilot — no card required",
       "No contract, no long-term commitment",
     ],
     submitConsent:
-      "By submitting, you agree that Standout Group may contact you about this call.",
+      "By submitting, you agree that Standout Group may contact you about this 30-day pilot.",
     privacyLinkLabel: "Privacy Policy",
     errorSummaryHeading: "Please correct the following:",
     submitError:
       "Something went wrong sending your request. Please try again in a moment.",
     calendly: {
       loading: "Loading calendar…",
-      iframeTitle: "Book a free strategy call",
+      iframeTitle: "Choose a time to begin your 30-day pilot",
       fallbackHeading: "The calendar could not be loaded.",
       fallbackBody:
-        "Open the booking page in a new tab to choose a time for your free strategy call.",
+        "Open the booking page in a new tab to choose a time to begin your 30-day pilot.",
       fallbackLink: "Open the calendar in a new tab",
       emailFallback: "Or email {email}",
     },
@@ -123,7 +123,7 @@ export const landingCopy = {
     },
   },
   confirmation: {
-    heading: "Your strategy call request has been received.",
+    heading: "Your 30-day pilot application has been received.",
     body: "We'll review your firm and be in touch.",
     /** Prefixed when siteConfig.reviewDeliveryTiming is set. */
     timingPrefix: "Expected timing:",
@@ -181,7 +181,7 @@ export const landingCopy = {
           question: "How much time will this take from me or my team?",
           answer: [
             "Next to none. We handle the setup and build your page — all of it, for free. The only thing we need from you is a high-quality version of your logo, and we take it from there.",
-            "From here, the next step is a free 30-minute strategy call, where we'll show you exactly how our enquiry recovery system can start recovering the enquiries you're currently losing.",
+            "From here, the next step is a 20-minute conversation, where we'll show you exactly how our enquiry recovery system can start recovering the enquiries you're currently losing.",
           ],
         },
         {

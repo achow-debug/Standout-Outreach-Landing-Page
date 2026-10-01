@@ -161,7 +161,7 @@ const modalCopy = await page.evaluate(() => {
       ),
     ),
     privacyConsent: Boolean(
-      privacyLine?.textContent?.includes("contact you about this call") &&
+      privacyLine?.textContent?.includes("contact you about this 30-day pilot") &&
         privacyLink?.textContent?.trim() === "Privacy Policy",
     ),
     bannedLeftovers: [
@@ -175,8 +175,8 @@ const modalCopy = await page.evaluate(() => {
 });
 record(
   "modal_request_framing",
-  modalCopy?.heading === "Claim your free strategy call" &&
-    modalCopy?.submit === "Claim My Free Strategy Call" &&
+  modalCopy?.heading === "Apply For My 30-Day Pilot" &&
+    modalCopy?.submit === "Apply For My 30-Day Pilot" &&
     modalCopy?.bannedLeftovers.length === 0,
   JSON.stringify(modalCopy),
 );
@@ -386,7 +386,7 @@ const success = await page.evaluate(() => ({
 }));
 record(
   "success_state",
-  success.title === "Your strategy call request has been received." &&
+  success.title === "Your 30-day pilot application has been received." &&
     Boolean(success.body?.includes("We'll review your firm and be in touch")) &&
     !Boolean(success.body?.toLowerCase().includes("business day")) &&
     !Boolean(success.body?.toLowerCase().includes("do not need to book a call")),

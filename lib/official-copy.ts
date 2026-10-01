@@ -7,10 +7,10 @@ export const officialCopy = {
   meta: {
     title: "Standout Group | Enabling ambitious law firms to thrive",
     description:
-      "The UK’s most innovative law firm growth accelerator. Standout Group helps UK law firms grow from strategy call to retained-matter lift.",
+      "The UK’s most innovative law firm growth accelerator. Standout Group helps UK law firms grow from a 30-day pilot to retained-matter lift.",
   },
   header: {
-    applyLabel: "Claim My Free Strategy Call",
+    applyLabel: "Apply For My 30-Day Pilot",
     applyHref: "#book",
   },
   hero: {
@@ -18,13 +18,13 @@ export const officialCopy = {
     h1: "Enabling ambitious law firms to thrive",
     h1Accent: "in 2026 and beyond.",
     supporting: "The UK’s most innovative law firm growth partner.",
-    ctaLabel: "Claim My Free Strategy Call",
+    ctaLabel: "Apply For My 30-Day Pilot",
     secondaryLabel: "See how the pilot works",
     secondaryHref: "#how-it-works",
     reassurance: [
-      "Free 30-day pilot",
-      "Built around SRA/BSB and GDPR",
-      "20-minute strategy call",
+      "Keep all leads generated",
+      "No 12-month lock-in",
+      "Complete DPA provided",
     ],
     imageSrc: "/images/hero-business-cards.jpg",
     imageAlt: "Standout Group business cards on a balcony overlooking the city.",
@@ -114,7 +114,7 @@ export const officialCopy = {
     timeline: [
       {
         id: "start",
-        label: "20-minute strategy call.",
+        label: "20-minute conversation.",
         caption: "Where it starts.",
       },
       {
@@ -125,7 +125,7 @@ export const officialCopy = {
       {
         id: "growth",
         label: "9 weeks.",
-        caption: "From first strategy call to law firm growth.",
+        caption: "From first conversation to law firm growth.",
       },
     ],
     addOn: {
@@ -140,8 +140,8 @@ export const officialCopy = {
       title: "Built for legal, not bolted on",
       body: "Legal marketing runs on rules general marketing doesn’t. Every page, form and follow-up sequence we build is designed around SRA/BSB compliance and GDPR from the start, not added afterward as a disclaimer at the bottom of the page.",
     },
-    ctaLabel: "Claim My Free Strategy Call",
-    ctaNote: "A 20-minute collaborative conversation",
+    ctaLabel: "Apply For My 30-Day Pilot",
+    ctaNote: "Begin with a 20-minute collaborative conversation",
   },
   partners: {
     eyebrow: "What partners say",
@@ -191,7 +191,7 @@ export const officialCopy = {
         id: "time",
         question: "How much time will this take from me or my team?",
         answer:
-          "Next to none. We handle the setup and management for 30 days, all of it, for free. The only thing we need from you is a high-quality version of your logo, and we take it from there.\n\nFrom here, the next step is a collaborative strategy call, where we'll discuss where we can potentially help.",
+          "Next to none. We handle the setup and management for 30 days, all of it, for free. The only thing we need from you is a high-quality version of your logo, and we take it from there.\n\nFrom here, the next step is a collaborative conversation, where we'll discuss where we can potentially help.",
       },
       {
         id: "enquiry-data",
@@ -207,7 +207,7 @@ export const officialCopy = {
       },
       {
         id: "the-call",
-        question: "What happens on the strategy call?",
+        question: "What happens on the conversation?",
         answer:
           "We’ll look at how new clients reach your firm now, where they drop off, and what that’s likely costing you. If we don’t see a clear gap, we’ll say so.",
       },
@@ -231,7 +231,8 @@ export const officialCopy = {
     eyebrow: "No cost. No obligation.",
     heading: "See exactly where",
     headingAccent: "your enquiries are leaking.",
-    buttonLabel: "Claim My Free Strategy Call",
+    buttonLabel: "Apply For My 30-Day Pilot",
+    ctaNote: "Begin with a 20-minute collaborative conversation",
     nextLabel: "What happens next",
     nextSteps: [
       "Pick a time that suits you.",

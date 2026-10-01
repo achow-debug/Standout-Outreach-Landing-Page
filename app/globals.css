@@ -1198,12 +1198,17 @@ html.modal-open .mobile-sticky-cta-wrapper {
 }
 
 html.official-sticky-on body {
-  padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
 }
 
 .official-sticky-cta-btn {
   width: 100%;
   min-height: 52px;
+  height: auto;
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
+  padding-block: 0.75rem;
 }
 
 @media (min-width: 1024px) {
@@ -2141,6 +2146,14 @@ html.modal-open {
 .official-header-nav,
 .official-header-cta {
   display: none;
+}
+
+.official-header-cta {
+  min-height: 44px;
+  height: auto;
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
 }
 
 .official-header-cta:disabled {
@@ -3474,6 +3487,14 @@ html.modal-open {
   width: 100%;
   min-height: 52px;
   margin-top: 0.25rem;
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.official-apply-cta-note {
+  margin: 0;
+  color: var(--official-muted-on-dark);
 }
 
 .official-apply-next {
