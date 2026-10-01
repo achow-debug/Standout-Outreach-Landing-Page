@@ -18,7 +18,7 @@ import { WhoItsFor } from "@/components/official/who-its-for";
 
 /**
  * Official homepage: header → hero → trust badges → proof → who it's for →
- * how it works → partners → founder → FAQ → book → footer.
+ * how it works → comparison → partners → COLP → founder → FAQ → book → footer.
  * Mobile sticky CTA sits outside main.
  */
 export default function HomePage() {

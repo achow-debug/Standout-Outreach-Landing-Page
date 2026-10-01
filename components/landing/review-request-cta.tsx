@@ -425,6 +425,13 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
                 <a href="/privacy" className="review-modal-footer-link">
                   {reviewRequest.privacyLinkLabel}
                 </a>
+                <span className="review-modal-footer-sep" aria-hidden="true">
+                  {" "}
+                  ·{" "}
+                </span>
+                <a href="/compliance" className="review-modal-footer-link">
+                  {landingCopy.footer.nav.compliance}
+                </a>
               </p>
             </footer>
           ) : null}

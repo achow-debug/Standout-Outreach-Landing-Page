@@ -2041,6 +2041,21 @@ html.modal-open {
   color: #cbd5e1; /* slate-300 */
 }
 
+.site-footer-agency {
+  margin: 0;
+  max-width: 65ch;
+  color: #cbd5e1;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.site-footer-legal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+}
+
 .site-footer-legal a {
   display: inline-flex;
   align-items: center;
@@ -2094,6 +2109,12 @@ html.modal-open {
 
   .site-footer-meta {
     width: auto;
+  }
+
+  .site-footer-legal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
   }
 
   .site-footer-copy {

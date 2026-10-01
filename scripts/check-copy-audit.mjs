@@ -111,6 +111,7 @@ const copySources = [
   "components/landing",
   "app/page.tsx",
   "app/privacy/page.tsx",
+  "app/compliance/page.tsx",
 ];
 
 function walk(dir, files = []) {

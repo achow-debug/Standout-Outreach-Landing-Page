@@ -142,11 +142,14 @@ export const landingCopy = {
       "We're a law firm growth partner for UK law firms, engineering the systems that turn existing and paid traffic into profitable, retained matters.",
     legalNotice:
       "Standout Group are registered with the Information Commissioner's Office (ICO) and strictly operate in compliance with the UK GDPR and PECR. All outbound email and telemarketing activities are processed under the lawful basis of Legitimate Interests.",
+    agencyNotice:
+      "Standout Group is a digital marketing agency specialising in the legal sector. We adhere to ICO data protection principles and SRA advertising guidance.",
     nav: {
       whyChooseUs: "Why choose us?",
       faq: "FAQ",
       contact: "Contact",
       privacyPolicy: "Privacy Policy",
+      compliance: "Compliance & Data Governance",
     },
     whyChooseUs: {
       title: "Why choose us?",
@@ -373,5 +376,18 @@ export const landingCopy = {
         ],
       },
     ],
+  },
+  compliancePage: {
+    title: "Compliance & Data Governance",
+    intro:
+      "Standout Group is a digital marketing agency specialising in the legal sector. We adhere to ICO data protection principles and SRA advertising guidance.",
+    icoHeading: "ICO registration",
+    icoBody: "ICO Reg: pending",
+    retentionHeading: "Data retention",
+    retentionPending: "Anything beyond this retention statement is pending.",
+    pledgeHeading: "SRA adherence pledge",
+    pledge:
+      "Ad copy, landing pages, and lead funnels are prepared against SRA advertising guidance. A data processing agreement is issued with each engagement. Lead capture does not use deceptive hooks, exaggerated claims, or unvetted lead syndication.",
+    pendingReview: "Pending legal review.",
   },
 } as const;

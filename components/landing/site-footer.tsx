@@ -39,7 +39,9 @@ export function SiteFooter() {
         <div className="site-footer-meta">
           <p className="site-footer-legal">
             <Link href="/privacy">{footer.nav.privacyPolicy}</Link>
+            <Link href="/compliance">{footer.nav.compliance}</Link>
           </p>
+          <p className="site-footer-agency t-small">{footer.agencyNotice}</p>
           <p className="site-footer-compliance t-small">{footer.legalNotice}</p>
         </div>
 
