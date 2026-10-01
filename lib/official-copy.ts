@@ -269,6 +269,29 @@ export const officialCopy = {
       },
     ],
   },
+  colp: {
+    heading: "Built for COLP & COFA peace of mind",
+    items: [
+      {
+        id: "sra-ad-compliance",
+        title: "SRA Ad Compliance",
+        body: "All ad copy, landing pages, and lead funnels are pre-vetted against SRA Advertising Standards.",
+        value: "Eliminates regulatory warning risks.",
+      },
+      {
+        id: "data-privacy",
+        title: "Data Privacy (DPA)",
+        body: "Standard Data Processing Agreements (DPA) issued with every engagement to satisfy GDPR requirements.",
+        value: "Simplifies compliance auditing.",
+      },
+      {
+        id: "ethical-lead-capture",
+        title: "Ethical Lead Capture",
+        body: "Zero deceptive hooks, exaggerated claims, or unvetted lead syndication.",
+        value: "Protects the firm's brand reputation.",
+      },
+    ],
+  },
   founder: {
     heading: "Meet the founder",
     name: "Alex",

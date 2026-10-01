@@ -2733,6 +2733,64 @@ html.modal-open {
   }
 }
 
+.official-colp {
+  background: #fff;
+}
+
+.page-shell.official-colp-inner {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.official-colp-heading {
+  margin: 0;
+  max-width: 16rem;
+  color: var(--official-headline-ink);
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.official-colp-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.official-colp-item {
+  margin: 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.official-colp-title {
+  margin: 0 0 0.5rem;
+  color: var(--color-ink);
+}
+
+.official-colp-body {
+  margin: 0;
+  color: #1e293b;
+}
+
+.official-colp-value {
+  margin: 0.75rem 0 0;
+  color: #475569;
+}
+
+@media (min-width: 768px) {
+  .official-colp-heading {
+    max-width: 28rem;
+  }
+
+  .official-colp-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+  }
+}
+
 .official-who {
   background: var(--official-band-tint);
 }

@@ -2,6 +2,7 @@ import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
 import { ReviewRequestShell } from "@/components/landing/review-request-cta";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { BookingProvider } from "@/components/official/booking-provider";
+import { ColpPeaceOfMind } from "@/components/official/colp-peace-of-mind";
 import { Faq } from "@/components/official/faq";
 import { OfficialFinalCta } from "@/components/official/final-cta";
 import { MeetTheFounder } from "@/components/official/meet-the-founder";
@@ -36,6 +37,7 @@ export default function HomePage() {
           <HowItWorks />
           <AgencyComparison />
           <WhatPartnersSay />
+          <ColpPeaceOfMind />
           <MeetTheFounder />
           <Faq />
           <OfficialFinalCta />
