@@ -16,6 +16,7 @@ import {
   trackEvent,
 } from "@/lib/analytics";
 import { loadCalendly, openCalendlyPopup } from "@/lib/booking";
+import { landingCopy } from "@/lib/landing-copy";
 import {
   getCalendlyEventUrl,
   isCalendlyEnabled,
@@ -181,6 +182,29 @@ export function BookingProvider({ children }: { children: ReactNode }) {
       cancelIdle();
     };
   }, []);
+
+  useEffect(() => {
+    if (!bookingOpen) return;
+
+    const noteId = "calendly-trust-microcopy";
+    const text = landingCopy.reviewRequest.trustMicrocopy.gdpr;
+
+    const place = () => {
+      if (document.getElementById(noteId)) return;
+      const popup = document.querySelector(".calendly-popup");
+      if (!popup) return;
+      const note = document.createElement("p");
+      note.id = noteId;
+      note.className = "t-small trust-microcopy trust-microcopy--popup";
+      note.textContent = text;
+      popup.appendChild(note);
+    };
+
+    place();
+    const observer = new MutationObserver(place);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [bookingOpen]);
 
   const openBooking = useCallback(
     (location: BookingLocation) => {

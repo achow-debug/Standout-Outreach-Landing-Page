@@ -78,6 +78,10 @@ export const landingCopy = {
     subtitle:
       "Tell us about your firm and we will review your current enquiry journey before confirming the next steps.",
     submitCta: "Apply For My 30-Day Pilot",
+    trustMicrocopy: {
+      gdpr: "100% GDPR & ICO Compliant. Data processed under strict UK privacy standards. We never resell your enquiry data.",
+      sra: "Compliant with SRA Transparency Rules & Advertising Guidelines.",
+    },
     submittingCta: "Sending request…",
     trustItems: [
       "Free throughout the 30-day pilot — no card required",

@@ -422,6 +422,10 @@ export function ReviewRequestForm({
             ? reviewRequest.submittingCta
             : reviewRequest.submitCta}
         </button>
+        <div className="trust-microcopy">
+          <p className="t-small">{reviewRequest.trustMicrocopy.gdpr}</p>
+          <p className="t-small">{reviewRequest.trustMicrocopy.sra}</p>
+        </div>
         <p className="request-privacy-line">
           {reviewRequest.submitConsent}{" "}
           <a href="/privacy" className="request-privacy-link">

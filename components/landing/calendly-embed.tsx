@@ -345,6 +345,9 @@ export function CalendlyEmbed({
         className="calendly-embed-host"
         hidden={status === "error"}
       />
+      <p className="t-small trust-microcopy">
+        {landingCopy.reviewRequest.trustMicrocopy.gdpr}
+      </p>
     </div>
   );
 }

@@ -1714,6 +1714,40 @@ html.modal-open {
   color: #64748b; /* slate-500 — decorative only */
 }
 
+.trust-microcopy {
+  margin: 0.75rem 0 0;
+  text-align: left;
+  color: #475569;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.trust-microcopy p {
+  margin: 0;
+}
+
+.trust-microcopy p + p {
+  margin-top: 0.45rem;
+}
+
+.calendly-popup:has(.trust-microcopy--popup) {
+  display: flex;
+  flex-direction: column;
+}
+
+.calendly-popup:has(.trust-microcopy--popup) .calendly-popup-content {
+  flex: 1 1 auto;
+  height: auto !important;
+  min-height: 0;
+}
+
+.trust-microcopy--popup {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  background: #fff;
+}
+
 .request-privacy-line {
   margin: 0.625rem 0 0;
   font-size: 0.875rem; /* 14px floor */
