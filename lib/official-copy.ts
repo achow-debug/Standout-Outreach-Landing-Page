@@ -18,6 +18,8 @@ export const officialCopy = {
     h1: "Enabling ambitious law firms to thrive",
     h1Accent: "in 2026 and beyond.",
     supporting: "The UK’s most innovative law firm growth partner.",
+    pilotLine:
+      "Start with a free 30-day pilot. You keep the leads, with no 12-month lock-in, and a complete DPA.",
     ctaLabel: "Apply For My 30-Day Pilot",
     secondaryLabel: "See how the pilot works",
     secondaryHref: "#how-it-works",
@@ -35,7 +37,7 @@ export const officialCopy = {
         id: "ico",
         mark: "ICO",
         title: "ICO Registered",
-        detail: "ICO Reg: pending",
+        detail: "ZC264255",
       },
       {
         id: "sra",
@@ -43,16 +45,11 @@ export const officialCopy = {
         title: "SRA Standards Aligned",
         detail: "Built around SRA Code of Conduct for Firm Marketing.",
       },
-      {
-        id: "security",
-        mark: "ISO",
-        title: "Cyber Essentials · ISO 27001",
-        detail: "Certification pending.",
-      },
     ],
   },
   proof: {
-    eyebrow: "Since launching in 2025",
+    label: "Findings",
+    result: "Response time cut from 14 hours to 5 minutes.",
     items: [
       {
         id: "firms-analysed",
@@ -207,23 +204,23 @@ export const officialCopy = {
         id: "florenda-abdo",
         quote:
           "Alex didn’t promise a fancy website redesign or a flood of new clients. He proposed diagnosing first, fixing our highest-value law pages, then improving how we captured and tracked enquiries. I agreed to expand only once we could see it working. That phased approach, not a big-bang relaunch, is why we said yes.",
-        name: "Florenda Abdo",
+        name: "Florenda A",
         role: "Conveyancing Law Specialist",
         firm: undefined,
         photo: undefined,
         portraitSrc: "/images/partners/florenda-abdo.jpg",
-        portraitAlt: "Portrait of Florenda Abdo, Conveyancing Law Specialist",
+        portraitAlt: "Portrait of Florenda A, Conveyancing Law Specialist",
       },
       {
         id: "jayden-chow",
         quote:
           "I found Alex after he emailed me — an email that described problems I recognised. When he reached out, I didn’t book a call straight away. I looked into them first, the way I’d expect a client to look into us. What got me on the call was that it was framed as a collaboration, not a sales pitch.",
-        name: "Jayden Chow",
+        name: "Jayden C",
         role: "Family Law Specialist",
         firm: undefined,
         photo: undefined,
         portraitSrc: "/images/partners/jayden-chow.jpg",
-        portraitAlt: "Portrait of Jayden Chow, Family Law Specialist",
+        portraitAlt: "Portrait of Jayden C, Family Law Specialist",
       },
     ],
   },

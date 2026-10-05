@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T11:35:35.166Z",
+  "generated_at": "2026-10-02T14:42:22.553Z",
   "passed": [
     "Asset present: public/video/breakdown.mp4",
     "Asset present: public/video/poster.jpg",
@@ -8,8 +8,8 @@
     "Proof line placeholder flag cleared",
     "Lawful basis configured",
     "Retention period configured",
-    "Company number unset is acceptable — redesign footer is copyright-only (not rendered)",
-    "Registered address unset is acceptable — redesign footer is copyright-only (not rendered)",
+    "Company number unset is acceptable — not rendered in the footer",
+    "Registered address unset is acceptable — not rendered in the footer",
     "No prohibited claim patterns found in page/email copy"
   ],
   "warnings": [

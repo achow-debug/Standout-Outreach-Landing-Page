@@ -32,6 +32,7 @@ export function OfficialHero() {
     h1,
     h1Accent,
     supporting,
+    pilotLine,
     ctaLabel,
     secondaryLabel,
     secondaryHref,
@@ -55,6 +56,7 @@ export function OfficialHero() {
             <span className="official-hero-title-accent">{h1Accent}</span>
           </h1>
           <p className="official-hero-supporting t-lead">{supporting}</p>
+          <p className="official-hero-supporting t-lead">{pilotLine}</p>
           <button
             id="hero-cta"
             type="button"

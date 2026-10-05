@@ -17,8 +17,8 @@ import { WhatPartnersSay } from "@/components/official/what-partners-say";
 import { WhoItsFor } from "@/components/official/who-its-for";
 
 /**
- * Official homepage: header → hero → trust badges → proof → who it's for →
- * how it works → comparison → partners → COLP → founder → FAQ → book → footer.
+ * Official homepage: header → hero → trust badges → proof → partners →
+ * who it's for → how it works → comparison → COLP → founder → FAQ → book → footer.
  * Mobile sticky CTA sits outside main.
  */
 export default function HomePage() {
@@ -33,10 +33,10 @@ export default function HomePage() {
           <div className="page-shell official-proof-shell">
             <ProofStrip />
           </div>
+          <WhatPartnersSay />
           <WhoItsFor />
           <HowItWorks />
           <AgencyComparison />
-          <WhatPartnersSay />
           <ColpPeaceOfMind />
           <MeetTheFounder />
           <Faq />

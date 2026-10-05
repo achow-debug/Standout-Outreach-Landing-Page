@@ -1198,7 +1198,8 @@ html.modal-open .mobile-sticky-cta-wrapper {
 }
 
 html.official-sticky-on body {
-  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  /* Two-line sticky button plus its 12px padding and a gap above the bar. */
+  padding-bottom: calc(8.75rem + env(safe-area-inset-bottom, 0px));
 }
 
 .official-sticky-cta-btn {
@@ -2404,7 +2405,8 @@ html.modal-open {
 
 .official-hero-photo {
   object-fit: cover;
-  object-position: 50% 70%;
+  /* 4/3 frame on a 3/4 photo. 70% sat on the railing under the cards. */
+  object-position: 50% 46%;
 }
 
 @media (min-width: 1024px) {
@@ -2446,6 +2448,10 @@ html.modal-open {
     width: min(100%, 465px);
     aspect-ratio: 3 / 4;
     max-height: 620px;
+  }
+
+  .official-hero-photo {
+    object-position: 50% 70%;
   }
 }
 
@@ -2524,13 +2530,17 @@ html.modal-open {
 }
 
 .official-proof {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.25rem;
   width: 100%;
   max-width: var(--measure-wide);
 }
 
-.official-proof-eyebrow {
-  margin: 0 0 1.25rem;
-  text-align: left;
+.official-proof-result {
+  margin: 0;
+  color: var(--official-headline-ink);
 }
 
 .official-proof-grid {
@@ -2563,14 +2573,7 @@ html.modal-open {
   }
 
   .official-proof {
-    display: flex;
-    align-items: center;
-    gap: 2.5rem;
-  }
-
-  .official-proof-eyebrow {
-    flex: 0 0 11rem;
-    margin: 0;
+    gap: 1.5rem;
   }
 
   .official-proof-grid {
@@ -2581,6 +2584,10 @@ html.modal-open {
 
   .official-proof-item {
     padding-inline: 1.75rem;
+  }
+
+  .official-proof-item:first-child {
+    padding-left: 0;
   }
 
   .official-proof-item + .official-proof-item {
