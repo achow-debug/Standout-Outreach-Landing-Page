@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { useBooking } from "@/components/official/booking-provider";
+import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 
@@ -205,7 +206,7 @@ export function SiteHeader() {
           disabled={booked}
           onClick={() => openBooking("header")}
         >
-          {booked ? "Call booked" : applyLabel}
+          {booked ? "Call booked" : keepTogether(applyLabel)}
           {booked ? null : (
             <span className="btn-cta-arrow" aria-hidden="true">
               →

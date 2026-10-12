@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useBooking } from "@/components/official/booking-provider";
+import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 
@@ -99,7 +100,7 @@ export function OfficialFinalCta() {
                 data-booking-cta=""
                 onClick={() => openBooking("final")}
               >
-                {buttonLabel}
+                {keepTogether(buttonLabel)}
                 <span className="btn-cta-arrow" aria-hidden="true">
                   →
                 </span>

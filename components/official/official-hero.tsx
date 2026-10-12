@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useBooking } from "@/components/official/booking-provider";
+import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
 
 function CheckIcon() {
@@ -56,7 +57,7 @@ export function OfficialHero() {
             <span className="official-hero-title-accent">{h1Accent}</span>
           </h1>
           <p className="official-hero-supporting t-lead">{supporting}</p>
-          <p className="official-hero-supporting t-lead">{pilotLine}</p>
+          <p className="official-hero-supporting t-lead">{keepTogether(pilotLine)}</p>
           <button
             id="hero-cta"
             type="button"
@@ -64,7 +65,7 @@ export function OfficialHero() {
             data-booking-cta=""
             onClick={() => openBooking("hero")}
           >
-            {ctaLabel}
+            {keepTogether(ctaLabel)}
             <span className="btn-cta-arrow" aria-hidden="true">
               →
             </span>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { useBooking } from "@/components/official/booking-provider";
 import { SectionLabel } from "@/components/official/section-label";
 import { sectionLabels } from "@/content/landing";
+import { keepTogether } from "@/components/official/no-break";
 import { useInView } from "@/hooks/use-in-view";
 import { officialCopy } from "@/lib/official-copy";
 
@@ -137,7 +138,7 @@ export function HowItWorks() {
               data-booking-cta=""
               onClick={() => openBooking("how")}
             >
-              {ctaLabel}
+              {keepTogether(ctaLabel)}
               <span className="btn-cta-arrow" aria-hidden="true">
                 →
               </span>
@@ -148,7 +149,7 @@ export function HowItWorks() {
 
           <div className="official-how-main">
           <div className="official-how-panel">
-            <p className="official-how-pill t-small">{pill}</p>
+            <p className="official-how-pill t-small">{keepTogether(pill)}</p>
             <ol className="official-how-steps">
               {steps.map((step, index) => (
                 <HowStep
@@ -168,7 +169,7 @@ export function HowItWorks() {
             {timeline.map((item) => (
               <li key={item.id} className="official-how-timeline-item">
                 <span className="official-how-timeline-dot" aria-hidden="true" />
-                <p className="official-how-timeline-label">{item.label}</p>
+                <p className="official-how-timeline-label">{keepTogether(item.label)}</p>
                 <p className="official-how-timeline-caption t-small">{item.caption}</p>
               </li>
             ))}

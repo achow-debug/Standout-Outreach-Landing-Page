@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useId, useState } from "react";
+import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
 
 /**
@@ -88,7 +89,7 @@ export function MeetTheFounder() {
                   <div className="official-founder-rest">
                     {bioRest.map((paragraph) => (
                       <p key={paragraph} className="official-founder-copy t-body">
-                        {paragraph}
+                        {keepTogether(paragraph)}
                       </p>
                     ))}
                   </div>

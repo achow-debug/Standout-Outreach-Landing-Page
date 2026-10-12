@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useBooking } from "@/components/official/booking-provider";
+import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
 
 function useStickyCtaVisible(bookingOpen: boolean, booked: boolean) {
@@ -71,7 +72,7 @@ export function StickyCta() {
         tabIndex={visible ? 0 : -1}
         onClick={() => openBooking("sticky")}
       >
-        {applyLabel}
+        {keepTogether(applyLabel)}
       </button>
     </div>
   );

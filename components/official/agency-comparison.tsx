@@ -1,3 +1,4 @@
+import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
 
 /**
@@ -17,7 +18,7 @@ export function AgencyComparison() {
         <table className="official-compare-table">
           <caption>
             <h2 id="official-compare-heading" className="official-compare-caption t-h2">
-              {caption}
+              {keepTogether(caption)}
             </h2>
           </caption>
           <thead>
@@ -31,8 +32,8 @@ export function AgencyComparison() {
             {rows.map((row) => (
               <tr key={row.id}>
                 <th scope="row">{row.feature}</th>
-                <td data-label={columns.traditional}>{row.traditional}</td>
-                <td data-label={columns.pilot}>{row.pilot}</td>
+                <td data-label={columns.traditional}>{keepTogether(row.traditional)}</td>
+                <td data-label={columns.pilot}>{keepTogether(row.pilot)}</td>
               </tr>
             ))}
           </tbody>

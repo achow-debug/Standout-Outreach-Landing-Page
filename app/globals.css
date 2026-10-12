@@ -38,9 +38,9 @@
 
   --header-h: 60px;
 
-  /* Size: mobile → desktop */
-  --text-display: clamp(2.5rem, 1.6rem + 4vw, 4.25rem); /* 40 → 68px  hero H1 */
-  --text-h2: clamp(2rem, 1.5rem + 2.2vw, 3rem); /* 32 → 48px  section headings */
+  /* Size: mobile → desktop. Floors follow the fluid heading task; caps stay with the existing scale. */
+  --text-display: clamp(2.25rem, 9vw, 3.5rem); /* 36 → 56px  hero H1 */
+  --text-h2: clamp(1.75rem, 6.5vw, 2.5rem); /* 28 → 40px  section headings */
   --text-h2-feature: clamp(2.25rem, 1.5rem + 3vw, 3.5rem); /* 36 → 56px  Who it's for only */
   --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem); /* 20 → 24px  item/step titles */
   --text-lead: clamp(1.1875rem, 1.1rem + 0.35vw, 1.3125rem); /* 19 → 21px  intro paragraphs */
@@ -111,6 +111,7 @@
   font-size: var(--text-lead);
   line-height: var(--lh-lead);
   font-weight: 400;
+  text-wrap: pretty;
   max-width: 55ch;
 }
 
@@ -2621,12 +2622,15 @@ html.modal-open {
 }
 
 .official-compare-table caption {
+  display: block;
+  width: 100%;
   caption-side: top;
   text-align: left;
 }
 
 .official-compare-caption {
   margin: 0 0 1.5rem;
+  width: 100%;
   max-width: 22rem;
   color: var(--official-headline-ink);
 }
