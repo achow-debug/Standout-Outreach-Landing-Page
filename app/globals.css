@@ -2490,8 +2490,76 @@ html.modal-open {
   margin-bottom: -1.25rem;
 }
 
-.results-proof:empty {
-  display: none;
+.results-proof {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  margin: 0;
+  padding: 1.25rem 1.15rem 0.5rem;
+  border-radius: 12px;
+  background: var(--color-brand-lavender-tint);
+}
+
+.results-proof-figure {
+  margin: 0;
+  max-width: 100%;
+  color: var(--color-ink);
+  font-size: clamp(2rem, 11vw, 4.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-proof-from {
+  color: var(--color-muted);
+}
+
+.results-proof-to {
+  color: var(--color-brand-purple);
+}
+
+/* Visible unless motion is allowed and the card has not yet revealed. */
+.results-proof-after {
+  opacity: 1;
+}
+
+html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.motion-ok .results-proof-after {
+    transition: opacity 400ms ease;
+  }
+}
+
+.results-proof-label {
+  margin: 0;
+  max-width: 36rem;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.results-proof-why {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+.results-proof-credit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 0.35rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  line-height: 1.4;
 }
 
 .official-trust-list {
