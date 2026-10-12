@@ -22,6 +22,7 @@ export const officialCopy = {
       "No 12-month lock-in",
       "Complete DPA provided",
     ],
+    /** File stays in /public. The hero shows a placeholder until a real image is chosen. */
     imageSrc: "/images/hero-business-cards.jpg",
     imageAlt: "Standout Group business cards on a balcony overlooking the city.",
   },

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useBooking } from "@/components/official/booking-provider";
 import { CtaMicrocopy } from "@/components/official/cta-microcopy";
 import { keepTogether } from "@/components/official/no-break";
@@ -31,8 +30,7 @@ function CheckIcon() {
  * shows the heading, subhead and button.
  */
 export function OfficialHero() {
-  const { ctaLabel, secondaryLabel, secondaryHref, reassurance, imageSrc, imageAlt } =
-    officialCopy.hero;
+  const { ctaLabel, secondaryLabel, secondaryHref, reassurance } = officialCopy.hero;
   const { openBooking } = useBooking();
 
   return (
@@ -74,15 +72,8 @@ export function OfficialHero() {
           </ul>
         </div>
         <div className="official-hero-media">
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            fill
-            priority
-            quality={80}
-            className="official-hero-photo"
-            sizes="(min-width: 1024px) 40vw, 100vw"
-          />
+          {/* When the real image is added, use next/image with priority, explicit dimensions and descriptive alt text. */}
+          <p className="official-hero-placeholder">{heroCopy.imagePlaceholder}</p>
         </div>
       </div>
     </section>
