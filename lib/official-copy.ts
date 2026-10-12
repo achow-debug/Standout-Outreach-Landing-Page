@@ -42,22 +42,6 @@ export const officialCopy = {
       },
     ],
   },
-  proof: {
-    items: [
-      {
-        id: "firms-analysed",
-        figure: "100+",
-        body: "Law firms analysed before building this process",
-        accentPhrase: undefined,
-      },
-      {
-        id: "revenue-leak",
-        figure: "70%",
-        body: "Law firms identified to be leaking £100K+ in revenue per year to mishandled enquiries",
-        accentPhrase: "£100K+",
-      },
-    ],
-  },
   nav: {
     items: [
       { id: "who-its-for", label: "Who it’s for" },
@@ -321,7 +305,6 @@ export const officialCopy = {
 export type OfficialNavItem = (typeof officialCopy.nav.items)[number];
 export type OfficialTrustBadge =
   (typeof officialCopy.trustBadges.items)[number];
-export type OfficialProofItem = (typeof officialCopy.proof.items)[number];
 export type OfficialWhoItsForItem =
   (typeof officialCopy.whoItsFor.items)[number];
 export type OfficialHowItWorksStep =

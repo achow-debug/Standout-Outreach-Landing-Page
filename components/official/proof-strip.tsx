@@ -1,24 +1,25 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { officialCopy, type OfficialProofItem } from "@/lib/official-copy";
-import type { ReactNode } from "react";
+import { researchStats } from "@/content/landing";
+import { sources } from "@/content/sources";
+import { Sheet } from "@/components/official/sheet";
+import { openSourcesSection } from "@/components/official/source-button";
 
-const ACCENT_SPAN = "font-bold text-[var(--official-headline-ink)]";
 const COUNT_MS = 900;
 
-function accentPhrase(text: string, phrase?: string): ReactNode {
-  if (!phrase) return text;
-  const index = text.indexOf(phrase);
-  if (index === -1) return text;
-  return (
-    <>
-      {text.slice(0, index)}
-      <span className={ACCENT_SPAN}>{phrase}</span>
-      {text.slice(index + phrase.length)}
-    </>
-  );
-}
+const stats = [
+  {
+    id: "firms",
+    figure: researchStats.firmsFigure,
+    label: researchStats.firmsLabel,
+  },
+  {
+    id: "leak",
+    figure: researchStats.leakFigure,
+    label: researchStats.leakLabel,
+  },
+] as const;
 
 function parseFigure(figure: string): { value: number; suffix: string } {
   const match = figure.match(/^(\d+)(.*)$/);
@@ -32,39 +33,40 @@ function easeOut(t: number) {
   return 1 - (1 - t) ** 3;
 }
 
-function ProofItem({
-  item,
+function Stat({
+  figure,
+  label,
   progress,
 }: {
-  item: OfficialProofItem;
+  figure: string;
+  label: string;
   progress: number;
 }) {
-  const { value, suffix } = parseFigure(item.figure);
+  const { value, suffix } = parseFigure(figure);
   const display =
-    progress >= 1 ? item.figure : `${Math.round(value * progress)}${suffix}`;
+    progress >= 1 ? figure : `${Math.round(value * progress)}${suffix}`;
 
   return (
     <div className="official-proof-item">
       <p className="official-proof-figure t-stat">
-        <span className="sr-only">{item.figure}</span>
+        <span className="sr-only">{figure}</span>
         <span aria-hidden="true">{display}</span>
       </p>
-      <p className="official-proof-body t-small">
-        {accentPhrase(item.body, item.accentPhrase)}
-      </p>
+      <p className="official-proof-body t-small">{label}</p>
     </div>
   );
 }
 
 /**
- * Two proof figures. The finished number is what renders first;
- * the count-up runs once the strip enters view.
+ * Two research figures, side by side from 360px.
+ * The finished number renders first; the count-up runs once in view.
  */
 export function ProofStrip() {
-  const { items } = officialCopy.proof;
   const sectionRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
+  const seeAllRef = useRef(false);
   const [progress, setProgress] = useState(1);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!document.documentElement.classList.contains("motion-ok")) {
@@ -100,13 +102,55 @@ export function ProofStrip() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (open || !seeAllRef.current) return;
+    seeAllRef.current = false;
+    openSourcesSection();
+  }, [open]);
+
   return (
     <div ref={sectionRef} className="official-proof">
       <div className="official-proof-grid">
-        {items.map((item) => (
-          <ProofItem key={item.id} item={item} progress={progress} />
+        {stats.map((item) => (
+          <Stat
+            key={item.id}
+            figure={item.figure}
+            label={item.label}
+            progress={progress}
+          />
         ))}
       </div>
+      <button
+        type="button"
+        className="methodology-button"
+        onClick={() => setOpen(true)}
+      >
+        {researchStats.methodButton}
+      </button>
+      <Sheet
+        open={open}
+        onOpenChange={setOpen}
+        title={sources.mysteryShop.title}
+      >
+        <p className="methodology-lead">
+          <strong>{sources.mysteryShop.leadBold}</strong>
+        </p>
+        {sources.mysteryShop.paragraphs.map((paragraph) => (
+          <p key={paragraph} className="methodology-body">
+            {paragraph}
+          </p>
+        ))}
+        <button
+          type="button"
+          className="source-sheet-see-all"
+          onClick={() => {
+            seeAllRef.current = true;
+            setOpen(false);
+          }}
+        >
+          {researchStats.seeAll}
+        </button>
+      </Sheet>
     </div>
   );
 }
