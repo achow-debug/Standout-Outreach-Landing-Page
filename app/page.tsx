@@ -8,8 +8,7 @@ import { Faq } from "@/components/official/faq";
 import { OfficialFinalCta } from "@/components/official/final-cta";
 import { MeetTheFounder } from "@/components/official/meet-the-founder";
 import { OfficialHero } from "@/components/official/official-hero";
-import { TrustBadges } from "@/components/official/trust-badges";
-import { ProofStrip } from "@/components/official/proof-strip";
+import { ResultsBand } from "@/components/official/results-band";
 import { AgencyComparison } from "@/components/official/agency-comparison";
 import { HowItWorks } from "@/components/official/how-it-works";
 import { SiteHeader } from "@/components/official/site-header";
@@ -18,7 +17,7 @@ import { WhatPartnersSay } from "@/components/official/what-partners-say";
 import { WhoItsFor } from "@/components/official/who-its-for";
 
 /**
- * Official homepage: header → hero → trust badges → proof → partners →
+ * Official homepage: header → hero → results → partners →
  * who it's for → how it works → comparison → COLP → founder → FAQ → book → footer.
  * Mobile sticky CTA sits outside main.
  */
@@ -31,10 +30,7 @@ export default function HomePage() {
             <MotionBootstrap />
             <SiteHeader />
             <OfficialHero />
-            <TrustBadges />
-            <div className="page-shell official-proof-shell">
-              <ProofStrip />
-            </div>
+            <ResultsBand />
             <WhatPartnersSay />
             <WhoItsFor />
             <HowItWorks />

@@ -61,8 +61,8 @@ function ProofItem({
  * the count-up runs once the strip enters view.
  */
 export function ProofStrip() {
-  const { label, result, items } = officialCopy.proof;
-  const sectionRef = useRef<HTMLElement>(null);
+  const { items } = officialCopy.proof;
+  const sectionRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
   const [progress, setProgress] = useState(1);
 
@@ -101,13 +101,12 @@ export function ProofStrip() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="official-proof" aria-label={label}>
+    <div ref={sectionRef} className="official-proof">
       <div className="official-proof-grid">
         {items.map((item) => (
           <ProofItem key={item.id} item={item} progress={progress} />
         ))}
       </div>
-      <p className="official-proof-result t-body">{result}</p>
-    </section>
+    </div>
   );
 }

@@ -43,8 +43,6 @@ export const officialCopy = {
     ],
   },
   proof: {
-    label: "Findings",
-    result: "Response time cut from 14 hours to 5 minutes.",
     items: [
       {
         id: "firms-analysed",

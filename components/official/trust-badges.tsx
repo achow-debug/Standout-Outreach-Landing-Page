@@ -8,8 +8,8 @@ export function TrustBadges() {
   const { items } = officialCopy.trustBadges;
 
   return (
-    <section className="official-trust" aria-label="Regulatory and security standards">
-      <ul className="page-shell official-trust-list">
+    <div className="official-trust" role="region" aria-label="Regulatory and security standards">
+      <ul className="official-trust-list">
         {items.map((item) => (
           <li key={item.id} className="official-trust-item">
             <span className="official-trust-mark" aria-hidden="true">
@@ -22,6 +22,6 @@ export function TrustBadges() {
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   );
 }
