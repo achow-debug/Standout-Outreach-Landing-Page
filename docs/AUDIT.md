@@ -43,6 +43,32 @@ Defined in `app/globals.css` unless noted.
 
 The comment above `.t-label--on-dark` already records that `#4f3192` fails contrast on navy, which is why on-dark accents use `#c4b5fd`.
 
+### Tailwind tokens added in task 1.1
+
+Registered in the official `:root` block and in `@theme inline`, so these utilities exist: `bg-brand-purple`, `text-brand-purple`, `bg-brand-lavender`, `text-brand-lavender`, `bg-brand-lavender-tint`, `text-muted`. `text-ink` and `bg-ink` already came from `--color-ink`.
+
+| Token | Value | Source |
+| --- | --- | --- |
+| `brand-purple` | `#4f3192` | `--color-accent` (logo purple) |
+| `brand-lavender` | `#c4b5fd` | `--official-accent-on-dark` (hero button) |
+| `brand-lavender-tint` | `#eeeafb` | New. Pills and highlighted cells on light backgrounds |
+| `ink` | `#0f172a` | Existing `--color-ink`. Not retargeted: custom CSS uses it as the navy band colour |
+| `muted` | `#334155` | Existing `--color-ink-muted`, which is also the body text colour |
+
+Light-section headings use `--official-headline-ink` (`#020617`), which is darker than `ink`. `ink` was left on `#0f172a` so the navy bands do not shift.
+
+`muted` (`#334155`) on text under 18px, contrast against every light background on the page plus the new tint. No darkening was required.
+
+| Background | Hex | Contrast | AA 4.5:1 |
+| --- | --- | --- | --- |
+| White (comparison, compliance) | `#ffffff` | 10.35:1 | Pass |
+| Page canvas | `#f8fafc` | 9.90:1 | Pass |
+| Who it's for band | `#f1f5f9` | 9.45:1 | Pass |
+| Existing purple wash | `#f0edf7` | 8.96:1 | Pass |
+| New lavender tint | `#eeeafb` | 8.78:1 | Pass |
+
+The quieter kicker grey `--color-ink-quiet` (`#64748b`) is not the `muted` token. It passes on white (4.76:1) and the canvas (4.55:1), and fails on the Who it's for band (4.34:1), the purple wash (4.12:1), and the lavender tint (4.03:1). Left unchanged here. Task 12.4 is the contrast sweep for that grey.
+
 Heading scale already in use (do not replace blindly; Task 1.3 says to adjust to this scale):
 
 - H1 `.t-display`: `clamp(2.5rem, 1.6rem + 4vw, 4.25rem)`, `text-wrap: balance`

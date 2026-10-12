@@ -180,6 +180,10 @@
   --color-focus: var(--color-focus);
   --color-error: var(--color-error);
   --color-error-bg: var(--color-error-bg);
+  --color-brand-purple: var(--color-brand-purple);
+  --color-brand-lavender: var(--color-brand-lavender);
+  --color-brand-lavender-tint: var(--color-brand-lavender-tint);
+  --color-muted: var(--color-muted);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 }
@@ -2143,6 +2147,12 @@ html.modal-open {
   --official-muted-on-dark: #cbd5e1; /* footer body */
   --official-accent-on-dark: #c4b5fd; /* lavender on navy — 9.7:1 vs #0f172a */
   --official-accent-on-dark-hover: #b7a4fc;
+  /* Tailwind: bg-brand-purple, text-brand-lavender, bg-brand-lavender-tint, text-muted.
+     text-ink / bg-ink already come from --color-ink (#0f172a). */
+  --color-brand-purple: var(--color-accent); /* #4f3192 */
+  --color-brand-lavender: var(--official-accent-on-dark); /* #c4b5fd */
+  --color-brand-lavender-tint: #eeeafb;
+  --color-muted: var(--color-ink-muted); /* #334155 */
   --official-band-tint: #f1f5f9; /* neutral light grey — section wash */
   --official-headline-ink: #020617;
   --official-headline-muted: var(--color-ink-quiet);
