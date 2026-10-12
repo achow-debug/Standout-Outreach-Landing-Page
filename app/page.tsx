@@ -2,6 +2,7 @@ import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
 import { ReviewRequestShell } from "@/components/landing/review-request-cta";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { BookingProvider } from "@/components/official/booking-provider";
+import { PracticeAreaProvider } from "@/components/official/practice-area";
 import { ColpPeaceOfMind } from "@/components/official/colp-peace-of-mind";
 import { Faq } from "@/components/official/faq";
 import { OfficialFinalCta } from "@/components/official/final-cta";
@@ -24,27 +25,29 @@ import { WhoItsFor } from "@/components/official/who-its-for";
 export default function HomePage() {
   return (
     <ReviewRequestShell>
-      <BookingProvider>
-        <main id="main-content" tabIndex={-1}>
-          <MotionBootstrap />
-          <SiteHeader />
-          <OfficialHero />
-          <TrustBadges />
-          <div className="page-shell official-proof-shell">
-            <ProofStrip />
-          </div>
-          <WhatPartnersSay />
-          <WhoItsFor />
-          <HowItWorks />
-          <AgencyComparison />
-          <ColpPeaceOfMind />
-          <MeetTheFounder />
-          <Faq />
-          <OfficialFinalCta />
-        </main>
-        <SiteFooter />
-        <StickyCta />
-      </BookingProvider>
+      <PracticeAreaProvider>
+        <BookingProvider>
+          <main id="main-content" tabIndex={-1}>
+            <MotionBootstrap />
+            <SiteHeader />
+            <OfficialHero />
+            <TrustBadges />
+            <div className="page-shell official-proof-shell">
+              <ProofStrip />
+            </div>
+            <WhatPartnersSay />
+            <WhoItsFor />
+            <HowItWorks />
+            <AgencyComparison />
+            <ColpPeaceOfMind />
+            <MeetTheFounder />
+            <Faq />
+            <OfficialFinalCta />
+          </main>
+          <SiteFooter />
+          <StickyCta />
+        </BookingProvider>
+      </PracticeAreaProvider>
     </ReviewRequestShell>
   );
 }

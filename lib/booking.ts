@@ -1,3 +1,4 @@
+import type { CalendlyUtm } from "@/lib/calendly-config";
 import {
   buildCalendlyEmbedUrl,
   CALENDLY_WIDGET_SCRIPT_SRC,
@@ -59,17 +60,27 @@ export function loadCalendly(): Promise<void> {
   return loading;
 }
 
-/** Open the existing Calendly popup. Does not change the event URL. */
-export async function openCalendlyPopup(): Promise<void> {
+/** Open the existing Calendly popup. Does not change the event type or questions. */
+export function bookingPopupUrl(utm: CalendlyUtm): string | null {
   const eventUrl = getCalendlyEventUrl();
-  if (!eventUrl) {
+  if (!eventUrl) return null;
+  const url = new URL(buildCalendlyEmbedUrl(eventUrl));
+  if (utm.utmSource) url.searchParams.set("utm_source", utm.utmSource);
+  if (utm.utmMedium) url.searchParams.set("utm_medium", utm.utmMedium);
+  if (utm.utmCampaign) url.searchParams.set("utm_campaign", utm.utmCampaign);
+  if (utm.utmContent) url.searchParams.set("utm_content", utm.utmContent);
+  if (utm.utmTerm) url.searchParams.set("utm_term", utm.utmTerm);
+  return url.toString();
+}
+
+export async function openCalendlyPopup(utm: CalendlyUtm): Promise<void> {
+  const url = bookingPopupUrl(utm);
+  if (!url) {
     throw new Error("Calendly URL is not configured");
   }
   await loadCalendly();
   if (!window.Calendly) {
     throw new Error("Calendly failed to load");
   }
-  window.Calendly.initPopupWidget({
-    url: buildCalendlyEmbedUrl(eventUrl),
-  });
+  window.Calendly.initPopupWidget({ url, utm });
 }

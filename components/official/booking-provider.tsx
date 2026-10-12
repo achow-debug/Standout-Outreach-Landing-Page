@@ -15,14 +15,22 @@ import {
   getDeviceCategory,
   trackEvent,
 } from "@/lib/analytics";
-import { loadCalendly, openCalendlyPopup } from "@/lib/booking";
+import { loadCalendly, bookingPopupUrl, openCalendlyPopup } from "@/lib/booking";
+import { usePracticeArea, type PracticeArea } from "@/components/official/practice-area";
 import { landingCopy } from "@/lib/landing-copy";
 import {
-  getCalendlyEventUrl,
   isCalendlyEnabled,
 } from "@/lib/calendly-config";
 
-export type BookingLocation = "header" | "hero" | "how" | "sticky" | "final";
+/** `header` is the existing header Apply button. Footer has no Apply button yet. */
+export type BookingLocation =
+  | "header"
+  | "hero"
+  | "how-it-works"
+  | "practice-card"
+  | "final"
+  | "sticky"
+  | "footer";
 
 const BOOKED_KEY = "sg_booked";
 
@@ -62,11 +70,22 @@ function writeBookedFlag() {
   }
 }
 
+function bookingUtm(location: BookingLocation, practiceArea: PracticeArea | null) {
+  return {
+    utmSource: "standoutgroup.net",
+    utmMedium: "landing-page",
+    utmCampaign: "30-day-pilot",
+    utmContent: practiceArea ?? "none",
+    utmTerm: location,
+  };
+}
+
 /**
  * One booking handler for every official CTA.
  * Calendly stays off the initial page load and warms on first intent.
  */
 export function BookingProvider({ children }: { children: ReactNode }) {
+  const { practiceArea } = usePracticeArea();
   const openModal = useReviewModal();
   const [bookingOpen, setBookingOpen] = useState(false);
   const [booked, setBooked] = useState(false);
@@ -221,7 +240,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         const fallback =
           location === "header"
             ? "official_header"
-            : location === "how"
+            : location === "how-it-works"
               ? "official_how"
               : location === "sticky"
                 ? "sticky_mobile"
@@ -231,15 +250,15 @@ export function BookingProvider({ children }: { children: ReactNode }) {
       }
 
       setBookingOpen(true);
-      void openCalendlyPopup().catch(() => {
+      void openCalendlyPopup(bookingUtm(location, practiceArea)).catch(() => {
         setBookingOpen(false);
-        const eventUrl = getCalendlyEventUrl();
-        if (eventUrl) {
-          window.open(eventUrl, "_blank", "noopener,noreferrer");
+        const popupUrl = bookingPopupUrl(bookingUtm(location, practiceArea));
+        if (popupUrl) {
+          window.open(popupUrl, "_blank", "noopener,noreferrer");
         }
       });
     },
-    [openModal],
+    [openModal, practiceArea],
   );
 
   return (

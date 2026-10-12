@@ -136,7 +136,7 @@ export function HowItWorks() {
               type="button"
               className="btn btn-primary btn-cta"
               data-booking-cta=""
-              onClick={() => openBooking("how")}
+              onClick={() => openBooking("how-it-works")}
             >
               {keepTogether(ctaLabel)}
               <span className="btn-cta-arrow" aria-hidden="true">
