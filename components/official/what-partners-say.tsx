@@ -1,71 +1,38 @@
-import { existsSync } from "node:fs";
-import { join } from "node:path";
-import Image from "next/image";
-import {
-  officialCopy,
-  type OfficialPartnersItem,
-} from "@/lib/official-copy";
+import { Avatar } from "@/components/official/avatar";
+import { SectionLabel } from "@/components/official/section-label";
+import { reviews, sectionLabels } from "@/content/landing";
+import { officialCopy } from "@/lib/official-copy";
 
-function publicFileExists(src: string) {
-  return existsSync(join(process.cwd(), "public", src.replace(/^\//, "")));
-}
+const reviewCards = [reviews.florenda, reviews.jayden] as const;
 
-function initialsFromName(name: string) {
-  const parts = name.split(/\s+/).filter(Boolean);
-  const first = parts[0]?.[0] ?? "";
-  const last = parts.at(-1)?.[0] ?? "";
-  return `${first}${last}`.toUpperCase();
-}
-
-function PartnerAvatar({ item }: { item: OfficialPartnersItem }) {
-  const photo = item.photo ?? item.portraitSrc;
-  if (photo && publicFileExists(photo)) {
-    return (
-      <Image
-        src={photo}
-        alt={item.portraitAlt}
-        width={56}
-        height={56}
-        className="official-partners-avatar"
-      />
-    );
+function quoteFor(name: string) {
+  const match = officialCopy.partners.items.find((item) => item.name === name);
+  if (!match) {
+    throw new Error(`Missing review quote for ${name}`);
   }
-
-  return (
-    <span className="official-partners-avatar official-partners-avatar--mono" aria-hidden="true">
-      {initialsFromName(item.name)}
-    </span>
-  );
+  return match.quote;
 }
 
-function PartnerCard({ item }: { item: OfficialPartnersItem }) {
+function ReviewCard({
+  item,
+}: {
+  item: (typeof reviewCards)[number];
+}) {
   return (
-    <li className="official-partners-card">
-      <span className="official-partners-mark" aria-hidden="true">
-        “
-      </span>
+    <li id={item.id} className="official-partners-card">
+      <p className="review-outcome">{item.outcome}</p>
       <figure className="official-partners-figure">
         <blockquote className="official-partners-quote">
-          <p className="t-body">
-            <span className="official-partners-quote-mark" aria-hidden="true">
-              “
-            </span>
-            {item.quote}
-            <span className="official-partners-quote-mark" aria-hidden="true">
-              ”
-            </span>
-          </p>
+          <p className="t-body">{quoteFor(item.name)}</p>
         </blockquote>
         <figcaption className="official-partners-caption">
-          <PartnerAvatar item={item} />
+          <Avatar name={item.name} photo={item.photo} />
           <div className="official-partners-identity">
             <p className="official-partners-name t-body">{item.name}</p>
-            {item.role ? (
-              <p className="official-partners-role t-small">{item.role}</p>
-            ) : null}
-            {item.firm ? (
-              <p className="official-partners-firm t-small">{item.firm}</p>
-            ) : null}
+            <p className="official-partners-role t-small">{item.role}</p>
+            <p className="review-meta t-small">
+              {item.region}, {item.date}
+            </p>
           </div>
         </figcaption>
       </figure>
@@ -74,10 +41,11 @@ function PartnerCard({ item }: { item: OfficialPartnersItem }) {
 }
 
 /**
- * Stacked partner quotes. Photos, firm and role render when the data has them.
+ * Partner reviews. Photos stay as initials until the owner supplies them.
+ * Jayden’s full quote stays until he approves the trimmed version.
  */
 export function WhatPartnersSay() {
-  const { heading, items } = officialCopy.partners;
+  const { heading } = officialCopy.partners;
 
   return (
     <section
@@ -88,13 +56,14 @@ export function WhatPartnersSay() {
     >
       <div className="page-shell official-partners-inner">
         <div className="official-partners-intro">
+          <SectionLabel id="reviews-label">{sectionLabels.reviews}</SectionLabel>
           <h2 id="official-partners-heading" className="official-partners-heading t-h2">
             {heading}
           </h2>
         </div>
         <ul className="official-partners-grid">
-          {items.map((item) => (
-            <PartnerCard key={item.id} item={item} />
+          {reviewCards.map((item) => (
+            <ReviewCard key={item.id} item={item} />
           ))}
         </ul>
       </div>

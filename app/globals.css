@@ -3689,24 +3689,26 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   border-top: 0;
 }
 
-.official-partners-avatar {
+.official-partners-avatar,
+.avatar {
   flex-shrink: 0;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
 }
 
-.official-partners-avatar--mono {
+.official-partners-avatar--mono,
+.avatar--initials {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: var(--official-headline-ink);
   color: var(--official-ink-on-dark);
   font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .official-partners-identity {
@@ -3714,6 +3716,19 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   min-width: 0;
   flex-direction: column;
   gap: 0.2rem;
+}
+
+.review-outcome {
+  margin: 0 0 0.75rem;
+  color: var(--color-brand-purple);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.review-meta {
+  margin: 0;
+  color: var(--color-muted);
 }
 
 .official-partners-name {
@@ -4306,11 +4321,13 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
     border-color: CanvasText;
   }
 
-  .official-partners-avatar {
+  .official-partners-avatar,
+  .avatar {
     border: 1px solid CanvasText;
   }
 
-  .official-partners-avatar--mono {
+  .official-partners-avatar--mono,
+  .avatar--initials {
     background: Highlight;
     color: HighlightText;
   }
