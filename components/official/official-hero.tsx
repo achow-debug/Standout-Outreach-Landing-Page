@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useBooking } from "@/components/official/booking-provider";
+import { CtaMicrocopy } from "@/components/official/cta-microcopy";
 import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
 
@@ -70,6 +71,7 @@ export function OfficialHero() {
               →
             </span>
           </button>
+          <CtaMicrocopy tone="dark" />
           <a className="official-hero-secondary" href={secondaryHref}>
             {secondaryLabel}
           </a>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useBooking } from "@/components/official/booking-provider";
+import { CtaMicrocopy } from "@/components/official/cta-microcopy";
 import { SectionLabel } from "@/components/official/section-label";
 import { sectionLabels } from "@/content/landing";
 import { keepTogether } from "@/components/official/no-break";
@@ -143,6 +144,7 @@ export function HowItWorks() {
                 →
               </span>
             </button>
+            <CtaMicrocopy tone="light" />
             <p className="official-how-cta-note t-small">{ctaNote}</p>
           </div>
           </div>

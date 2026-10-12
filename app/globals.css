@@ -4460,3 +4460,62 @@ html.sheet-open body {
   align-items: flex-start;
   gap: 0.25rem;
 }
+
+.cta-microcopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  max-width: 36rem;
+  text-align: left;
+}
+
+.cta-microcopy-line,
+.cta-microcopy-legal {
+  margin: 0;
+}
+
+.cta-microcopy-line {
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.cta-microcopy-legal {
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.cta-microcopy-ico {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.cta-microcopy-ico:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.cta-microcopy--light {
+  color: var(--color-ink-muted);
+}
+
+.cta-microcopy--light .cta-microcopy-ico {
+  color: var(--color-accent);
+}
+
+.cta-microcopy--dark {
+  color: var(--official-muted-on-dark);
+}
+
+.cta-microcopy--dark .cta-microcopy-ico {
+  color: var(--official-accent-on-dark);
+}

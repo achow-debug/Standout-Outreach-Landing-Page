@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useBooking } from "@/components/official/booking-provider";
+import { CtaMicrocopy } from "@/components/official/cta-microcopy";
 import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
@@ -105,6 +106,7 @@ export function OfficialFinalCta() {
                   →
                 </span>
               </button>
+              <CtaMicrocopy tone="dark" />
               <p className="official-apply-cta-note t-small">{ctaNote}</p>
             </>
           )}
