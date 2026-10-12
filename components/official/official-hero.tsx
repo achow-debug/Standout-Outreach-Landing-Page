@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useBooking } from "@/components/official/booking-provider";
 import { CtaMicrocopy } from "@/components/official/cta-microcopy";
 import { keepTogether } from "@/components/official/no-break";
+import { SectionLabel } from "@/components/official/section-label";
+import { hero as heroCopy, sectionLabels } from "@/content/landing";
 import { officialCopy } from "@/lib/official-copy";
 
 function CheckIcon() {
@@ -29,19 +31,8 @@ function CheckIcon() {
  * shows the heading, subhead and button.
  */
 export function OfficialHero() {
-  const {
-    eyebrow,
-    h1,
-    h1Accent,
-    supporting,
-    pilotLine,
-    ctaLabel,
-    secondaryLabel,
-    secondaryHref,
-    reassurance,
-    imageSrc,
-    imageAlt,
-  } = officialCopy.hero;
+  const { ctaLabel, secondaryLabel, secondaryHref, reassurance, imageSrc, imageAlt } =
+    officialCopy.hero;
   const { openBooking } = useBooking();
 
   return (
@@ -52,13 +43,11 @@ export function OfficialHero() {
     >
       <div className="page-shell official-hero-inner">
         <div className="official-hero-copy">
-          <p className="official-hero-eyebrow t-kicker t-kicker--on-dark">{eyebrow}</p>
+          <SectionLabel tone="dark">{sectionLabels.hero}</SectionLabel>
           <h1 id="official-hero-heading" className="official-hero-title t-display">
-            <span className="official-hero-title-lead">{h1}</span>
-            <span className="official-hero-title-accent">{h1Accent}</span>
+            {heroCopy.headline}
           </h1>
-          <p className="official-hero-supporting t-lead">{supporting}</p>
-          <p className="official-hero-supporting t-lead">{keepTogether(pilotLine)}</p>
+          <p className="official-hero-supporting t-lead">{heroCopy.subline}</p>
           <button
             id="hero-cta"
             type="button"

@@ -63,7 +63,7 @@ The source is a full-length evening shot. A circle cannot show the diploma witho
 
 In [`officialCopy.hero`](../../lib/official-copy.ts) (curly apostrophe, trailing periods to match the current H1/supporting pattern):
 
-- `h1`: `Enabling ambitious law firms to thrive in 2026 and beyond.`
+- `h1`: replaced in task 2.1. The previous line is retired.
 - `supporting`: `The UK’s most innovative law firm growth accelerator.`
 
 Also update `officialCopy.meta` so search/social does not still say “scaler”:

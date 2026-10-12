@@ -5,21 +5,15 @@
 
 export const officialCopy = {
   meta: {
-    title: "Standout Group | Enabling ambitious law firms to thrive",
+    title: "Standout Group | Stop losing the clients who already found you.",
     description:
-      "The UK’s most innovative law firm growth accelerator. Standout Group helps UK law firms grow from a 30-day pilot to retained-matter lift.",
+      "We turn the work you already attract into retained matters. Free for 30 days.",
   },
   header: {
     applyLabel: "Apply For My 30-Day Pilot",
     applyHref: "#book",
   },
   hero: {
-    eyebrow: "Law firm growth partner",
-    h1: "Enabling ambitious law firms to thrive",
-    h1Accent: "in 2026 and beyond.",
-    supporting: "The UK’s most innovative law firm growth partner.",
-    pilotLine:
-      "Start with a free 30-day pilot. You keep the leads, with no 12-month lock-in, and a complete DPA.",
     ctaLabel: "Apply For My 30-Day Pilot",
     secondaryLabel: "See how the pilot works",
     secondaryHref: "#how-it-works",
