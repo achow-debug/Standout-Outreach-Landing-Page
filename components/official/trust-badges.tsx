@@ -1,27 +1,72 @@
-import { officialCopy } from "@/lib/official-copy";
+import { credentials } from "@/content/landing";
+
+const icon = {
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.75,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  "aria-hidden": true as const,
+  className: "credential-icon",
+};
+
+function PadlockIcon() {
+  return (
+    <svg {...icon}>
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </svg>
+  );
+}
+
+function DocumentIcon() {
+  return (
+    <svg {...icon}>
+      <path d="M7 3.5h7l5 5V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z" />
+      <path d="M14 3.5V9h5.5" />
+      <path d="M9 13h6" />
+      <path d="M9 17h6" />
+    </svg>
+  );
+}
 
 /**
- * Regulatory lockups under the hero. Stacked on the phone, one row from 768px.
- * Marks are monograms in the site palette, not trademarked crests.
+ * ICO and SRA credentials. Line icons only: no boxed marks and no ICO logo.
+ * Task 3.5 opens the explainer from "What does this mean?".
  */
-export function TrustBadges() {
-  const { items } = officialCopy.trustBadges;
-
+export function TrustBadges({ onExplain }: { onExplain?: () => void }) {
   return (
-    <div className="official-trust" role="region" aria-label="Regulatory and security standards">
-      <ul className="official-trust-list">
-        {items.map((item) => (
-          <li key={item.id} className="official-trust-item">
-            <span className="official-trust-mark" aria-hidden="true">
-              {item.mark}
-            </span>
-            <span className="official-trust-copy">
-              <span className="official-trust-title">{item.title}</span>
-              <span className="official-trust-detail t-small">{item.detail}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
+    <div className="credentials" role="region" aria-label="Regulatory credentials">
+      <div className="credential">
+        <PadlockIcon />
+        <div className="credential-copy">
+          <p className="credential-title">{credentials.icoTitle}</p>
+          <p className="credential-detail">{credentials.icoNumber}</p>
+          <div className="credential-actions">
+            <a
+              className="credential-link"
+              href={credentials.icoRegisterUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {credentials.icoRegisterLabel}
+            </a>
+            <button type="button" className="credential-link" onClick={onExplain}>
+              {credentials.icoMeaningLabel}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="credential">
+        <DocumentIcon />
+        <div className="credential-copy">
+          <p className="credential-title">{credentials.sraTitle}</p>
+          <p className="credential-detail">{credentials.sraBody}</p>
+        </div>
+      </div>
     </div>
   );
 }

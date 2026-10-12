@@ -26,22 +26,6 @@ export const officialCopy = {
     imageSrc: "/images/hero-business-cards.jpg",
     imageAlt: "Standout Group business cards on a balcony overlooking the city.",
   },
-  trustBadges: {
-    items: [
-      {
-        id: "ico",
-        mark: "ICO",
-        title: "ICO Registered",
-        detail: "ZC264255",
-      },
-      {
-        id: "sra",
-        mark: "SRA",
-        title: "SRA Standards Aligned",
-        detail: "Built around SRA Code of Conduct for Firm Marketing.",
-      },
-    ],
-  },
   nav: {
     items: [
       { id: "who-its-for", label: "Who it’s for" },
@@ -303,8 +287,6 @@ export const officialCopy = {
 } as const;
 
 export type OfficialNavItem = (typeof officialCopy.nav.items)[number];
-export type OfficialTrustBadge =
-  (typeof officialCopy.trustBadges.items)[number];
 export type OfficialWhoItsForItem =
   (typeof officialCopy.whoItsFor.items)[number];
 export type OfficialHowItWorksStep =
