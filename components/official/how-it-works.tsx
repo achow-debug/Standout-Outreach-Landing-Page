@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useBooking } from "@/components/official/booking-provider";
+import { SectionLabel } from "@/components/official/section-label";
+import { sectionLabels } from "@/content/landing";
 import { useInView } from "@/hooks/use-in-view";
 import { officialCopy } from "@/lib/official-copy";
 
@@ -84,7 +86,6 @@ function HowStep({
  */
 export function HowItWorks() {
   const {
-    eyebrow,
     heading,
     headingSecond,
     intro,
@@ -120,7 +121,7 @@ export function HowItWorks() {
         <div className="official-how-stage">
           <div className="official-how-sticky">
           <div className="official-how-intro">
-            <p className="official-how-eyebrow t-kicker">{eyebrow}</p>
+            <SectionLabel>{sectionLabels.how}</SectionLabel>
             <h2 id="official-how-heading" className="official-how-heading t-h2">
               <span className="official-how-heading-line">{heading}</span>
               <span className="official-how-heading-line">{headingSecond}</span>

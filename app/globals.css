@@ -2849,10 +2849,6 @@ html.modal-open {
   max-width: 36rem;
 }
 
-.official-who-eyebrow {
-  margin: 0;
-}
-
 .official-who-heading {
   margin: 0;
   color: var(--official-headline-ink);
@@ -2970,10 +2966,6 @@ html.modal-open {
   align-items: flex-start;
   gap: 1rem;
   max-width: 40rem;
-}
-
-.official-how-eyebrow {
-  margin: 0;
 }
 
 .official-how-heading {
@@ -4108,7 +4100,7 @@ html.modal-open {
   .official-header-mark .brand-mark-name,
   .official-header-mark .brand-mark-accent,
   .official-proof-figure,
-  .official-who-eyebrow,
+  .section-label,
   .official-who-heading,
   .official-who-heading-line,
   .official-who-heading-line--muted,
@@ -4116,7 +4108,6 @@ html.modal-open {
   .official-who-index,
   .official-who-item-title,
   .official-who-item-body,
-  .official-how-eyebrow,
   .official-how-heading,
   .official-how-heading-line,
   .official-how-intro-body,

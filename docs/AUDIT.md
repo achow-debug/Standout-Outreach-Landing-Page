@@ -69,6 +69,15 @@ Light-section headings use `--official-headline-ink` (`#020617`), which is darke
 
 The quieter kicker grey `--color-ink-quiet` (`#64748b`) is not the `muted` token. It passes on white (4.76:1) and the canvas (4.55:1), and fails on the Who it's for band (4.34:1), the purple wash (4.12:1), and the lavender tint (4.03:1). Left unchanged here. Task 12.4 is the contrast sweep for that grey.
 
+### Section label contrast (task 1.2)
+
+| Variant | Text | Background | Contrast |
+| --- | --- | --- | --- |
+| Light | `#4f3192` | `#eeeafb` | 8.14:1 |
+| Dark | `#c4b5fd` | `#272e3f` (navy `#0f172a` plus `white/10`) | 7.34:1 |
+
+Both clear 4.5:1 at 15px.
+
 Heading scale already in use (do not replace blindly; Task 1.3 says to adjust to this scale):
 
 - H1 `.t-display`: `clamp(2.5rem, 1.6rem + 4vw, 4.25rem)`, `text-wrap: balance`
