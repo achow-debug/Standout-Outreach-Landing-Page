@@ -1,5 +1,5 @@
 import { SectionLabel } from "@/components/official/section-label";
-import { sectionLabels } from "@/content/landing";
+import { sectionLabels, whoItsFor } from "@/content/landing";
 import { officialCopy, type OfficialWhoItsForItem } from "@/lib/official-copy";
 
 function WhoItem({ item }: { item: OfficialWhoItsForItem }) {
@@ -16,7 +16,7 @@ function WhoItem({ item }: { item: OfficialWhoItsForItem }) {
  * Qualification band. Items use a short purple rule instead of A/B/C letters.
  */
 export function WhoItsFor() {
-  const { heading, headingAccent, supporting, items } = officialCopy.whoItsFor;
+  const { items } = officialCopy.whoItsFor;
 
   return (
     <section
@@ -29,10 +29,9 @@ export function WhoItsFor() {
         <div className="official-who-intro">
           <SectionLabel>{sectionLabels.who}</SectionLabel>
           <h2 id="official-who-heading" className="official-who-heading t-h2-feature">
-            <span className="official-who-heading-line">{heading}</span>
-            <span className="official-who-heading-line">{headingAccent}</span>
+            {whoItsFor.heading}
           </h2>
-          <p className="official-who-supporting t-lead">{supporting}</p>
+          <p className="official-who-supporting t-lead">{whoItsFor.supporting}</p>
         </div>
         <ol className="official-who-list">
           {items.map((item) => (

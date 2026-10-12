@@ -36,10 +36,6 @@ export const officialCopy = {
   },
   whoItsFor: {
     eyebrow: "Who it’s for",
-    heading: "You don’t need",
-    headingAccent: "a finished growth plan",
-    supporting:
-      "Just a firm worth building on, and the will to build it. High street or city, whatever size you are.",
     items: [
       {
         id: "grow-deliberately",
