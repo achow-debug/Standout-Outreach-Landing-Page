@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import { credentials } from "@/content/landing";
+import { IcoExplainer } from "@/components/official/ico-explainer";
 
 const icon = {
   width: 24,
@@ -35,9 +39,10 @@ function DocumentIcon() {
 
 /**
  * ICO and SRA credentials. Line icons only: no boxed marks and no ICO logo.
- * Task 3.5 opens the explainer from "What does this mean?".
  */
-export function TrustBadges({ onExplain }: { onExplain?: () => void }) {
+export function TrustBadges() {
+  const [explainOpen, setExplainOpen] = useState(false);
+
   return (
     <div className="credentials" role="region" aria-label="Regulatory credentials">
       <div className="credential">
@@ -54,7 +59,11 @@ export function TrustBadges({ onExplain }: { onExplain?: () => void }) {
             >
               {credentials.icoRegisterLabel}
             </a>
-            <button type="button" className="credential-link" onClick={onExplain}>
+            <button
+              type="button"
+              className="credential-link"
+              onClick={() => setExplainOpen(true)}
+            >
               {credentials.icoMeaningLabel}
             </button>
           </div>
@@ -67,6 +76,7 @@ export function TrustBadges({ onExplain }: { onExplain?: () => void }) {
           <p className="credential-detail">{credentials.sraBody}</p>
         </div>
       </div>
+      <IcoExplainer open={explainOpen} onOpenChange={setExplainOpen} />
     </div>
   );
 }

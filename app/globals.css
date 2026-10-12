@@ -2640,6 +2640,22 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   outline-offset: 2px;
 }
 
+.ico-explainer-copy {
+  margin: 0 0 0.75rem;
+}
+
+.ico-explainer-mail {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.ico-explainer-mail:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .official-proof {
   display: flex;
   flex-direction: column;
