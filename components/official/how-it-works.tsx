@@ -88,7 +88,6 @@ export function HowItWorks() {
     addOn,
     compliance,
     ctaLabel,
-    ctaNote,
   } = officialCopy.howItWorks;
   const { openBooking } = useBooking();
   const [reached, setReached] = useState<boolean[]>(() => steps.map(() => false));
@@ -142,7 +141,6 @@ export function HowItWorks() {
               </span>
             </button>
             <CtaMicrocopy tone="light" />
-            <p className="official-how-cta-note t-small">{ctaNote}</p>
           </div>
           </div>
 
@@ -203,13 +201,13 @@ export function HowItWorks() {
           <div className="official-how-compliance-lead">
             <p className="official-how-compliance-label t-kicker">
               <ShieldIcon />
-              {compliance.kicker}
+              {howCopy.legalLabel}
             </p>
             <h3 id="official-how-compliance-heading" className="official-how-step-title t-h3">
               {compliance.title}
             </h3>
           </div>
-          <p className="official-how-step-body t-body">{compliance.body}</p>
+          <p className="official-how-step-body t-body">{howCopy.legalBody}</p>
         </div>
       </div>
     </section>

@@ -3499,11 +3499,6 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   width: 100%;
 }
 
-.official-how-cta-note {
-  margin: 0;
-  color: #475569; /* slate-600 */
-}
-
 @media (min-width: 1024px) {
   .official-how-stage {
     display: grid;
@@ -4515,7 +4510,6 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   .official-how-timeline-caption,
   .official-how-addon-pill,
   .official-how-compliance-label,
-  .official-how-cta-note,
   .official-partners-eyebrow,
   .official-partners-heading,
   .official-partners-quote p,

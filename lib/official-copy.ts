@@ -92,12 +92,9 @@ export const officialCopy = {
     },
     compliance: {
       id: "built-for-legal",
-      kicker: "SRA/BSB and GDPR",
       title: "Built for legal, not bolted on",
-      body: "Legal marketing runs on rules general marketing doesn’t. Every page, form and follow-up sequence we build is designed around SRA/BSB compliance and GDPR from the start, not added afterward as a disclaimer at the bottom of the page.",
     },
     ctaLabel: "Apply For My 30-Day Pilot",
-    ctaNote: "Begin with a 20-minute collaborative conversation",
   },
   comparison: {
     caption: "Traditional agencies and the Standout 30-day pilot",
