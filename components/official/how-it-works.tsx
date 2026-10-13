@@ -34,6 +34,7 @@ function HowStep({
   title,
   body,
   youGet,
+  proofLink,
   nextReached,
   onReach,
 }: {
@@ -41,6 +42,7 @@ function HowStep({
   title: string;
   body: string;
   youGet: string;
+  proofLink?: { href: string; label: string };
   nextReached: boolean;
   onReach: (index: number) => void;
 }) {
@@ -64,6 +66,11 @@ function HowStep({
       <p className="official-how-you-get t-body">
         <strong>You get:</strong> {youGet}
       </p>
+      {proofLink ? (
+        <a className="official-how-proof-link" href={proofLink.href}>
+          {keepTogether(proofLink.label)}
+        </a>
+      ) : null}
     </li>
   );
 }
@@ -151,6 +158,11 @@ export function HowItWorks() {
                   title={step.title}
                   body={step.body}
                   youGet={step.youGet}
+                  proofLink={
+                    step.id === "handle-what-happens-next"
+                      ? { href: howCopy.proofHref, label: howCopy.proofLink }
+                      : undefined
+                  }
                   nextReached={Boolean(reached[index + 1])}
                   onReach={onReach}
                 />

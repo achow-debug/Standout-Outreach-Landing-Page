@@ -3265,6 +3265,25 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   color: var(--color-ink);
 }
 
+.official-how-proof-link {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 44px;
+  margin-top: 0.15rem;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.official-how-proof-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .official-how-callout-credit {
   display: flex;
   flex-wrap: wrap;
@@ -4509,6 +4528,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   .official-how-callout-figure,
   .official-how-callout-body,
   .official-how-callout-credit,
+  .official-how-proof-link,
   .official-how-step-label,
   .official-how-step-title,
   .official-how-step-body,
