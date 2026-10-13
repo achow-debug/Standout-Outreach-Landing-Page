@@ -1,7 +1,7 @@
 "use client";
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export type AccordionEntry = {
   id: string;
@@ -11,6 +11,9 @@ export type AccordionEntry = {
 
 type AccordionProps = {
   items: readonly AccordionEntry[];
+  className?: string;
+  /** Fires with the open item id, or "" when every item is closed. */
+  onValueChange?: (value: string) => void;
 };
 
 function Chevron() {
@@ -36,9 +39,16 @@ function Chevron() {
  * One item open at a time. The open item can be closed again.
  * A matching URL hash opens that item and scrolls it into view.
  */
-export function Accordion({ items }: AccordionProps) {
+export function Accordion({ items, className, onValueChange }: AccordionProps) {
   const [value, setValue] = useState("");
   const ids = items.map((item) => item.id).join("|");
+  const onChangeRef = useRef(onValueChange);
+  onChangeRef.current = onValueChange;
+
+  const select = (next: string) => {
+    setValue(next);
+    onChangeRef.current?.(next);
+  };
 
   useEffect(() => {
     const known = new Set(ids.split("|").filter(Boolean));
@@ -47,6 +57,7 @@ export function Accordion({ items }: AccordionProps) {
       const id = window.location.hash.replace(/^#/, "");
       if (!known.has(id)) return;
       setValue(id);
+      onChangeRef.current?.(id);
     };
 
     openFromHash();
@@ -73,8 +84,8 @@ export function Accordion({ items }: AccordionProps) {
       type="single"
       collapsible
       value={value}
-      onValueChange={setValue}
-      className="accordion"
+      onValueChange={select}
+      className={className ? `accordion ${className}` : "accordion"}
     >
       {items.map((item) => (
         <AccordionPrimitive.Item

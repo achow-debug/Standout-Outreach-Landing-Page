@@ -3060,6 +3060,99 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   color: #475569; /* slate-600 */
 }
 
+.official-who-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 0;
+}
+
+.practice-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.practice-cards .accordion-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+}
+
+.practice-cards .accordion-trigger {
+  align-items: flex-start;
+  padding: 1rem;
+}
+
+.practice-cards .accordion-trigger > span:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.practice-cards .accordion-chevron {
+  margin-top: 0.15rem;
+}
+
+.practice-card-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.practice-card-title {
+  color: var(--official-headline-ink);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.practice-card-summary {
+  margin: 0;
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+.practice-cards .accordion-panel {
+  padding: 0;
+}
+
+.practice-card-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+}
+
+.practice-card-excerpt {
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.practice-card-link {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 44px;
+  color: var(--color-accent);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.practice-card-link:focus-visible,
+.practice-cards .accordion-trigger:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.practice-card-cta {
+  margin-top: 0.25rem;
+}
+
 @media (min-width: 1024px) {
   .page-shell.official-who-inner {
     display: grid;
@@ -3076,7 +3169,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
     max-width: none;
   }
 
-  .official-who-list {
+  .official-who-main {
     grid-column: 6 / 13;
   }
 }
@@ -4360,6 +4453,10 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   .official-who-index,
   .official-who-item-title,
   .official-who-item-body,
+  .practice-card-title,
+  .practice-card-summary,
+  .practice-card-excerpt,
+  .practice-card-link,
   .official-how-heading,
   .official-how-heading-line,
   .official-how-intro-body,
@@ -4391,6 +4488,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
 
   .official-who-list,
   .official-who-item,
+  .practice-cards .accordion-item,
   .official-how-panel,
   .official-how-addon,
   .official-how-compliance,
