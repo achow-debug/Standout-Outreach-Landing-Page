@@ -85,7 +85,6 @@ export function HowItWorks() {
     headingSecond,
     pill,
     steps,
-    timeline,
     addOn,
     compliance,
     ctaLabel,
@@ -171,13 +170,21 @@ export function HowItWorks() {
           </div>
 
           <ol className="official-how-timeline">
-            {timeline.map((item) => (
-              <li key={item.id} className="official-how-timeline-item">
-                <span className="official-how-timeline-dot" aria-hidden="true" />
-                <p className="official-how-timeline-label">{keepTogether(item.label)}</p>
-                <p className="official-how-timeline-caption t-small">{item.caption}</p>
-              </li>
-            ))}
+            {howCopy.timeline.map((stage) => {
+              const after = "afterHref" in stage ? stage : null;
+              return (
+                <li key={stage.title} className="official-how-timeline-item">
+                  <span className="official-how-timeline-dot" aria-hidden="true" />
+                  <p className="official-how-timeline-label">{keepTogether(stage.title)}</p>
+                  <p className="official-how-timeline-caption t-small">{stage.description}</p>
+                  {after ? (
+                    <a className="official-how-proof-link" href={after.afterHref}>
+                      {after.afterLink}
+                    </a>
+                  ) : null}
+                </li>
+              );
+            })}
           </ol>
 
           <div className="official-how-addon">

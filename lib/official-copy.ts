@@ -84,23 +84,6 @@ export const officialCopy = {
         youGet: "follow-up that doesn’t wait",
       },
     ],
-    timeline: [
-      {
-        id: "start",
-        label: "20-minute conversation.",
-        caption: "Where it starts.",
-      },
-      {
-        id: "pilot",
-        label: "30-day free pilot.",
-        caption: "To demonstrate a measurable lift in retained matters.",
-      },
-      {
-        id: "growth",
-        label: "9 weeks.",
-        caption: "From first conversation to law firm growth.",
-      },
-    ],
     addOn: {
       id: "fill-the-funnel",
       kicker: "Paid add-on",

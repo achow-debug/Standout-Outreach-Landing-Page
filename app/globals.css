@@ -3549,29 +3549,6 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
     grid-column: 6 / 13;
   }
 
-  .official-how-timeline {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0 1.25rem;
-  }
-
-  .official-how-timeline-item {
-    padding: 1.35rem 0.75rem 0 0;
-  }
-
-  .official-how-timeline-item:not(:last-child)::before {
-    top: 4px;
-    left: 11px;
-    right: -1.25rem;
-    bottom: auto;
-    width: auto;
-    height: 1px;
-  }
-
-  .official-how-timeline-dot {
-    top: 0;
-  }
-
   .official-how-cta .btn-cta {
     width: auto;
   }
