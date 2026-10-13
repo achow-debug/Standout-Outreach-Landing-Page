@@ -1,28 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useBooking } from "@/components/official/booking-provider";
 import { CtaMicrocopy } from "@/components/official/cta-microcopy";
 import { SectionLabel } from "@/components/official/section-label";
-import { sectionLabels } from "@/content/landing";
+import { SourceButton } from "@/components/official/source-button";
+import { howItWorks as howCopy, sectionLabels } from "@/content/landing";
 import { keepTogether } from "@/components/official/no-break";
 import { useInView } from "@/hooks/use-in-view";
 import { officialCopy } from "@/lib/official-copy";
-
-const ACCENT_SPAN = "font-bold text-[var(--official-headline-ink)]";
-
-function accentPhrase(text: string, phrase?: string): ReactNode {
-  if (!phrase) return text;
-  const index = text.indexOf(phrase);
-  if (index === -1) return text;
-  return (
-    <>
-      {text.slice(0, index)}
-      <span className={ACCENT_SPAN}>{phrase}</span>
-      {text.slice(index + phrase.length)}
-    </>
-  );
-}
 
 function ShieldIcon() {
   return (
@@ -90,8 +76,6 @@ export function HowItWorks() {
   const {
     heading,
     headingSecond,
-    intro,
-    introAccentPhrase,
     pill,
     steps,
     timeline,
@@ -128,9 +112,16 @@ export function HowItWorks() {
               <span className="official-how-heading-line">{heading}</span>
               <span className="official-how-heading-line">{headingSecond}</span>
             </h2>
-            <p className="official-how-intro-body t-lead">
-              {accentPhrase(intro, introAccentPhrase)}
-            </p>
+            <p className="official-how-intro-body t-lead">{howCopy.intro}</p>
+            <div className="official-how-callout">
+              <p className="official-how-callout-figure">{howCopy.calloutFigure}</p>
+              <p className="official-how-callout-body t-body">{howCopy.calloutBody}</p>
+              <p className="official-how-callout-credit">
+                {howCopy.calloutCredit}
+                <SourceButton sourceId={howCopy.calloutSourceId} />
+              </p>
+            </div>
+            <p className="official-how-after t-lead">{howCopy.afterCallout}</p>
           </div>
           <div className="official-how-cta">
             <button

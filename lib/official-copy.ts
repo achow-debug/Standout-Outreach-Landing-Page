@@ -63,9 +63,6 @@ export const officialCopy = {
     eyebrow: "How it works",
     heading: "More retained matters.",
     headingSecond: "Fewer enquiries lost along the way.",
-    intro:
-      "Every unqualified enquiry that reaches a fee-earner is time you’re not billing for. Every qualified one that sits in an inbox overnight is a client calling your competitor instead. Most firms don’t have a lead problem — they have a handling problem, and it’s costing six figures a year without anyone seeing exactly where. Here’s how we close the gap.",
-    introAccentPhrase: "six figures",
     pill: "Included in your free 30-day pilot. See results before you decide whether to continue.",
     steps: [
       {

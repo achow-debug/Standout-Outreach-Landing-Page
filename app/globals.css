@@ -3232,9 +3232,48 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   display: block;
 }
 
-.official-how-intro-body {
+.official-how-intro-body,
+.official-how-after {
   margin: 0;
-  color: #475569; /* slate-600 */
+  color: #334155;
+}
+
+.official-how-callout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 0;
+  padding: 1rem 1rem 0.35rem;
+  border-left: 3px solid var(--color-brand-purple);
+  border-radius: var(--radius-md);
+  background: var(--color-brand-lavender-tint);
+}
+
+.official-how-callout-figure {
+  margin: 0;
+  color: var(--color-brand-purple);
+  font-size: clamp(2rem, 8vw, 2.75rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.official-how-callout-body {
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.official-how-callout-credit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 0.35rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  line-height: 1.4;
 }
 
 .official-how-panel {
@@ -4466,6 +4505,10 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   .official-how-heading,
   .official-how-heading-line,
   .official-how-intro-body,
+  .official-how-after,
+  .official-how-callout-figure,
+  .official-how-callout-body,
+  .official-how-callout-credit,
   .official-how-step-label,
   .official-how-step-title,
   .official-how-step-body,
