@@ -97,6 +97,7 @@ export function WhoItsFor() {
         </div>
         <div className="official-who-main">
           <PracticeAreaCards />
+          <p className="official-who-transparency t-body">{whoItsFor.transparency}</p>
           <ol className="official-who-list">
             {items.map((item) => (
               <WhoItem key={item.id} item={item} />

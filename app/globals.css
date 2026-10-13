@@ -3153,6 +3153,11 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   margin-top: 0.25rem;
 }
 
+.official-who-transparency {
+  margin: 0;
+  color: var(--color-ink);
+}
+
 @media (min-width: 1024px) {
   .page-shell.official-who-inner {
     display: grid;
@@ -4457,6 +4462,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   .practice-card-summary,
   .practice-card-excerpt,
   .practice-card-link,
+  .official-who-transparency,
   .official-how-heading,
   .official-how-heading-line,
   .official-how-intro-body,
