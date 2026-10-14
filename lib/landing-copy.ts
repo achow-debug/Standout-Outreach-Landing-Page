@@ -57,8 +57,8 @@ export const landingCopy = {
       {
         id: "compliance",
         icon: "calendar" as const,
-        title: "30-day free trial",
-        body: "We offer a risk-free trial with no obligation. Choose to continue only after you see live results. We’re fully transparent about fees.",
+        title: "30-day free pilot",
+        body: "We offer a risk-free pilot with no obligation. Choose to continue only after you see live results. We’re fully transparent about fees.",
       },
     ],
     /** Risk-reversal explanation for the free 30-day pilot. */
@@ -176,10 +176,10 @@ export const landingCopy = {
             "It won't, our process runs inside your existing SRA obligations, not around them. Every enquiry that comes through during the 30 days is still logged and actioned the way your client care and complaints process already requires. Client data is handled to GDPR standard throughout. We're not a regulated entity ourselves, so we're not claiming compliance on our own behalf, the point is that the process is built to protect the compliance you already have in place.",
         },
         {
-          question: "Is there a contract or commitment after trial ends?",
+          question: "Is there a contract or commitment after the pilot ends?",
           answer: [
             "None. You decide whether to continue based on the results we've generated for you. Every enquiry we recover is yours to keep, whatever you decide.",
-            "The landing page and workflows we build are simply the engine that powers the trial — so if you choose not to continue, that engine winds down. The enquiries it's already generated for you don't go anywhere.",
+            "The landing page and workflows we build are simply the engine that powers the pilot — so if you choose not to continue, that engine winds down. The enquiries it's already generated for you don't go anywhere.",
           ],
         },
         {
@@ -191,7 +191,7 @@ export const landingCopy = {
         },
         {
           question:
-            "What happens to our enquiry and client data during the trial?",
+            "What happens to our enquiry and client data during the pilot?",
           answer:
             "Your enquiry and client data stays on your firm's own systems throughout. We never store, copy, or move it elsewhere. Access is limited to our team working directly with you, and it's only ever used to run it. We take privacy seriously and include a data processing agreement (DPA) in line with UK GDPR.",
         },

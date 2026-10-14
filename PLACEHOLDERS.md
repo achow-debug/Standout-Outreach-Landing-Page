@@ -31,3 +31,12 @@ These answers disagree with the plan. They stay as written until you say how to 
 | `time` | Ends with “a collaborative conversation”, which the copy sweep removes elsewhere. |
 | `enquiry-data` | Says enquiry and client data stays on the firm’s systems and “We never store, copy, or move it elsewhere.” The new ICO explainer and sensitive-data FAQ say enquiry data passes through our automations, only Alex can access it, and it is deleted after 30 days. |
 | `after-30-days` | Same question title as the new `faq-after-30-days` item, with different copy (no exclusivity, no “you keep every lead and all enquiry data”). Both questions are on the page until you choose one. |
+
+## Copy sweep left in place
+
+| Hit | Where | Why it stays |
+| --- | --- | --- |
+| “general marketing agencies” | `content/landing.ts` | Approved How it works copy. Left exact. |
+| FAQ `existing-setup`, `time`, `enquiry-data`, `after-30-days` | `lib/official-copy.ts` | Listed above. Not rewritten. |
+| Old plan notes, the codebase audit, and the Lighthouse baseline | `.cursor/plans/`, `docs/AUDIT.md`, `docs/baseline/` | Historical records, not the live page. |
+| “Median time from request to review delivery” | `ops/commercial-funnel-metrics.json` | Internal metric name, not page copy. |

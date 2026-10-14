@@ -5,9 +5,9 @@
 
 export const officialCopy = {
   meta: {
-    title: "Standout Group | Stop losing the clients who already found you.",
+    title: "Standout Group, a law firm growth partner | Stop losing the clients who already found you.",
     description:
-      "We turn the work you already attract into retained matters. Free for 30 days.",
+      "Standout Group is a law firm growth partner. We turn the work you already attract into retained matters. Free for 30 days.",
   },
   header: {
     applyLabel: "Apply For My 30-Day Pilot",
