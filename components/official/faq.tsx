@@ -2,6 +2,7 @@
 
 import { faqs as newFaqs, sectionLabels } from "@/content/landing";
 import { Accordion, type AccordionEntry } from "@/components/official/accordion";
+import { DpaRequestTrigger } from "@/components/official/dpa-request";
 import { SectionLabel } from "@/components/official/section-label";
 import { officialCopy } from "@/lib/official-copy";
 
@@ -24,11 +25,18 @@ export function Faq() {
       title: item.question,
       children:
         "paragraphs" in item ? (
-          item.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="official-faq-answer t-body">
-              {paragraph}
-            </p>
-          ))
+          <>
+            {item.paragraphs.map((paragraph) => (
+              <p key={paragraph} className="official-faq-answer t-body">
+                {paragraph}
+              </p>
+            ))}
+            {"dpaLink" in item ? (
+              <DpaRequestTrigger className="official-faq-dpa">
+                {item.dpaLink}
+              </DpaRequestTrigger>
+            ) : null}
+          </>
         ) : (
           <Answer text={item.answer} />
         ),
