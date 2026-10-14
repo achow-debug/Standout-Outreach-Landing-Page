@@ -4998,6 +4998,67 @@ html.sheet-open body {
   gap: 0.25rem;
 }
 
+.official-sources-band {
+  background: var(--official-band-tint);
+}
+
+.page-shell.official-sources-inner {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.official-sources {
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+.official-sources-summary {
+  display: list-item;
+  min-height: 48px;
+  padding: 0.85rem 0;
+  color: var(--official-headline-ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.official-sources-summary:focus-visible,
+.official-sources-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.official-sources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 42rem;
+  padding: 0.5rem 0 1rem;
+}
+
+.official-sources-heading {
+  margin: 0 0 0.5rem;
+  color: var(--official-headline-ink);
+}
+
+.official-sources-copy {
+  margin: 0 0 0.75rem;
+}
+
+.official-sources-item .official-sources-copy:last-child {
+  margin-bottom: 0;
+}
+
+.official-sources-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
 .cta-microcopy {
   display: flex;
   flex-direction: column;

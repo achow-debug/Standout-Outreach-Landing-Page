@@ -1,6 +1,6 @@
 /**
  * Appendix A, exact copy. Journal titles in `italicise` are rendered in italics.
- * The sources section itself is added in task 10.2 (`id="sources"`).
+ * Rendered by `SourcesSection` (`id="sources"`).
  */
 
 export const sources = {
@@ -40,6 +40,7 @@ export const sources = {
       "By combining this data with average practice-area client values and conservative monthly enquiry estimates, the financial leak across the industry became clear. Most firms aren't losing prospects to better competitors- they are losing them to basic response failures.",
     ],
   },
+  firstContactTitle: "First contact speed",
   firstContact:
     "In a live August 2026 pilot with a South Yorkshire Wills & Probate firm, automated lead capture slashed first-response times from 14 hours down to 5 minutes with a personalised email response.",
   nineWeekTitle: "Fast deployment. Measurable growth.",
