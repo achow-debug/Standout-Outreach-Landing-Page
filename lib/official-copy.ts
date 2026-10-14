@@ -185,7 +185,6 @@ export const officialCopy = {
     heading: "See exactly where",
     headingAccent: "your enquiries are leaking.",
     buttonLabel: "Apply For My 30-Day Pilot",
-    ctaNote: "Begin with a 20-minute collaborative conversation",
     nextLabel: "What happens next",
     nextSteps: [
       "Pick a time that suits you.",

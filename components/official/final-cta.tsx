@@ -17,7 +17,6 @@ export function OfficialFinalCta() {
     heading,
     headingAccent,
     buttonLabel,
-    ctaNote,
     nextLabel,
     nextSteps,
   } = officialCopy.finalCta;
@@ -107,7 +106,6 @@ export function OfficialFinalCta() {
                 </span>
               </button>
               <CtaMicrocopy tone="dark" />
-              <p className="official-apply-cta-note t-small">{ctaNote}</p>
             </>
           )}
         </div>
