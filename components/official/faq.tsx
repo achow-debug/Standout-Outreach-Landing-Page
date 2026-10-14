@@ -1,91 +1,60 @@
 "use client";
 
-import { useId, useState } from "react";
+import { faqs as newFaqs, sectionLabels } from "@/content/landing";
+import { Accordion, type AccordionEntry } from "@/components/official/accordion";
+import { SectionLabel } from "@/components/official/section-label";
 import { officialCopy } from "@/lib/official-copy";
 
-function Chevron({ open }: { open: boolean }) {
-  return (
-    <svg
-      className={open ? "official-faq-chevron is-open" : "official-faq-chevron"}
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
+function Answer({ text }: { text: string }) {
+  return text.split("\n\n").map((paragraph) => (
+    <p key={paragraph} className="official-faq-answer t-body">
+      {paragraph}
+    </p>
+  ));
 }
 
 /**
- * Draft FAQ. Answers marked TODO still need Alex's approval.
- * Several items can be open at once.
+ * One answer open at a time. New questions lead; existing answers are unchanged
+ * where they conflict with the plan (see PLACEHOLDERS.md).
  */
 export function Faq() {
-  const { heading, items } = officialCopy.faq;
-  const baseId = useId();
-  const [openIds, setOpenIds] = useState<string[]>([]);
-
-  function toggle(id: string) {
-    setOpenIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
-  }
+  const items: AccordionEntry[] = [
+    ...newFaqs.map((item) => ({
+      id: item.id,
+      title: item.question,
+      children:
+        "paragraphs" in item ? (
+          item.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="official-faq-answer t-body">
+              {paragraph}
+            </p>
+          ))
+        ) : (
+          <Answer text={item.answer} />
+        ),
+    })),
+    ...officialCopy.faq.items.map((item) => ({
+      id: item.id,
+      title: item.question,
+      children: <Answer text={item.answer} />,
+    })),
+  ];
 
   return (
     <section
       className="official-faq"
-      id="faq"
+      id="faqs"
       aria-labelledby="official-faq-heading"
       tabIndex={-1}
     >
       <div className="page-shell official-faq-inner">
-        <h2 id="official-faq-heading" className="official-faq-heading t-h2">
-          {heading}
-        </h2>
-        <div className="official-faq-list">
-          {items.map((item) => {
-            const open = openIds.includes(item.id);
-            const buttonId = `${baseId}-${item.id}-button`;
-            const panelId = `${baseId}-${item.id}-panel`;
-
-            return (
-              <div key={item.id} className="official-faq-item">
-                <button
-                  id={buttonId}
-                  type="button"
-                  className="official-faq-trigger"
-                  aria-expanded={open}
-                  aria-controls={panelId}
-                  onClick={() => toggle(item.id)}
-                >
-                  <span className="official-faq-question">{item.question}</span>
-                  <Chevron open={open} />
-                </button>
-                <div
-                  id={panelId}
-                  className="expand"
-                  data-open={open ? "true" : "false"}
-                  role="region"
-                  aria-labelledby={buttonId}
-                >
-                  <div>
-                    {item.answer.split("\n\n").map((paragraph) => (
-                      <p key={paragraph} className="official-faq-answer t-body">
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div className="official-faq-intro">
+          <SectionLabel>{sectionLabels.faqs}</SectionLabel>
+          <h2 id="official-faq-heading" className="official-faq-heading t-h2">
+            {officialCopy.faq.heading}
+          </h2>
         </div>
+        <Accordion items={items} className="official-faq-list" />
       </div>
     </section>
   );

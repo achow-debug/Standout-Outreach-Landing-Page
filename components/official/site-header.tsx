@@ -10,7 +10,7 @@ const HEADER_NAV_IDS = [
   "who-its-for",
   "how-it-works",
   "founder",
-  "faq",
+  "faqs",
 ] as const;
 type HeaderNavId = (typeof HEADER_NAV_IDS)[number];
 

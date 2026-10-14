@@ -30,4 +30,4 @@ These answers disagree with the plan. They stay as written until you say how to 
 | `existing-setup` | Says “your agency” and “We don’t replace your website or your agency.” “Agency” is otherwise only allowed for traditional agencies in the comparison. |
 | `time` | Ends with “a collaborative conversation”, which the copy sweep removes elsewhere. |
 | `enquiry-data` | Says enquiry and client data stays on the firm’s systems and “We never store, copy, or move it elsewhere.” The new ICO explainer and sensitive-data FAQ say enquiry data passes through our automations, only Alex can access it, and it is deleted after 30 days. |
-| `after-30-days` | Same question title as the new `faq-after-30-days` item, with different copy (no exclusivity, no “you keep every lead and all enquiry data”). The section id is `faq`; the plan’s anchor is `faqs`. |
+| `after-30-days` | Same question title as the new `faq-after-30-days` item, with different copy (no exclusivity, no “you keep every lead and all enquiry data”). Both questions are on the page until you choose one. |

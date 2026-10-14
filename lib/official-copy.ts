@@ -31,7 +31,7 @@ export const officialCopy = {
       { id: "who-its-for", label: "Who it’s for" },
       { id: "how-it-works", label: "How it works" },
       { id: "founder", label: "Founder" },
-      { id: "faq", label: "FAQs" },
+      { id: "faqs", label: "FAQs" },
     ],
   },
   whoItsFor: {
