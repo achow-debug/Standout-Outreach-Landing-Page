@@ -2031,26 +2031,30 @@ html.modal-open {
   color: var(--official-accent-on-dark);
 }
 
+.site-footer-compliance {
+  width: 100%;
+  color: #f8fafc;
+}
+
+.site-footer-compliance .accordion-panel {
+  max-width: 65ch;
+  color: #cbd5e1;
+}
+
+.site-footer-compliance-copy {
+  margin: 0 0 0.75rem;
+}
+
+.site-footer-compliance-copy:last-child {
+  margin-bottom: 0;
+}
+
 .site-footer-meta {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
   width: 100%;
-}
-
-.site-footer-compliance {
-  margin: 0;
-  max-width: 65ch;
-  color: #cbd5e1; /* slate-300 */
-}
-
-.site-footer-agency {
-  margin: 0;
-  max-width: 65ch;
-  color: #cbd5e1;
-  white-space: normal;
-  overflow-wrap: break-word;
 }
 
 .site-footer-legal {

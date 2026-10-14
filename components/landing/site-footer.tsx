@@ -8,7 +8,9 @@ import {
   DpaRequestTrigger,
   useDpaRequestOptional,
 } from "@/components/official/dpa-request";
+import { Accordion } from "@/components/official/accordion";
 import { keepTogether } from "@/components/official/no-break";
+import { footerCompliance } from "@/content/landing";
 import { officialCopy } from "@/lib/official-copy";
 import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
@@ -22,11 +24,12 @@ function FooterDpaBoundary({ children }: { children: ReactNode }) {
 }
 
 function openCompliance(event: MouseEvent<HTMLAnchorElement>) {
-  const target = document.getElementById(COMPLIANCE_ID);
-  if (!(target instanceof HTMLDetailsElement)) return;
   event.preventDefault();
-  target.open = true;
-  target.scrollIntoView({ block: "start" });
+  const hash = `#${COMPLIANCE_ID}`;
+  if (window.location.hash === hash) {
+    history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+  }
+  window.location.hash = COMPLIANCE_ID;
 }
 
 function ApplyLink() {
@@ -53,8 +56,7 @@ function ApplyLink() {
 }
 
 /**
- * Dark site footer. Brand, then the four link groups.
- * The compliance paragraphs stay until the accordion in task 11.2.
+ * Dark site footer. Brand, link groups, then the compliance accordion.
  */
 export function SiteFooter() {
   return (
@@ -154,12 +156,24 @@ function SiteFooterContent() {
           </nav>
         </div>
 
-        <div className="site-footer-meta" id={COMPLIANCE_ID}>
-          <p className="site-footer-agency t-small">{footer.agencyNotice}</p>
-          <p className="site-footer-compliance t-small">{footer.legalNotice}</p>
-        </div>
+        <Accordion
+          className="site-footer-compliance"
+          items={[
+            {
+              id: COMPLIANCE_ID,
+              title: footerCompliance.title,
+              children: footerCompliance.paragraphs.map((paragraph) => (
+                <p key={paragraph} className="site-footer-compliance-copy t-small">
+                  {paragraph}
+                </p>
+              )),
+            },
+          ]}
+        />
 
-        <p className="site-footer-copy t-small">{footer.copyright}</p>
+        <p className="site-footer-copy t-small">
+          © {new Date().getFullYear()} Standout Group. All rights reserved.
+        </p>
       </div>
     </footer>
   );
