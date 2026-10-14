@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBooking } from "@/components/official/booking-provider";
 import { keepTogether } from "@/components/official/no-break";
 import { officialCopy } from "@/lib/official-copy";
@@ -47,6 +47,23 @@ export function StickyCta() {
   const { openBooking, bookingOpen, booked } = useBooking();
   const { applyLabel } = officialCopy.header;
   const visible = useStickyCtaVisible(bookingOpen, booked);
+  const barRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    const root = document.documentElement;
+    const apply = () => {
+      root.style.setProperty("--official-sticky-h", `${bar.offsetHeight}px`);
+    };
+    apply();
+    const observer = new ResizeObserver(apply);
+    observer.observe(bar);
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty("--official-sticky-h");
+    };
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("official-sticky-on", visible);
@@ -57,6 +74,7 @@ export function StickyCta() {
 
   return (
     <div
+      ref={barRef}
       className={
         visible
           ? "official-sticky-cta is-visible border-t border-slate-900/5 bg-white/85 backdrop-blur-md"

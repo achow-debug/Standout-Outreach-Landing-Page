@@ -1192,7 +1192,7 @@ html.modal-open .mobile-sticky-cta-wrapper {
   inset-inline: 0;
   bottom: 0;
   z-index: 40;
-  padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+  padding: 0.75rem 1.25rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
   pointer-events: none;
   transform: translateY(100%);
 }
@@ -1203,8 +1203,7 @@ html.modal-open .mobile-sticky-cta-wrapper {
 }
 
 html.official-sticky-on body {
-  /* Two-line sticky button plus its 12px padding and a gap above the bar. */
-  padding-bottom: calc(8.75rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: var(--official-sticky-h, 0px);
 }
 
 .official-sticky-cta-btn {
@@ -1225,7 +1224,7 @@ html.official-sticky-on body {
 
 @media (prefers-reduced-motion: no-preference) {
   .official-sticky-cta {
-    transition: transform var(--dur-ui) var(--ease-out);
+    transition: transform 200ms var(--ease-out);
   }
 }
 
