@@ -14,7 +14,7 @@ Visible `[[TBC: …]]` text, plus owner actions that must be settled before laun
 | Direct ICO register link for ZC264255 | `content/landing.ts` | A direct register URL if one works. Until then the public search page is used: `https://ico.org.uk/ESDWebPages/Search`. |
 | Owner to confirm the Transparency Rules line is true before launch | `content/landing.ts` | Confirm that every conveyancing and probate page we build includes the price and service information the SRA Transparency Rules require. |
 | `[[TBC: timeframe, e.g. one working day]]` | `content/landing.ts` | How quickly we email the standard DPA after a request. |
-| `[[TBC: n8n webhook URL]]` | `content/landing.ts` (written into `.env.example` in task 8.2) | The n8n webhook URL for DPA requests (`DPA_REQUEST_WEBHOOK_URL`). |
+| `[[TBC: n8n webhook URL]]` | `.env.example` (`DPA_REQUEST_WEBHOOK_URL`) | The n8n webhook URL for DPA requests. Until this is a real https URL, the request sheet shows the connection error. |
 | ICO explainer: sentence begins with `[` | `content/landing.ts` | The second paragraph currently starts `[Booking data is kept for 30 days then deleted.` Confirm whether the `[` should be removed. |
 | Journey timeline stage count | `content/landing.ts` | The plan says a five-stage timeline. The table has four stages. Confirm there is no fifth stage. |
 | Data ownership cell | `content/landing.ts` | The live cell is `You keep 100% of leads`. It does not say the firm owns the system. Confirm we keep it, or switch to `You keep every lead and all enquiry data`. |

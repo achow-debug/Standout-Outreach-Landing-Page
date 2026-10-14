@@ -1,10 +1,11 @@
 import { compliance, sectionLabels } from "@/content/landing";
+import { DpaRequestTrigger } from "@/components/official/dpa-request";
 import { SectionLabel } from "@/components/official/section-label";
 
 /**
  * Three regulatory protections for the firm. One column on the phone,
  * three columns from 768px.
- * The DPA button is opened by the request sheet in the next task.
+ * The DPA button opens the shared request sheet.
  */
 export function ColpPeaceOfMind() {
   return (
@@ -27,9 +28,9 @@ export function ColpPeaceOfMind() {
               <p className="official-colp-body t-body">{item.body}</p>
               <p className="official-colp-value t-small">{item.note}</p>
               {"button" in item ? (
-                <button type="button" className="official-colp-dpa">
+                <DpaRequestTrigger className="official-colp-dpa">
                   {item.button}
-                </button>
+                </DpaRequestTrigger>
               ) : null}
             </li>
           ))}

@@ -280,7 +280,6 @@ export const dpaRequest = {
     "Request sent. We'll email the DPA to {email} within [[TBC: timeframe, e.g. one working day]].",
   error:
     "Your request didn't go through. Check your connection and try again, or email achow@standoutgroup.net.",
-  webhookPlaceholder: "[[TBC: n8n webhook URL]]",
 } as const;
 
 export const faqs = [

@@ -5017,3 +5017,68 @@ html.sheet-open body {
 .cta-microcopy--dark .cta-microcopy-ico {
   color: var(--official-accent-on-dark);
 }
+
+.dpa-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.dpa-intro,
+.dpa-privacy,
+.dpa-success {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.dpa-privacy {
+  font-size: 0.875rem;
+}
+
+.dpa-privacy-link,
+.dpa-mail {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-underline-offset: 0.15em;
+}
+
+.dpa-privacy-link:focus-visible,
+.dpa-mail:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.dpa-form-error {
+  margin: 0;
+  color: var(--color-error);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.dpa-submit {
+  width: 100%;
+}
+
+.dpa-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgb(255 255 255 / 45%);
+  border-top-color: #fff;
+  border-radius: 50%;
+  flex: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dpa-spinner {
+    animation: dpa-spin 0.7s linear infinite;
+  }
+}
+
+@keyframes dpa-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

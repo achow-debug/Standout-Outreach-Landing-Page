@@ -1,6 +1,7 @@
 "use client";
 
-import { credentials, icoExplainer } from "@/content/landing";
+import { credentials, dpaRequest, icoExplainer } from "@/content/landing";
+import { DpaRequestTrigger } from "@/components/official/dpa-request";
 import { Sheet } from "@/components/official/sheet";
 
 function Paragraph({ text }: { text: string }) {
@@ -31,14 +32,22 @@ export function IcoExplainer({
       {icoExplainer.paragraphs.map((paragraph) => (
         <Paragraph key={paragraph} text={paragraph} />
       ))}
-      <a
-        className="source-sheet-link"
-        href={credentials.icoRegisterUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {icoExplainer.registerLabel}
-      </a>
+      <div className="source-sheet-actions">
+        <a
+          className="source-sheet-link"
+          href={credentials.icoRegisterUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {icoExplainer.registerLabel}
+        </a>
+        <DpaRequestTrigger
+          className="source-sheet-link"
+          closeOtherFirst={() => onOpenChange(false)}
+        >
+          {dpaRequest.title}
+        </DpaRequestTrigger>
+      </div>
     </Sheet>
   );
 }

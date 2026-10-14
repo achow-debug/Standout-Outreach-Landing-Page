@@ -43,7 +43,9 @@ const IGNORE_DIRS = new Set([
 /** Server-only modules that may reference N8N env vars. */
 const SERVER_ALLOWLIST = new Set([
   path.join(root, "lib", "review-request-service.ts"),
+  path.join(root, "lib", "dpa-request-service.ts"),
   path.join(root, "app", "api", "review-request", "route.ts"),
+  path.join(root, "app", "api", "dpa-request", "route.ts"),
   path.join(root, ".env.example"),
   path.join(root, ".env.local"),
   path.join(root, ".env"),
@@ -101,6 +103,11 @@ for (const file of files) {
           !/^N8N_WEBHOOK_SECRET=\s*$/.test(line)
         ) {
           findings.push(`${file}: N8N_WEBHOOK_SECRET must remain empty in .env.example`);
+        }
+        if (/^DPA_REQUEST_WEBHOOK_URL=https?:\/\//.test(line)) {
+          findings.push(
+            `${file}: DPA_REQUEST_WEBHOOK_URL must not be a real URL in .env.example`,
+          );
         }
       }
     }

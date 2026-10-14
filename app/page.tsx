@@ -2,6 +2,7 @@ import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
 import { ReviewRequestShell } from "@/components/landing/review-request-cta";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { BookingProvider } from "@/components/official/booking-provider";
+import { DpaRequestProvider } from "@/components/official/dpa-request";
 import { PracticeAreaProvider } from "@/components/official/practice-area";
 import { ColpPeaceOfMind } from "@/components/official/colp-peace-of-mind";
 import { Faq } from "@/components/official/faq";
@@ -26,22 +27,24 @@ export default function HomePage() {
     <ReviewRequestShell>
       <PracticeAreaProvider>
         <BookingProvider>
-          <main id="main-content" tabIndex={-1}>
-            <MotionBootstrap />
-            <SiteHeader />
-            <OfficialHero />
-            <ResultsBand />
-            <WhatPartnersSay />
-            <WhoItsFor />
-            <HowItWorks />
-            <AgencyComparison />
-            <ColpPeaceOfMind />
-            <MeetTheFounder />
-            <Faq />
-            <OfficialFinalCta />
-          </main>
-          <SiteFooter />
-          <StickyCta />
+          <DpaRequestProvider>
+            <main id="main-content" tabIndex={-1}>
+              <MotionBootstrap />
+              <SiteHeader />
+              <OfficialHero />
+              <ResultsBand />
+              <WhatPartnersSay />
+              <WhoItsFor />
+              <HowItWorks />
+              <AgencyComparison />
+              <ColpPeaceOfMind />
+              <MeetTheFounder />
+              <Faq />
+              <OfficialFinalCta />
+            </main>
+            <SiteFooter />
+            <StickyCta />
+          </DpaRequestProvider>
         </BookingProvider>
       </PracticeAreaProvider>
     </ReviewRequestShell>
