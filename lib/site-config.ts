@@ -9,6 +9,7 @@ export const siteConfig = {
   contactPhone: "07599 569931",
   contactPhoneHref: "tel:+447599569931",
   contactWhatsAppHref: "https://wa.me/447599569931",
+  linkedinUrl: "https://lnkd.in/eGUUnr8X",
   productionDomain: "https://standoutgroup.net",
   /** Canonical route for this dedicated outreach microsite */
   canonicalPath: "/",

@@ -50,6 +50,11 @@ export function useBooking(): BookingContextValue {
   return value;
 }
 
+/** Legal pages share the footer but do not mount the booking popup. */
+export function useBookingOptional(): BookingContextValue | null {
+  return useContext(BookingContext);
+}
+
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }

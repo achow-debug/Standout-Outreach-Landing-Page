@@ -29,6 +29,11 @@ export function useDpaRequest(): DpaRequestContextValue {
   return value;
 }
 
+/** The homepage already provides this. Other pages that share the footer do not. */
+export function useDpaRequestOptional(): DpaRequestContextValue | null {
+  return useContext(DpaRequestContext);
+}
+
 const PRIVACY_LINK = "Privacy Policy";
 const ERROR_EMAIL = "achow@standoutgroup.net";
 
