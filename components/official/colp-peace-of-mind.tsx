@@ -1,12 +1,12 @@
-import { officialCopy } from "@/lib/official-copy";
+import { compliance, sectionLabels } from "@/content/landing";
+import { SectionLabel } from "@/components/official/section-label";
 
 /**
  * Three regulatory protections for the firm. One column on the phone,
  * three columns from 768px.
+ * The DPA button is opened by the request sheet in the next task.
  */
 export function ColpPeaceOfMind() {
-  const { heading, items } = officialCopy.colp;
-
   return (
     <section
       className="official-colp"
@@ -14,15 +14,23 @@ export function ColpPeaceOfMind() {
       aria-labelledby="official-colp-heading"
     >
       <div className="page-shell official-colp-inner">
-        <h2 id="official-colp-heading" className="official-colp-heading t-h2">
-          {heading}
-        </h2>
+        <div className="official-colp-intro">
+          <SectionLabel>{sectionLabels.compliance}</SectionLabel>
+          <h2 id="official-colp-heading" className="official-colp-heading t-h2">
+            {compliance.heading}
+          </h2>
+        </div>
         <ul className="official-colp-list">
-          {items.map((item) => (
+          {compliance.items.map((item) => (
             <li key={item.id} className="official-colp-item">
               <h3 className="official-colp-title t-h3">{item.title}</h3>
               <p className="official-colp-body t-body">{item.body}</p>
-              <p className="official-colp-value t-small">{item.value}</p>
+              <p className="official-colp-value t-small">{item.note}</p>
+              {"button" in item ? (
+                <button type="button" className="official-colp-dpa">
+                  {item.button}
+                </button>
+              ) : null}
             </li>
           ))}
         </ul>

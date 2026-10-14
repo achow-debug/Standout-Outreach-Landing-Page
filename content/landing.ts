@@ -257,6 +257,12 @@ export const compliance = {
       note: "Simplifies compliance auditing.",
       button: "Request our standard DPA",
     },
+    {
+      id: "ethical-lead-capture",
+      title: "Ethical lead capture",
+      body: "Zero deceptive hooks, exaggerated claims, or unvetted lead syndication.",
+      note: "Protects the firm's brand reputation.",
+    },
   ],
 } as const;
 
