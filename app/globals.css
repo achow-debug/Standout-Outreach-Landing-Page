@@ -197,7 +197,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 16px);
   overflow-x: clip;
 }
 
@@ -2487,6 +2486,7 @@ html.modal-open {
   padding: 1.25rem 1.15rem 0.5rem;
   border-radius: 12px;
   background: var(--color-brand-lavender-tint);
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
 .results-proof-figure {
@@ -3085,6 +3085,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
 
 .official-who {
   background: var(--official-band-tint);
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
 .page-shell.official-who-inner {
@@ -3282,6 +3283,10 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   gap: 2rem;
   padding-top: 4rem;
   padding-bottom: 4rem;
+}
+
+.official-how {
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
 .official-how-stage {
@@ -4152,6 +4157,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
 .official-founder {
   background: var(--official-band-dark);
   color: var(--official-ink-on-dark);
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
 .page-shell.official-founder-inner {

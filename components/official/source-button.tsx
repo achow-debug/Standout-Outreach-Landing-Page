@@ -23,17 +23,13 @@ function Citation({
   );
 }
 
-/** Closes nothing itself. Task 10.2's `<details id="sources">` is opened when it exists. */
+/** Closes nothing itself. Opens `<details id="sources">` and scrolls to it. */
 export function openSourcesSection() {
   const section = document.getElementById(sources.sectionId);
   if (section instanceof HTMLDetailsElement) {
     section.open = true;
   }
-  const root = document.documentElement;
-  const previous = root.style.scrollBehavior;
-  root.style.scrollBehavior = "auto";
-  section?.scrollIntoView({ block: "start" });
-  root.style.scrollBehavior = previous;
+  section?.scrollIntoView({ block: "start", behavior: "auto" });
 }
 
 export function SourceButton({ sourceId }: { sourceId: SourceId }) {
