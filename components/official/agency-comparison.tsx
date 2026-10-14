@@ -12,9 +12,47 @@ const keptRows = [
   },
 ] as const;
 
+function CrossIcon() {
+  return (
+    <svg
+      className="official-compare-icon"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
+      <path d="M4 4l8 8M12 4l-8 8" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      className="official-compare-icon official-compare-icon--check"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M3.5 8.5 6.5 11.5 12.5 4.5" />
+    </svg>
+  );
+}
+
 /**
  * Light comparison between a traditional retainer and the 30-day pilot.
- * Phone layout is a stacked card per row. Columns start at 768px.
+ * On a phone, each row is a label with two cells side by side.
+ * Columns start at 768px.
  */
 export function AgencyComparison() {
   const rows = [...comparison.rows, ...keptRows];
@@ -26,15 +64,24 @@ export function AgencyComparison() {
       aria-labelledby="official-compare-heading"
     >
       <div className="page-shell official-compare-inner">
+        <div className="official-compare-intro">
+          <SectionLabel>{sectionLabels.compare}</SectionLabel>
+          <h2 id="official-compare-heading" className="official-compare-caption t-h2">
+            {keepTogether(comparison.heading)}
+          </h2>
+        </div>
+        <div className="official-compare-key" aria-hidden="true">
+          <p>
+            <CrossIcon />
+            <span>{comparison.columns.traditional}</span>
+          </p>
+          <p>
+            <CheckIcon />
+            <span>{keepTogether(comparison.columns.pilot)}</span>
+          </p>
+        </div>
         <table className="official-compare-table">
-          <caption>
-            <div className="official-compare-intro">
-              <SectionLabel>{sectionLabels.compare}</SectionLabel>
-              <h2 id="official-compare-heading" className="official-compare-caption t-h2">
-                {keepTogether(comparison.heading)}
-              </h2>
-            </div>
-          </caption>
+          <caption className="official-compare-sr">{comparison.heading}</caption>
           <thead>
             <tr>
               <th scope="col">Feature</th>
@@ -46,10 +93,16 @@ export function AgencyComparison() {
             {rows.map((row) => (
               <tr key={row.id}>
                 <th scope="row">{row.label}</th>
-                <td data-label={comparison.columns.traditional}>
-                  {keepTogether(row.traditional)}
+                <td className="official-compare-cell official-compare-cell--agency">
+                  <span className="official-compare-sr">Traditional agencies: </span>
+                  <CrossIcon />
+                  <span>{keepTogether(row.traditional)}</span>
                 </td>
-                <td data-label={comparison.columns.pilot}>{keepTogether(row.pilot)}</td>
+                <td className="official-compare-cell official-compare-cell--pilot">
+                  <span className="official-compare-sr">Standout’s 30-day pilot: </span>
+                  <CheckIcon />
+                  <span>{keepTogether(row.pilot)}</span>
+                </td>
               </tr>
             ))}
           </tbody>
