@@ -14,17 +14,7 @@ export const officialCopy = {
     applyHref: "#book",
   },
   hero: {
-    ctaLabel: "Apply For My 30-Day Pilot",
-    secondaryLabel: "See how the pilot works",
     secondaryHref: "#how-it-works",
-    reassurance: [
-      "Keep all leads generated",
-      "No 12-month lock-in",
-      "Complete DPA provided",
-    ],
-    /** File stays in /public. The hero shows a placeholder until a real image is chosen. */
-    imageSrc: "/images/hero-business-cards.jpg",
-    imageAlt: "Standout Group business cards on a balcony overlooking the city.",
   },
   nav: {
     items: [

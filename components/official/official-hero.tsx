@@ -1,79 +1,77 @@
 "use client";
 
-import { useBooking } from "@/components/official/booking-provider";
-import { CtaMicrocopy } from "@/components/official/cta-microcopy";
-import { keepTogether } from "@/components/official/no-break";
-import { SectionLabel } from "@/components/official/section-label";
-import { hero as heroCopy, sectionLabels } from "@/content/landing";
+import HeroBackground from "@/components/HeroBackground";
+import { useCtaActions } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 
-function CheckIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.25"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
 /**
- * Navy hero. On mobile the CTA sits above the image so the first screen
- * shows the heading, subhead and button.
+ * Centred hero on the light canvas.
+ * Speak to Alex opens the existing booking popup via openBooking("hero").
  */
 export function OfficialHero() {
-  const { ctaLabel, secondaryLabel, secondaryHref, reassurance } = officialCopy.hero;
-  const { openBooking } = useBooking();
+  const { secondaryHref } = officialCopy.hero;
+  const { startForFree, speakToAlex } = useCtaActions("hero");
 
   return (
-    <section
-      className="official-hero"
-      id="top"
-      aria-labelledby="official-hero-heading"
-    >
-      <div className="page-shell official-hero-inner">
-        <div className="official-hero-copy">
-          <SectionLabel tone="dark">{sectionLabels.hero}</SectionLabel>
-          <h1 id="official-hero-heading" className="official-hero-title t-display">
-            {heroCopy.headline}
-          </h1>
-          <p className="official-hero-supporting t-lead">{heroCopy.subline}</p>
-          <button
-            id="hero-cta"
-            type="button"
-            className="btn btn-primary btn-on-dark btn-cta official-hero-cta"
-            data-booking-cta=""
-            onClick={() => openBooking("hero")}
+    <section id="top" className="relative isolate bg-canvas" aria-labelledby="official-hero-heading">
+      <HeroBackground />
+      <div className="mx-auto flex max-w-5xl flex-col items-center px-5 pb-20 pt-32 text-center md:pb-24 md:pt-44">
+        <div className="hero-in">
+          <p className="text-base font-bold text-ink/55 md:text-xl">
+            Online presence underselling your firm?
+          </p>
+          <h1
+            id="official-hero-heading"
+            className="mt-4 text-balance text-[clamp(2.25rem,6vw,5rem)] font-bold leading-[1.04] tracking-[-0.035em] text-ink"
           >
-            {keepTogether(ctaLabel)}
-            <span className="btn-cta-arrow" aria-hidden="true">
-              →
+            <span className="md:block">Standout Group</span>{" "}
+            <span className="md:block">makes you known for</span>{" "}
+            <span className="md:block">
+              your <span className="text-brand">best work</span>
             </span>
-          </button>
-          <CtaMicrocopy tone="dark" />
-          <a className="official-hero-secondary" href={secondaryHref}>
-            {secondaryLabel}
-          </a>
-          <ul className="official-hero-reassure">
-            {reassurance.map((item) => (
-              <li key={item}>
-                <CheckIcon />
-                <span className="t-small">{item}</span>
-              </li>
-            ))}
-          </ul>
+          </h1>
         </div>
-        <div className="official-hero-media">
-          {/* When the real image is added, use next/image with priority, explicit dimensions and descriptive alt text. */}
-          <p className="official-hero-placeholder">{heroCopy.imagePlaceholder}</p>
+        <div className="hero-in hero-in-delay mt-8 flex w-full max-w-xs flex-col items-center md:mt-10 md:max-w-none">
+          <a
+            href={secondaryHref}
+            className="text-sm font-semibold text-ink! no-underline transition-colors hover:text-brand! md:text-base"
+          >
+            See how the pilot works
+          </a>
+
+          <div className="mt-3 flex w-full flex-col md:w-auto md:flex-row md:items-start md:gap-3">
+            <button
+              type="button"
+              data-cta="speak-to-alex"
+              data-booking-cta=""
+              onClick={speakToAlex}
+              className="inline-flex h-14 w-full items-center justify-center rounded-2xl border border-ink/15 bg-white px-6 text-base font-semibold text-ink shadow-sm transition-colors hover:border-ink/30 focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-canvas md:h-16 md:w-64 md:text-lg"
+            >
+              Speak to Alex
+            </button>
+
+            <div className="mt-3 flex w-full flex-col items-center md:mt-0 md:w-64">
+              <button
+                id="hero-cta"
+                type="button"
+                data-cta="start-free"
+                data-booking-cta=""
+                onClick={startForFree}
+                className="group inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 text-base font-semibold text-white shadow-lg shadow-brand/20 transition-colors hover:bg-brand-dark focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-canvas md:h-16 md:text-lg"
+              >
+                Start for free
+                <span
+                  aria-hidden
+                  className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
+                >
+                  →
+                </span>
+              </button>
+              <p className="mt-2 text-[0.9375rem] font-medium text-ink/70">
+                30-day free pilot to see results
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

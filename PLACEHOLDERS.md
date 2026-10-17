@@ -4,8 +4,6 @@ Visible `[[TBC: …]]` text, plus owner actions that must be settled before laun
 
 | Placeholder | File | What the owner needs to supply |
 | --- | --- | --- |
-| Hero headline: owner to confirm A, B or C | `content/landing.ts` | Confirm Option A, or choose B or C. A is implemented until you say otherwise. |
-| `[[TBC: hero image (founder photo or pilot system screenshot)]]` | `content/landing.ts` | A founder photo or a screenshot of the pilot system, with alt text. |
 | `[[TBC: measurable outcome from this firm's work with us]]` (Florenda A) | `content/landing.ts` | A measurable outcome from Florenda A’s firm, and consent to publish it. |
 | `[[TBC: measurable outcome from this firm's work with us]]` (Jayden C) | `content/landing.ts` | A measurable outcome from Jayden C’s firm, and consent to publish it. |
 | Florenda A photo | `content/landing.ts` | A photo of Florenda A. The initials circle stays until this exists. Consent for photo, region, date and outcome. |

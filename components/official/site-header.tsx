@@ -1,219 +1,184 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBooking } from "@/components/official/booking-provider";
-import { keepTogether } from "@/components/official/no-break";
+import { useCtaActions } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 
-const HEADER_NAV_IDS = [
-  "who-its-for",
-  "how-it-works",
-  "founder",
-  "faqs",
-] as const;
-type HeaderNavId = (typeof HEADER_NAV_IDS)[number];
+const navCtaClass =
+  "inline-flex h-10 items-center justify-center rounded-xl bg-brand px-3 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-brand-dark focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none! disabled:cursor-default disabled:opacity-80 sm:px-4";
 
-function isHeaderNavId(value: string): value is HeaderNavId {
-  return (HEADER_NAV_IDS as readonly string[]).includes(value);
+function MenuIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
 }
 
 /**
- * Official-site chrome. Logo only below lg; the CTA lives in the hero
- * and the sticky bar. A hairline and shadow appear after 8px of scroll.
+ * Floating pill nav. Start for free still goes through openBooking("header").
  */
 export function SiteHeader() {
   const [standout, group] = siteConfig.businessName.split(" ");
-  const { applyLabel } = officialCopy.header;
-  const navItems = officialCopy.nav.items.filter((item) =>
-    HEADER_NAV_IDS.includes(item.id),
-  );
-  const { openBooking, booked } = useBooking();
-  const [scrolled, setScrolled] = useState(false);
-  const [activeId, setActiveId] = useState<HeaderNavId | null>(null);
-  const navRef = useRef<HTMLElement>(null);
-  const pillMotion = useRef(false);
-  const [pill, setPill] = useState<{
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    on: boolean;
-    motion: boolean;
-  }>({ x: 0, y: 0, w: 0, h: 0, on: false, motion: false });
+  const navItems = officialCopy.nav.items;
+  const { booked } = useBooking();
+  const { startForFree, speakToAlex } = useCtaActions("header");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const updateScrolled = () => {
-      setScrolled(window.scrollY > 8);
+    const media = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => {
+      if (media.matches) setMenuOpen(false);
     };
-
-    updateScrolled();
-    window.addEventListener("scroll", updateScrolled, { passive: true });
-    return () => window.removeEventListener("scroll", updateScrolled);
-  }, []);
-
-  useEffect(() => {
-    const sections = HEADER_NAV_IDS.map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el))
-      .sort((a, b) => a.offsetTop - b.offsetTop);
-
-    if (sections.length === 0) return;
-
-    const visible = new Set<string>();
-    const observable = sections.filter((el) => el.offsetHeight > 0);
-    const hero = document.getElementById("top");
-    let heroInBand = false;
-
-    const applyActive = () => {
-      if (heroInBand) {
-        setActiveId(null);
-        return;
-      }
-
-      const current = [...observable]
-        .reverse()
-        .find((el) => visible.has(el.id));
-      setActiveId(current && isHeaderNavId(current.id) ? current.id : null);
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.target.id === "top") {
-            heroInBand = entry.isIntersecting;
-            continue;
-          }
-          if (entry.isIntersecting) {
-            visible.add(entry.target.id);
-          } else {
-            visible.delete(entry.target.id);
-          }
-        }
-        applyActive();
-      },
-      {
-        root: null,
-        rootMargin: "-40% 0px -55% 0px",
-        threshold: 0,
-      },
-    );
-
-    if (hero) observer.observe(hero);
-    for (const section of observable) {
-      observer.observe(section);
-    }
-
+    closeOnDesktop();
+    media.addEventListener("change", closeOnDesktop);
+    window.addEventListener("resize", closeOnDesktop);
     return () => {
-      observer.disconnect();
+      media.removeEventListener("change", closeOnDesktop);
+      window.removeEventListener("resize", closeOnDesktop);
     };
   }, []);
 
-  useLayoutEffect(() => {
-    const nav = navRef.current;
-    if (!nav) return;
-
-    const measure = () => {
-      const link = activeId
-        ? nav.querySelector<HTMLAnchorElement>(`a[href="#${activeId}"]`)
-        : null;
-
-      if (!link) {
-        setPill((prev) =>
-          prev.on ? { ...prev, on: false, motion: pillMotion.current } : prev,
-        );
-        return;
-      }
-
-      const next = {
-        x: link.offsetLeft,
-        y: link.offsetTop,
-        w: link.offsetWidth,
-        h: link.offsetHeight,
-        on: true,
-        motion: pillMotion.current,
-      };
-      setPill((prev) =>
-        prev.on === next.on &&
-        prev.x === next.x &&
-        prev.y === next.y &&
-        prev.w === next.w &&
-        prev.h === next.h &&
-        prev.motion === next.motion
-          ? prev
-          : next,
-      );
-      pillMotion.current = true;
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButtonRef.current?.focus();
     };
-
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(nav);
-    return () => observer.disconnect();
-  }, [activeId]);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   return (
-    <header
-      className={
-        scrolled
-          ? "official-header is-scrolled bg-white supports-[backdrop-filter]:bg-white/80 supports-[backdrop-filter]:backdrop-blur-md supports-[backdrop-filter]:backdrop-saturate-150"
-          : "official-header bg-white supports-[backdrop-filter]:bg-white/80 supports-[backdrop-filter]:backdrop-blur-md supports-[backdrop-filter]:backdrop-saturate-150"
-      }
-    >
-      <div className="page-shell official-header-inner">
-        <a href="#top" className="brand-mark official-header-mark">
-          <span className="brand-mark-name">
-            {standout}{" "}
-            <span className="brand-mark-accent">{group}</span>
-          </span>
-        </a>
-        <nav
-          ref={navRef}
-          className="official-header-nav"
-          aria-label="Page"
-          style={
-            {
-              "--pill-x": `${pill.x}px`,
-              "--pill-y": `${pill.y}px`,
-              "--pill-w": `${pill.w}px`,
-              "--pill-h": `${pill.h}px`,
-            } as CSSProperties
-          }
+    <header className="fixed inset-x-0 z-50 px-3 top-[calc(env(safe-area-inset-top)+0.75rem)] md:top-4 md:px-6">
+      <nav
+        className="site-nav mx-auto max-w-6xl rounded-2xl border border-ink/10 bg-white shadow-[0_1px_2px_rgba(17,23,41,0.04),0_8px_24px_rgba(17,23,41,0.06)]"
+        aria-label="Page"
+      >
+        <div className="relative flex h-14 items-center justify-between px-4 md:h-16 md:px-6">
+          <a
+            href="#top"
+            className="brand-mark site-nav-mark relative z-10 text-lg leading-none no-underline md:text-2xl"
+            onClick={() => setMenuOpen(false)}
+          >
+            <span className="brand-mark-name whitespace-nowrap">
+              {standout}{" "}
+              <span className="brand-mark-accent">{group}</span>
+            </span>
+          </a>
+
+          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className="font-sans text-[15px] font-medium text-ink/75! no-underline transition-colors hover:text-ink!"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+
+          <div className="relative z-10 flex items-center gap-1.5 sm:gap-2">
+            <button
+              type="button"
+              className={navCtaClass}
+              data-cta="start-free"
+              data-booking-cta=""
+              disabled={booked}
+              onClick={() => {
+                setMenuOpen(false);
+                startForFree();
+              }}
+            >
+              {booked ? "Call booked" : "Start for free"}
+            </button>
+            <button
+              ref={menuButtonRef}
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center text-ink lg:hidden"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              {menuOpen ? <CloseIcon /> : <MenuIcon />}
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="mobile-menu"
+          hidden={!menuOpen}
+          className="px-4 pb-4 md:px-6 lg:hidden"
         >
-          <span
-            className={
-              pill.on
-                ? "official-header-pill is-visible"
-                : "official-header-pill"
-            }
-            data-motion={pill.motion ? "true" : "false"}
-            aria-hidden="true"
-          />
           {navItems.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
-              className={`official-header-nav-link${activeId === item.id ? " is-active" : ""}`}
-              aria-current={activeId === item.id ? "location" : undefined}
+              className="block border-t border-ink/10 py-3 font-sans text-base font-medium text-ink! no-underline"
+              onClick={() => setMenuOpen(false)}
             >
               {item.label}
             </a>
           ))}
-        </nav>
-        <button
-          type="button"
-          className="btn btn-primary btn-cta official-header-cta"
-          data-booking-cta=""
-          disabled={booked}
-          onClick={() => openBooking("header")}
-        >
-          {booked ? "Call booked" : keepTogether(applyLabel)}
-          {booked ? null : (
-            <span className="btn-cta-arrow" aria-hidden="true">
-              →
-            </span>
-          )}
-        </button>
-      </div>
+          <button
+            type="button"
+            className={`${navCtaClass} mt-3 w-full`}
+            data-cta="start-free"
+            data-booking-cta=""
+            disabled={booked}
+            onClick={() => {
+              setMenuOpen(false);
+              startForFree();
+            }}
+          >
+            {booked ? "Call booked" : "Start for free"}
+          </button>
+          <button
+            type="button"
+            data-cta="speak-to-alex"
+            data-booking-cta=""
+            onClick={() => {
+              setMenuOpen(false);
+              speakToAlex();
+            }}
+            className="mt-2 inline-flex h-10 w-full items-center justify-center rounded-xl border border-ink/15 bg-white px-4 text-sm font-semibold text-ink shadow-sm transition-colors hover:border-ink/30 focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+          >
+            Speak to Alex
+          </button>
+        </div>
+      </nav>
     </header>
   );
 }

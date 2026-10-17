@@ -5,7 +5,6 @@
  */
 
 export const sectionLabels = {
-  hero: "Law firm growth partner",
   results: "Results",
   reviews: "Reviews",
   who: "Who it's for",
@@ -14,28 +13,6 @@ export const sectionLabels = {
   compliance: "Compliance",
   founder: "Founder",
   faqs: "FAQs",
-} as const;
-
-export const hero = {
-  /** Owner has not chosen. Option A is the default until they confirm. */
-  selected: "A",
-  headline: "Stop losing the clients who already found you.",
-  subline:
-    "We turn the work you already attract into retained matters. Free for 30 days.",
-  options: {
-    B: {
-      headline: "Your next client has already enquired.",
-      subline:
-        "Make sure they hear from you first. We build the follow-up that answers enquiries in minutes, not hours, without more ad spend or a website relaunch. Free for 30 days.",
-    },
-    C: {
-      headline: "Judge us on results before you pay a penny.",
-      subline:
-        "A free 30-day pilot built to turn more of your enquiries into retained matters, measured against numbers we agree before we start.",
-    },
-  },
-  imagePlaceholder:
-    "[[TBC: hero image (founder photo or pilot system screenshot)]]",
 } as const;
 
 export const ctaMicrocopy = {
