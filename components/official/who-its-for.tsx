@@ -1,85 +1,23 @@
-"use client";
-
-import { useCallback } from "react";
-import { Accordion, type AccordionEntry } from "@/components/official/accordion";
-import { useBooking } from "@/components/official/booking-provider";
-import { keepTogether } from "@/components/official/no-break";
-import { usePracticeArea, type PracticeArea } from "@/components/official/practice-area";
-import { SectionLabel } from "@/components/official/section-label";
-import { sectionLabels, whoItsFor } from "@/content/landing";
-import { officialCopy, type OfficialWhoItsForItem } from "@/lib/official-copy";
-
-function WhoItem({ item }: { item: OfficialWhoItsForItem }) {
-  return (
-    <li className="official-who-item">
-      <span className="official-who-rule" aria-hidden="true" />
-      <h3 className="official-who-item-title t-h3">{item.title}</h3>
-      <p className="official-who-item-body t-body">{item.body}</p>
-    </li>
-  );
-}
-
-function areaForCard(id: string): PracticeArea | null {
-  const card = whoItsFor.cards.find((item) => item.id === id);
-  return card ? card.context : null;
-}
-
-function PracticeAreaCards() {
-  const { setPracticeArea } = usePracticeArea();
-  const { openBooking } = useBooking();
-  const applyLabel = officialCopy.header.applyLabel;
-
-  const onValueChange = useCallback(
-    (id: string) => {
-      const area = areaForCard(id);
-      if (area) setPracticeArea(area);
-    },
-    [setPracticeArea],
-  );
-
-  const items: AccordionEntry[] = whoItsFor.cards.map((card) => ({
-    id: card.id,
-    title: (
-      <span className="practice-card-copy">
-        <span className="practice-card-title">{card.title}</span>
-        <span className="practice-card-summary t-body">{card.summary}</span>
-      </span>
-    ),
-    children: (
-      <div className="practice-card-panel">
-        {card.excerpt ? (
-          <p className="practice-card-excerpt t-body">{card.excerpt}</p>
-        ) : null}
-        <a className="practice-card-link" href={card.linkHref}>
-          {card.linkLabel}
-        </a>
-        <button
-          type="button"
-          className="btn btn-primary practice-card-cta"
-          data-booking-cta=""
-          onClick={() => openBooking("practice-card")}
-        >
-          {keepTogether(applyLabel)}
-          <span className="btn-cta-arrow" aria-hidden="true">
-            →
-          </span>
-        </button>
-      </div>
-    ),
-  }));
-
-  return (
-    <Accordion className="practice-cards" items={items} onValueChange={onValueChange} />
-  );
-}
+const cards = [
+  {
+    title: "Law firms that want to grow deliberately",
+    body: "More high-value work and healthy margins, not just enquiries coming in through the door.",
+  },
+  {
+    title: "Firms whose online presence undersells the quality of work they actually do",
+    body: "Website, reviews, and reputation that don’t yet reflect where the firm wants to be positioned.",
+  },
+  {
+    title: "Partners who want to be more selective about the matters they take on",
+    body: "Understanding which work is genuinely profitable and building a pipeline that brings in more of it, instead of accepting whatever calls in.",
+  },
+] as const;
 
 /**
- * Qualification band. Practice-area cards sit under the subline.
- * The qualifier list stays below them.
+ * Qualification band. Static cards under a left-aligned heading.
+ * The section id stays so the “Who it’s for” nav link still lands here.
  */
 export function WhoItsFor() {
-  const { items } = officialCopy.whoItsFor;
-
   return (
     <section
       className="official-who"
@@ -87,23 +25,36 @@ export function WhoItsFor() {
       aria-labelledby="official-who-heading"
       tabIndex={-1}
     >
-      <div className="page-shell official-who-inner">
-        <div className="official-who-intro">
-          <SectionLabel>{sectionLabels.who}</SectionLabel>
-          <h2 id="official-who-heading" className="official-who-heading t-h2-feature">
-            {whoItsFor.heading}
+      <div className="page-shell official-partners-inner">
+        <div className="official-partners-intro max-w-2xl lg:max-w-md">
+          <p className="text-left text-base font-bold text-ink/55 md:text-xl">
+            Who it’s for
+          </p>
+          <h2 id="official-who-heading" className="official-partners-heading t-h2">
+            You bring the ambition.{" "}
+            <span className="block whitespace-nowrap text-brand">
+              We build the system.
+            </span>
           </h2>
-          <p className="official-who-supporting t-lead">{whoItsFor.supporting}</p>
+          <p className="hero-supporting text-left!">
+            We partner with firms worth building on, and the people with the will to build them.
+          </p>
         </div>
-        <div className="official-who-main">
-          <PracticeAreaCards />
-          <p className="official-who-transparency t-body">{whoItsFor.transparency}</p>
-          <ol className="official-who-list">
-            {items.map((item) => (
-              <WhoItem key={item.id} item={item} />
-            ))}
-          </ol>
-        </div>
+        <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 md:gap-6 lg:grid-cols-3 lg:gap-8">
+          {cards.map((card) => (
+            <li
+              key={card.title}
+              className="h-full rounded-xl border border-line bg-surface p-4"
+            >
+              <h3 className="m-0 text-xl font-bold leading-[1.3] text-[color:var(--official-headline-ink)]">
+                {card.title}
+              </h3>
+              <p className="t-body m-0! mt-1.5 max-w-none! font-normal text-muted">
+                {card.body}
+              </p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

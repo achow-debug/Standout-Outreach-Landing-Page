@@ -1,155 +1,152 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Avatar } from "@/components/official/avatar";
-import { SectionLabel } from "@/components/official/section-label";
-import { reviews, sectionLabels } from "@/content/landing";
-import { officialCopy } from "@/lib/official-copy";
 
-const reviewCards = [reviews.florenda, reviews.jayden] as const;
+type Review = {
+  id: string;
+  name: string;
+  specialism: string;
+  location: string;
+  pullQuote: string;
+  fullQuote: string;
+  photo?: string; // optional, e.g. "/reviews/florenda-a.jpg"
+};
 
-function quoteFor(name: string) {
-  const match = officialCopy.partners.items.find((item) => item.name === name);
-  if (!match) {
-    throw new Error(`Missing review quote for ${name}`);
-  }
-  return match.quote;
+const reviews: Review[] = [
+  {
+    id: "florenda-a",
+    name: "Florenda A",
+    specialism: "Conveyancing law specialist",
+    location: "Staffordshire",
+    pullQuote:
+      "Standout didn’t promise a flood of new clients. They proposed diagnosing first. I agreed to expand only once we could see it working.",
+    fullQuote:
+      "Standout didn’t promise a fancy website redesign or a flood of new clients. They proposed diagnosing first, fixing our highest-value pages, then improving how we captured and tracked enquiries. I agreed to expand only once we could see it working. That phased approach, not a big-bang relaunch, is why we would tell a partner who is sitting on the fence about Standout Group: you have no reason to wait.",
+  },
+  {
+    id: "jayden-c",
+    name: "Jayden C",
+    specialism: "Family law specialist",
+    location: "Greater Manchester",
+    pullQuote:
+      "The call was framed as a collaboration, not a sales pitch. Without Alex’s help, I would have missed opportunities that turned into commissions.",
+    fullQuote:
+      "I found Standout Group after Alex emailed me, an email that described problems I recognised. What got me on the call was that it was framed as a collaboration, not a sales pitch. Without Alex’s help, I would have missed opportunities that turned into commissions.",
+  },
+];
+
+const headingColour = "text-[color:var(--official-headline-ink)]";
+
+function firstName(name: string) {
+  return name.split(/\s+/).find(Boolean) ?? name;
+}
+
+function initialsFromName(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word[0] ?? "")
+    .join("")
+    .toUpperCase();
 }
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function carouselActive() {
-  return window.matchMedia("(max-width: 1023px)").matches;
+function ReviewAvatar({ name, photo }: { name: string; photo?: string }) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl md:h-16 md:w-16 md:rounded-2xl">
+      {photo && !failed ? (
+        <Image
+          src={photo}
+          alt={name}
+          fill
+          sizes="64px"
+          className="object-cover"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <span className="avatar--initials h-full w-full">{initialsFromName(name)}</span>
+      )}
+    </div>
+  );
 }
 
-function ReviewCard({ item }: { item: (typeof reviewCards)[number] }) {
+function ReviewCard({ item }: { item: Review }) {
   return (
-    <li id={item.id} className="official-partners-card">
-      <p className="review-outcome">{item.outcome}</p>
-      <figure className="official-partners-figure">
-        <blockquote className="official-partners-quote">
-          <p className="t-body">{quoteFor(item.name)}</p>
-        </blockquote>
-        <figcaption className="official-partners-caption">
-          <Avatar name={item.name} photo={item.photo} />
-          <div className="official-partners-identity">
-            <p className="official-partners-name t-body">{item.name}</p>
-            <p className="official-partners-role t-small">{item.role}</p>
-            <p className="review-meta t-small">
-              {item.region}, {item.date}
-            </p>
-          </div>
-        </figcaption>
-      </figure>
+    <li
+      id={item.id}
+      className="official-partners-card flex h-full w-[85%]! shrink-0 basis-[85%]! snap-start flex-col p-6! last:mr-[15%]! md:w-auto! md:basis-auto! md:p-8! md:last:mr-0!"
+    >
+      <blockquote>
+        <p
+          className={`relative font-bold text-xl leading-[1.35] tracking-[-0.01em] [text-wrap:pretty] md:text-[22px] md:leading-[1.3] lg:text-2xl lg:tracking-[-0.015em] ${headingColour}`}
+        >
+          <span aria-hidden="true" className="absolute right-full select-none">“</span>
+          {item.pullQuote}”
+        </p>
+      </blockquote>
+      <button
+        type="button"
+        className="mt-4 inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-brand underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand"
+      >
+        Read {firstName(item.name)}’s full review →
+      </button>
+      <div className="mt-auto flex items-end justify-between gap-4 pt-8">
+        <div>
+          <p className={`font-bold text-base ${headingColour}`}>{item.name}</p>
+          <p className="official-partners-role mt-0.5! text-sm">
+            {item.specialism} · {item.location}
+          </p>
+        </div>
+        <ReviewAvatar name={item.name} photo={item.photo} />
+      </div>
     </li>
   );
 }
 
-function Chevron({ direction }: { direction: "left" | "right" }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" fill="none">
-      <path
-        d={direction === "left" ? "M12.5 4.5 7 10l5.5 5.5" : "M7.5 4.5 13 10l-5.5 5.5"}
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /**
- * Partner reviews. Below 1024px they sit in a swipeable row.
- * Jayden’s full quote stays until he approves the trimmed version.
+ * Partner reviews. Below md they sit in a scroll-snap row; from md they sit in a grid.
  */
 export function WhatPartnersSay() {
-  const { heading } = officialCopy.partners;
-  const scrollerRef = useRef<HTMLUListElement>(null);
+  const rowRef = useRef<HTMLUListElement>(null);
   const [index, setIndex] = useState(0);
 
-  function scrollToIndex(next: number) {
-    const scroller = scrollerRef.current;
-    if (!scroller || !carouselActive()) return;
-    const clamped = Math.max(0, Math.min(reviewCards.length - 1, next));
-    const card = scroller.querySelectorAll<HTMLElement>(".official-partners-card")[clamped];
-    if (!card) return;
+  function scrollToReview(next: number) {
+    const row = rowRef.current;
+    const card = row?.querySelectorAll<HTMLElement>(".official-partners-card")[next];
+    if (!row || !card) return;
+    const padding = Number.parseFloat(getComputedStyle(row).paddingLeft) || 0;
     const left =
-      card.getBoundingClientRect().left -
-      scroller.getBoundingClientRect().left +
-      scroller.scrollLeft;
-    scroller.scrollTo({
-      left,
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
-    });
-  }
-
-  function scrollCardIntoCarousel(id: string) {
-    if (!reviewCards.some((item) => item.id === id)) return;
-    const card = document.getElementById(id);
-    const scroller = scrollerRef.current;
-    if (!card || !scroller || !carouselActive()) return;
-    const left =
-      card.getBoundingClientRect().left -
-      scroller.getBoundingClientRect().left +
-      scroller.scrollLeft;
-    scroller.scrollTo({
+      card.getBoundingClientRect().left - row.getBoundingClientRect().left + row.scrollLeft - padding;
+    row.scrollTo({
       left,
       behavior: prefersReducedMotion() ? "auto" : "smooth",
     });
   }
 
   useEffect(() => {
-    const scroller = scrollerRef.current;
-    if (!scroller) return;
-
-    function updateIndex() {
-      const current = scrollerRef.current;
-      if (!current || !carouselActive()) return;
-      const cards = [...current.querySelectorAll<HTMLElement>(".official-partners-card")];
-      let best = 0;
-      let bestDistance = Number.POSITIVE_INFINITY;
-      cards.forEach((card, cardIndex) => {
-        const distance = Math.abs(
-          card.getBoundingClientRect().left - current.getBoundingClientRect().left,
-        );
-        if (distance < bestDistance) {
-          best = cardIndex;
-          bestDistance = distance;
-        }
-      });
-      setIndex((currentIndex) => (currentIndex === best ? currentIndex : best));
-    }
-
-    scroller.addEventListener("scroll", updateIndex, { passive: true });
-    window.addEventListener("resize", updateIndex);
-
-    function onHashChange() {
-      const id = window.location.hash.replace(/^#/, "");
-      scrollCardIntoCarousel(id);
-    }
-
-    function onClick(event: MouseEvent) {
-      const link = (event.target as Element | null)?.closest("a[href]");
-      if (!link) return;
-      const href = link.getAttribute("href") ?? "";
-      const id = href.startsWith("#") ? href.slice(1) : "";
-      if (!reviewCards.some((item) => item.id === id)) return;
-      window.requestAnimationFrame(() => scrollCardIntoCarousel(id));
-    }
-
-    onHashChange();
-    window.addEventListener("hashchange", onHashChange);
-    document.addEventListener("click", onClick);
-
-    return () => {
-      scroller.removeEventListener("scroll", updateIndex);
-      window.removeEventListener("resize", updateIndex);
-      window.removeEventListener("hashchange", onHashChange);
-      document.removeEventListener("click", onClick);
-    };
+    const row = rowRef.current;
+    if (!row) return;
+    const cards = [...row.querySelectorAll<HTMLElement>(".official-partners-card")];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        const target = visible[0]?.target;
+        if (!target) return;
+        const next = cards.indexOf(target as HTMLElement);
+        if (next >= 0) setIndex((current) => (current === next ? current : next));
+      },
+      { root: row, threshold: 0.6 },
+    );
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -161,53 +158,39 @@ export function WhatPartnersSay() {
     >
       <div className="page-shell official-partners-inner">
         <div className="official-partners-intro">
-          <SectionLabel id="reviews-label">{sectionLabels.reviews}</SectionLabel>
           <h2 id="official-partners-heading" className="official-partners-heading t-h2">
-            {heading}
+            Trusted by people clients <span className="text-brand">count on</span>
           </h2>
         </div>
-        <div
-          className="reviews-carousel"
-          role="region"
-          aria-label="Reviews"
-          onKeyDown={(event) => {
-            if (event.key === "ArrowRight") {
-              event.preventDefault();
-              scrollToIndex(index + 1);
-            }
-            if (event.key === "ArrowLeft") {
-              event.preventDefault();
-              scrollToIndex(index - 1);
-            }
-          }}
-        >
-          <ul ref={scrollerRef} className="official-partners-grid reviews-scroller">
-            {reviewCards.map((item) => (
+        <div>
+          <ul
+            ref={rowRef}
+            className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory -mx-5 px-5 scroll-px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:px-0 lg:gap-8"
+          >
+            {reviews.map((item) => (
               <ReviewCard key={item.id} item={item} />
             ))}
           </ul>
-          <div className="reviews-controls">
-            <button
-              type="button"
-              className="reviews-nav"
-              aria-label="Previous review"
-              aria-disabled={index === 0}
-              onClick={() => scrollToIndex(index - 1)}
-            >
-              <Chevron direction="left" />
-            </button>
-            <p className="reviews-counter" aria-live="polite">
-              {index + 1} of {reviewCards.length}
-            </p>
-            <button
-              type="button"
-              className="reviews-nav"
-              aria-label="Next review"
-              aria-disabled={index === reviewCards.length - 1}
-              onClick={() => scrollToIndex(index + 1)}
-            >
-              <Chevron direction="right" />
-            </button>
+          <div className="mt-5 flex justify-center md:hidden">
+            {reviews.map((item, dotIndex) => {
+              const active = index === dotIndex;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-label={`Show review ${dotIndex + 1}`}
+                  aria-current={active ? "true" : undefined}
+                  className="inline-flex items-center justify-center p-3 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand"
+                  onClick={() => scrollToReview(dotIndex)}
+                >
+                  <span
+                    className={`block h-1.5 rounded-full transition-all duration-300 ${
+                      active ? "w-5 bg-current text-brand" : "w-1.5 bg-slate-300"
+                    }`}
+                  />
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
