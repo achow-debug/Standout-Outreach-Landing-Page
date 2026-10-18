@@ -1,23 +1,25 @@
-import { KeyRound, ScrollText, Users } from "lucide-react";
+import { Briefcase, KeyRound, ScrollText, Users } from "lucide-react";
 
 export const practiceAreas = [
   {
     id: "family-law",
-    label: "Family Law",
-    shortLabel: "Family Law",
+    label: "Family",
     icon: Users,
   },
   {
     id: "conveyancing",
-    label: "Residential Conveyancing",
-    shortLabel: "Conveyancing",
+    label: "Landlord Financing & Conveyancing",
     icon: KeyRound,
   },
   {
     id: "wills-probate",
-    label: "Wills, Probate & Private Client",
-    shortLabel: "Wills & Probate",
+    label: "Contentious Probate",
     icon: ScrollText,
+  },
+  {
+    id: "employment",
+    label: "Employment",
+    icon: Briefcase,
   },
 ] as const;
 

@@ -8,7 +8,8 @@ import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 
 /**
- * Full-bleed navy close on mobile. After a booking, this section
+ * Full-bleed purple close. Rounded bottom corners sit on the navy
+ * field shared with the footer. After a booking, this section
  * crossfades to the thank-you state in place.
  */
 export function OfficialFinalCta() {

@@ -1987,6 +1987,7 @@ html.modal-open {
 
 .site-footer-about {
   margin: 0;
+  max-width: 36rem;
   color: #cbd5e1; /* slate-300 */
 }
 
@@ -2062,32 +2063,55 @@ html.modal-open {
   width: 100%;
 }
 
-.site-footer-legal {
+.site-footer-spacer {
+  display: none;
+}
+
+.site-footer-bar {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 0.75rem 2rem;
+  width: 100%;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+.site-footer-legal {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1rem;
   margin: 0;
 }
 
-.site-footer-legal a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #e2e8f0;
+.site-footer-legal a,
+.site-footer-legal button {
+  display: inline;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #94a3b8;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.site-footer-legal a:hover {
+.site-footer-legal a:hover,
+.site-footer-legal button:hover {
   color: var(--official-accent-on-dark);
-  text-decoration: underline;
-  text-underline-offset: 0.18em;
 }
 
 .site-footer-copy {
   margin: 0;
-  color: #cbd5e1; /* slate-300 */
+  color: #94a3b8;
 }
 
 .site-footer a:focus-visible,
@@ -2108,19 +2132,23 @@ html.modal-open {
     gap: 2rem;
   }
 
-  .site-footer-brand {
+  .site-footer-about {
     max-width: 38rem;
   }
 
   .site-footer-groups {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 2rem 1.5rem;
   }
 
-  .site-footer-copy {
-    margin-top: 0.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgb(255 255 255 / 12%);
+  .site-footer-spacer {
+    display: block;
+  }
+
+  .site-footer-bar {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
   }
 }
 
@@ -2128,7 +2156,8 @@ html.modal-open {
   .site-footer-brand .brand-mark-name,
   .site-footer-brand .brand-mark-accent,
   .site-footer-nav a,
-  .site-footer-legal a {
+  .site-footer-legal a,
+  .site-footer-legal button {
     color: CanvasText;
   }
 }
@@ -4027,9 +4056,17 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
 
 }
 
+.official-close {
+  background: #0f172a;
+}
+
 .official-apply {
-  background: var(--official-band-dark);
-  color: var(--official-ink-on-dark);
+  position: relative;
+  z-index: 10;
+  background: #4f3192;
+  color: #fff;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
 }
 
 .official-apply-panel {
@@ -4052,11 +4089,11 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
 .official-apply-heading {
   margin: 0;
   max-width: 32rem;
-  color: var(--official-ink-on-dark);
+  color: #fff;
 }
 
 .official-apply-heading-line--muted {
-  color: var(--official-muted-on-dark);
+  color: #fff;
 }
 
 .official-apply-supporting {
@@ -4100,7 +4137,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   align-items: flex-start;
   gap: 0.75rem;
   margin: 0;
-  color: #cbd5e1;
+  color: #fff;
 }
 
 .official-apply-steps li::marker {
@@ -4110,7 +4147,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
 .official-apply-step-num {
   flex-shrink: 0;
   font-weight: 700;
-  color: #cbd5e1;
+  color: #fff;
 }
 
 .official-apply-alex {
@@ -4166,7 +4203,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   align-items: center;
   gap: 0.75rem;
   min-height: 44px;
-  color: var(--official-muted-on-dark);
+  color: #fff;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -4174,7 +4211,7 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
 
 .official-apply-contacts a span {
   font-weight: 400;
-  color: #cbd5e1;
+  color: #fff;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -4195,16 +4232,18 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
 
 @media (min-width: 1024px) {
   .official-apply {
-    background: transparent;
+    background: #4f3192;
+    border-bottom-left-radius: 2.5rem;
+    border-bottom-right-radius: 2.5rem;
   }
 
   .official-apply-panel {
     align-items: center;
     text-align: center;
-    background: var(--official-band-dark);
-    border-radius: var(--radius-md);
-    padding: clamp(2rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 3rem);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 10%);
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
   }
 
   .official-apply-next,
@@ -4285,6 +4324,20 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   .official-apply-thanks .official-apply-contacts {
     align-items: flex-start;
   }
+}
+
+.official-apply .t-kicker--on-dark,
+.official-apply .cta-microcopy--dark,
+.official-apply .cta-microcopy--dark .cta-microcopy-ico {
+  color: #fff;
+}
+
+.official-apply .btn-primary.btn-on-dark,
+.official-apply .btn-primary.btn-on-dark:hover:not(:disabled),
+.official-apply .btn-primary.btn-on-dark:active {
+  background-color: #fff;
+  color: #4f3192;
+  border-color: #fff;
 }
 
 .official-apply .btn-cta:focus-visible {

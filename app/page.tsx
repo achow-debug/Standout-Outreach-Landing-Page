@@ -13,7 +13,6 @@ import { PracticeTabs } from "@/components/practice-tabs/PracticeTabs";
 import { AgencyComparison } from "@/components/official/agency-comparison";
 import { HowItWorks } from "@/components/official/how-it-works";
 import { SiteHeader } from "@/components/official/site-header";
-import { SourcesSection } from "@/components/official/sources-section";
 import { StickyCta } from "@/components/official/sticky-cta";
 import { WhatPartnersSay } from "@/components/official/what-partners-say";
 import { WhoItsFor } from "@/components/official/who-its-for";
@@ -41,10 +40,11 @@ export default function HomePage() {
               <ColpPeaceOfMind />
               <MeetTheFounder />
               <Faq />
-              <OfficialFinalCta />
-              <SourcesSection />
             </main>
-            <SiteFooter />
+            <div className="official-close">
+              <OfficialFinalCta />
+              <SiteFooter />
+            </div>
             <StickyCta />
           </DpaRequestProvider>
         </BookingProvider>

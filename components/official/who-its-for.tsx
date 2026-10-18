@@ -20,27 +20,25 @@ const cards = [
 export function WhoItsFor() {
   return (
     <section
-      className="official-who"
+      className="official-who scroll-mt-24! bg-brand-lavender-tint!"
       id="who-its-for"
       aria-labelledby="official-who-heading"
       tabIndex={-1}
     >
-      <div className="page-shell official-partners-inner">
-        <div className="official-partners-intro max-w-2xl lg:max-w-md">
-          <p className="text-left text-base font-bold text-ink/55 md:text-xl">
-            Who it’s for
-          </p>
+      <div className="page-shell official-partners-inner gap-0! py-12! md:py-16!">
+        <div className="official-partners-intro">
           <h2 id="official-who-heading" className="official-partners-heading t-h2">
             You bring the ambition.{" "}
             <span className="block whitespace-nowrap text-brand">
               We build the system.
             </span>
           </h2>
-          <p className="hero-supporting text-left!">
-            We partner with firms worth building on, and the people with the will to build them.
+          <p className="hero-supporting max-w-none! text-left! max-sm:text-base!">
+            We partner with firms worth building on,{" "}
+            <span className="block lg:inline">and the people with the will to build them.</span>
           </p>
         </div>
-        <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 md:gap-6 lg:grid-cols-3 lg:gap-8">
+        <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-4 p-0 md:mt-10 md:gap-6 lg:grid-cols-3 lg:gap-8">
           {cards.map((card) => (
             <li
               key={card.title}

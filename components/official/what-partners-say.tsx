@@ -80,7 +80,7 @@ function ReviewCard({ item }: { item: Review }) {
   return (
     <li
       id={item.id}
-      className="official-partners-card flex h-full w-[85%]! shrink-0 basis-[85%]! snap-start flex-col p-6! last:mr-[15%]! md:w-auto! md:basis-auto! md:p-8! md:last:mr-0!"
+      className="official-partners-card flex h-full w-[85%]! shrink-0 basis-[85%]! snap-start flex-col bg-brand-lavender-tint! p-6! last:mr-[15%]! md:w-auto! md:basis-auto! md:p-8! md:last:mr-0!"
     >
       <blockquote>
         <p
@@ -151,13 +151,13 @@ export function WhatPartnersSay() {
 
   return (
     <section
-      className="official-partners"
+      className="official-partners bg-white"
       id="partners"
       aria-labelledby="official-partners-heading"
       tabIndex={-1}
     >
-      <div className="page-shell official-partners-inner">
-        <div className="official-partners-intro">
+      <div className="page-shell official-partners-inner gap-0! py-12! md:py-16!">
+        <div className="official-partners-intro mb-8 md:mb-10">
           <h2 id="official-partners-heading" className="official-partners-heading t-h2">
             Trusted by people clients <span className="text-brand">count on</span>
           </h2>

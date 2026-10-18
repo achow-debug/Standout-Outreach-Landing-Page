@@ -16,7 +16,7 @@ import { practiceAreas, type PracticeAreaId } from "@/components/practice-tabs/p
 const ROTATE_MS = 6500;
 
 const TAB_CLASS =
-  "group relative flex flex-col items-center justify-center gap-1.5 rounded-xl border bg-white px-2 pt-3 pb-3.5 min-h-[76px] text-center shadow-sm cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 md:flex-row md:justify-start md:gap-3 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:pt-1 md:pb-4 md:min-h-0 md:text-left md:shadow-none";
+  "group relative flex w-full min-w-0 flex-row items-start justify-start gap-1.5 rounded-xl border bg-white px-2 pt-3 pb-3.5 min-h-[76px] text-left shadow-sm cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 md:gap-2 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:pt-1 md:pb-4 md:min-h-0 md:shadow-none";
 
 function nextArea(id: PracticeAreaId): PracticeAreaId {
   const index = practiceAreas.findIndex((area) => area.id === id);
@@ -123,7 +123,7 @@ export function PracticeTabs() {
     <section
       ref={sectionRef}
       aria-label="Practice areas"
-      className="relative z-10 -mt-10 rounded-t-[2rem] bg-white pt-8 pb-12 shadow-[0_-12px_40px_-16px_rgba(17,12,46,0.12)] md:-mt-16 md:rounded-t-[3rem] md:pt-14 md:pb-20"
+      className="relative z-10 -mt-10 rounded-t-[2rem] bg-white py-12 shadow-[0_-12px_40px_-16px_rgba(17,12,46,0.12)] md:-mt-16 md:rounded-t-[3rem] md:py-16"
     >
       <div className="page-shell">
         <div
@@ -137,17 +137,10 @@ export function PracticeTabs() {
             }
           }}
         >
-          <p
-            id="practice-tabs-prompt"
-            className="mb-3 text-xs font-medium text-neutral-500 md:mb-4 md:text-sm"
-          >
-            Select your practice area
-          </p>
-
           <div
             role="tablist"
-            aria-labelledby="practice-tabs-prompt"
-            className="grid grid-cols-3 gap-2 md:gap-6"
+            aria-label="Practice areas"
+            className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-6"
             onKeyDown={onTabListKeyDown}
           >
             {practiceAreas.map((area) => {
@@ -172,15 +165,10 @@ export function PracticeTabs() {
                   <Icon
                     aria-hidden="true"
                     strokeWidth={1.75}
-                    className={`h-5 w-5 shrink-0 text-brand transition-opacity md:h-6 md:w-6 ${
-                      active
-                        ? "opacity-100"
-                        : "opacity-50 md:group-hover:opacity-100"
-                    }`}
+                    className="mt-0.5 h-4 w-4 shrink-0 text-neutral-400 md:mt-1 md:h-5 md:w-5"
                   />
-                  <span className="text-xs font-semibold leading-tight md:text-lg md:font-medium">
-                    <span className="lg:hidden">{area.shortLabel}</span>
-                    <span className="hidden lg:inline">{area.label}</span>
+                  <span className="min-w-0 text-[11px] font-semibold leading-snug md:text-lg md:font-medium">
+                    {area.label}
                   </span>
                   <span
                     aria-hidden="true"
