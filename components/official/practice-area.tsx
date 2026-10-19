@@ -11,7 +11,9 @@ import {
 export type PracticeArea =
   | "family"
   | "conveyancing"
-  | "wills-probate-private-client";
+  | "wills-probate-private-client"
+  | "employment"
+  | "immigration";
 
 type PracticeAreaContextValue = {
   practiceArea: PracticeArea | null;

@@ -6,21 +6,20 @@ import { DpaRequestProvider } from "@/components/official/dpa-request";
 import { PracticeAreaProvider } from "@/components/official/practice-area";
 import { ColpPeaceOfMind } from "@/components/official/colp-peace-of-mind";
 import { Faq } from "@/components/official/faq";
-import { OfficialFinalCta } from "@/components/official/final-cta";
 import { MeetTheFounder } from "@/components/official/meet-the-founder";
 import { OfficialHero } from "@/components/official/official-hero";
 import { PracticeTabs } from "@/components/practice-tabs/PracticeTabs";
 import { AgencyComparison } from "@/components/official/agency-comparison";
+import { FirmDay } from "@/components/official/firm-day";
 import { HowItWorks } from "@/components/official/how-it-works";
 import { SiteHeader } from "@/components/official/site-header";
-import { StickyCta } from "@/components/official/sticky-cta";
 import { WhatPartnersSay } from "@/components/official/what-partners-say";
+import { SourcesSection } from "@/components/official/sources-section";
 import { WhoItsFor } from "@/components/official/who-its-for";
 
 /**
  * Official homepage: header → hero → practice areas → partners →
- * who it's for → how it works → comparison → COLP → founder → FAQ → book → footer.
- * Mobile sticky CTA sits outside main.
+ * who it's for → how it works → firm’s day → comparison → COLP → founder → FAQ → footer.
  */
 export default function HomePage() {
   return (
@@ -36,16 +35,14 @@ export default function HomePage() {
               <WhatPartnersSay />
               <WhoItsFor />
               <HowItWorks />
+              <FirmDay />
               <AgencyComparison />
               <ColpPeaceOfMind />
               <MeetTheFounder />
               <Faq />
             </main>
-            <div className="official-close">
-              <OfficialFinalCta />
-              <SiteFooter />
-            </div>
-            <StickyCta />
+            <SourcesSection />
+            <SiteFooter />
           </DpaRequestProvider>
         </BookingProvider>
       </PracticeAreaProvider>

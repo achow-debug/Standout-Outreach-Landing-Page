@@ -27,9 +27,9 @@ export type BookingLocation =
   | "header"
   | "hero"
   | "how-it-works"
+  | "firm-day"
   | "practice-card"
   | "final"
-  | "sticky"
   | "footer";
 
 const BOOKED_KEY = "sg_booked";
@@ -247,9 +247,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
             ? "official_header"
             : location === "how-it-works"
               ? "official_how"
-              : location === "sticky"
-                ? "sticky_mobile"
-                : "official_apply";
+              : "official_apply";
         openModal(null, fallback);
         return;
       }
@@ -265,6 +263,19 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     },
     [openModal, practiceArea],
   );
+
+  const bookParamHandled = useRef(false);
+
+  useEffect(() => {
+    if (bookParamHandled.current) return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("book") !== "1") return;
+    bookParamHandled.current = true;
+    url.searchParams.delete("book");
+    const next = `${url.pathname}${url.search}${url.hash}`;
+    window.history.replaceState(null, "", next);
+    openBooking("footer");
+  }, [openBooking]);
 
   return (
     <BookingContext.Provider value={{ openBooking, bookingOpen, booked }}>

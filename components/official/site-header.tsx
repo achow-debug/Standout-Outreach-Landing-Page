@@ -52,7 +52,9 @@ export function SiteHeader() {
   const { booked } = useBooking();
   const { startForFree, speakToAlex } = useCtaActions("header");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const headerHiddenRef = useRef(false);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 1024px)");
@@ -70,6 +72,45 @@ export function SiteHeader() {
 
   useEffect(() => {
     if (!menuOpen) return;
+    headerHiddenRef.current = false;
+    setHeaderHidden(false);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      lastY = y;
+      if (menuOpen) return;
+
+      if (y < 48) {
+        if (headerHiddenRef.current) {
+          headerHiddenRef.current = false;
+          setHeaderHidden(false);
+        }
+        return;
+      }
+
+      if (delta > 6 && !headerHiddenRef.current) {
+        headerHiddenRef.current = true;
+        setHeaderHidden(true);
+        return;
+      }
+
+      if (delta < -6 && headerHiddenRef.current) {
+        headerHiddenRef.current = false;
+        setHeaderHidden(false);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setMenuOpen(false);
@@ -80,7 +121,10 @@ export function SiteHeader() {
   }, [menuOpen]);
 
   return (
-    <header className="fixed inset-x-0 z-50 px-3 top-[calc(env(safe-area-inset-top)+0.75rem)] md:top-4 md:px-6">
+    <header
+      className={`site-header fixed inset-x-0 z-50 px-3 top-[calc(env(safe-area-inset-top)+0.75rem)] md:top-4 md:px-6${headerHidden ? " is-header-hidden" : ""}`}
+      inert={headerHidden}
+    >
       <nav
         className="site-nav mx-auto max-w-6xl rounded-2xl border border-ink/10 bg-white shadow-[0_1px_2px_rgba(17,23,41,0.04),0_8px_24px_rgba(17,23,41,0.06)]"
         aria-label="Page"

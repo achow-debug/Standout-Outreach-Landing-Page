@@ -28,7 +28,7 @@ export const sources = {
       italicise: "Legal Futures",
       url: "https://www.legalfutures.co.uk/latest-news/law-firms-failing-to-respond-to-consumer-enquiries",
       summary:
-        "Mystery shoppers from insight6 contacted 50 personal injury and 50 wills practices by phone and through their websites. For web enquiries, 28% received a non-automated reply by phone or email within 15 minutes.",
+        "Mystery shoppers from insight6 contacted 50 personal injury and 50 wills practices by phone and through their websites. For web enquiries, 28% received a non-automated reply by phone or email within 15 minutes. As many as one in five enquiries went unanswered.",
     },
   ],
   mysteryShop: {

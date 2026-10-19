@@ -86,6 +86,80 @@ export const officialCopy = {
     },
     ctaLabel: "Apply For My 30-Day Pilot",
   },
+  firmDay: {
+    heading: "Your firm’s day with Standout Group",
+    beats: [
+      {
+        id: "morning",
+        kicker: "Morning",
+        time: "7:40am",
+        title: "Look as good online as you are in practice",
+        body: "A prospective client searches on their phone before work. They find a page that loads fast, speaks to exactly what they’re facing and makes the next step obvious. The enquiries your competitors used to win start coming to you.",
+        image: {
+          src: "/images/firm-day/morning-page.webp",
+          label: "Pilot landing page on a phone",
+          alt: "A prospective client’s phone showing a fast landing page that speaks to their situation and makes the next step obvious.",
+        },
+      },
+      {
+        id: "lunchtime",
+        kicker: "Lunchtime",
+        time: "1:15pm",
+        title: "Spend your time on the matters worth taking",
+        body: "A house buyer asks three firms for a conveyancing quote over lunch. Your intake form, built for that practice area, has already asked the right questions. Your team sends a clear quote while the buyer is still deciding, without a single chasing email. Enquiries that aren’t a fit are obvious from the start.",
+        image: {
+          src: "/images/firm-day/lunch-form.webp",
+          label: "Practice-area intake form",
+          alt: "A conveyancing intake form that has already asked the questions a quote needs.",
+        },
+      },
+      {
+        id: "late-evening",
+        kicker: "Late evening",
+        time: "9:47pm",
+        title: "Never lose an enquiry to the clock",
+        body: "A family dealing with a bereavement gets in touch once the house is quiet. Within minutes they have a calm, clear reply that reassures rather than sells, and they leave their details before they’ve thought to try anyone else.",
+        image: {
+          src: "/images/firm-day/evening-chat.webp",
+          label: "Chatbot mid-conversation, about 9:47pm",
+          alt: "A calm reply at 9:47pm, mid-conversation with a family who got in touch after the house went quiet.",
+        },
+        proof: {
+          lead: "Fourteen hours is the gap between a 7pm enquiry and a 9am reply. A South Yorkshire wills & probate firm closed that first reply time to five minutes during its pilot.",
+          research:
+            "Businesses that reply within an hour are almost seven times likelier to get a proper conversation with the enquirer than those that wait just one hour more.",
+          credit: "Harvard Business Review research",
+          sourceId: "hbr-2011",
+        },
+      },
+      {
+        id: "next-morning",
+        kicker: "Next morning",
+        time: "8:30am",
+        title: "Start the day with enquiries ready to call back",
+        body: "Your team arrives to enquiries ready to call back, each with the client’s details and matter type attached. Every enquiry is logged and consent is recorded. Nothing bypasses your own client-care or complaints process, so your SRA obligations stay intact.",
+        image: {
+          src: "/images/firm-day/next-morning.webp",
+          label: "Logged enquiry ready to call back",
+          alt: "An enquiry logged overnight, with the client’s details and matter type ready for a call back.",
+        },
+        proof: {
+          lead: "Up to a fifth of enquiries to law firms never get a reply. In your firm, every one is answered and on record.",
+          credit: "First4Lawyers, 2023",
+          sourceId: "first4lawyers-2023",
+        },
+      },
+    ],
+    monthly: {
+      kicker: "Monthly review",
+      title:
+        "A strategy built around your firm that is designed to be stronger every month",
+      body: "At the end of each month, you’ll see exactly how the figures have moved, and what we’re changing as a result. If a question on the enquiry form is putting people off, we rewrite it. If your clients tend to reply in the evening, that’s when the follow-ups go out. As the numbers show which work earns the best margins, that’s where we focus our effort. All of it is shaped by your market, your clients and where you want to take the firm.",
+    },
+    ctaLabel: "Start for free",
+    microcopy:
+      "Free for 30 days. We partner with one firm per practice area in your county.",
+  },
   partners: {
     eyebrow: "What partners say",
     heading: "Don’t take our word for it.",

@@ -1,85 +1,34 @@
 "use client";
 
+import { useRef, useState, type KeyboardEvent } from "react";
+import { ChevronDown } from "lucide-react";
+import { useBooking } from "@/components/official/booking-provider";
+import { keepTogether } from "@/components/official/no-break";
+import { usePracticeArea } from "@/components/official/practice-area";
 import {
-  useEffect,
-  useRef,
-  useState,
-  type AnimationEvent,
-  type CSSProperties,
-  type FocusEvent,
-  type KeyboardEvent,
-  type PointerEvent,
-} from "react";
+  practiceAreas,
+  type PracticeAreaEntry,
+  type PracticeAreaId,
+} from "@/components/practice-tabs/practiceAreas";
 import { trackEvent } from "@/lib/analytics";
-import { practiceAreas, type PracticeAreaId } from "@/components/practice-tabs/practiceAreas";
-
-const ROTATE_MS = 6500;
+import { officialCopy } from "@/lib/official-copy";
 
 const TAB_CLASS =
-  "group relative flex w-full min-w-0 flex-row items-start justify-start gap-1.5 rounded-xl border bg-white px-2 pt-3 pb-3.5 min-h-[76px] text-left shadow-sm cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 md:gap-2 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:pt-1 md:pb-4 md:min-h-0 md:shadow-none";
-
-function nextArea(id: PracticeAreaId): PracticeAreaId {
-  const index = practiceAreas.findIndex((area) => area.id === id);
-  return practiceAreas[(index + 1) % practiceAreas.length].id;
-}
+  "relative flex h-full w-full min-w-0 items-start gap-2 px-2 py-3 text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:px-3 lg:py-4";
 
 export function PracticeTabs() {
-  const [activeId, setActiveId] = useState<PracticeAreaId>("family-law");
-  const [autoRotate, setAutoRotate] = useState(true);
-  const [hoverPaused, setHoverPaused] = useState(false);
-  const [focusPaused, setFocusPaused] = useState(false);
-  const [touchPaused, setTouchPaused] = useState(false);
-  const [inView, setInView] = useState(false);
-  const [pageHidden, setPageHidden] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  const sectionRef = useRef<HTMLElement>(null);
+  const { openBooking } = useBooking();
+  const { setPracticeArea } = usePracticeArea();
   const tracked = useRef<Set<PracticeAreaId>>(new Set());
+  const [activeId, setActiveId] = useState<PracticeAreaId>("family-law");
 
-  const rotating = autoRotate && !reducedMotion;
-  const running =
-    rotating &&
-    inView &&
-    !pageHidden &&
-    !hoverPaused &&
-    !focusPaused &&
-    !touchPaused;
+  const active = practiceAreas.find((area) => area.id === activeId) ?? practiceAreas[0];
 
-  const rotatingRef = useRef(rotating);
-  rotatingRef.current = rotating;
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => setReducedMotion(media.matches);
-    apply();
-    media.addEventListener("change", apply);
-    return () => media.removeEventListener("change", apply);
-  }, []);
-
-  useEffect(() => {
-    const apply = () => setPageHidden(document.visibilityState === "hidden");
-    apply();
-    document.addEventListener("visibilitychange", apply);
-    return () => document.removeEventListener("visibilitychange", apply);
-  }, []);
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setInView(entry.isIntersecting);
-        if (!entry.isIntersecting) setTouchPaused(false);
-      },
-      { threshold: 0.35 },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  function selectTab(id: PracticeAreaId, method: "click" | "keyboard") {
-    setAutoRotate(false);
+  function selectArea(id: PracticeAreaId, method: "click" | "keyboard") {
+    const area = practiceAreas.find((item) => item.id === id);
+    if (!area) return;
     setActiveId(id);
+    setPracticeArea(area.bookingArea);
     if (method !== "click" || tracked.current.has(id)) return;
     tracked.current.add(id);
     trackEvent("practice_area_selected", { area: id });
@@ -103,8 +52,8 @@ export function PracticeTabs() {
 
     event.preventDefault();
     const id = practiceAreas[nextIndex].id;
-    selectTab(id, "keyboard");
-    const tab = document.getElementById(`tab-${id}`);
+    selectArea(id, "keyboard");
+    const tab = document.getElementById(`practice-tab-${id}`);
     if (tab instanceof HTMLElement) {
       tab.focus({
         preventScroll: true,
@@ -113,129 +62,153 @@ export function PracticeTabs() {
     }
   }
 
-  function onProgressEnd(event: AnimationEvent<HTMLSpanElement>) {
-    if (event.animationName !== "practice-tab-progress") return;
-    if (!rotatingRef.current) return;
-    setActiveId((current) => nextArea(current));
-  }
-
   return (
     <section
-      ref={sectionRef}
       aria-label="Practice areas"
-      className="relative z-10 -mt-10 rounded-t-[2rem] bg-white py-12 shadow-[0_-12px_40px_-16px_rgba(17,12,46,0.12)] md:-mt-16 md:rounded-t-[3rem] md:py-16"
+      className="relative z-10 -mt-10 scroll-mt-24 rounded-t-[2rem] bg-white py-12 shadow-[0_-12px_40px_-16px_rgba(17,12,46,0.12)] md:-mt-16 md:rounded-t-[3rem] md:py-16"
     >
       <div className="page-shell">
-        <div
-          onMouseEnter={() => setHoverPaused(true)}
-          onMouseLeave={() => setHoverPaused(false)}
-          onFocus={() => setFocusPaused(true)}
-          onBlur={(event: FocusEvent<HTMLDivElement>) => {
-            const next = event.relatedTarget;
-            if (!(next instanceof Node) || !event.currentTarget.contains(next)) {
-              setFocusPaused(false);
-            }
-          }}
-        >
+        <div className="lg:hidden">
+          <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
+            {practiceAreas.map((area) => {
+              const selected = area.id === active.id;
+              const panelId = `practice-accordion-${area.id}`;
+              const triggerId = `practice-accordion-trigger-${area.id}`;
+              const Icon = area.icon;
+              return (
+                <div key={area.id} className="scroll-mt-24 border-b border-line last:border-b-0">
+                  <button
+                    type="button"
+                    id={triggerId}
+                    className="flex min-h-16 w-full items-center gap-3 px-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand"
+                    aria-expanded={selected}
+                    aria-controls={panelId}
+                    onClick={() => selectArea(area.id, "click")}
+                  >
+                    <Icon
+                      aria-hidden="true"
+                      strokeWidth={1.75}
+                      className={`h-5 w-5 shrink-0 ${selected ? "text-brand" : "text-neutral-400"}`}
+                    />
+                    <span className="min-w-0 flex-1 text-base font-medium leading-snug text-ink">
+                      {area.label}
+                    </span>
+                    <ChevronDown
+                      aria-hidden="true"
+                      strokeWidth={1.75}
+                      className={`h-5 w-5 shrink-0 ${selected ? "rotate-180 text-brand" : "text-neutral-400"}`}
+                    />
+                  </button>
+                  <div
+                    id={panelId}
+                    role="region"
+                    aria-labelledby={triggerId}
+                    hidden={!selected}
+                    className="border-t border-line px-4 py-4"
+                  >
+                    <PracticeAreaBody
+                      area={area}
+                      onApply={() => openBooking("practice-card")}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="hidden lg:block">
           <div
             role="tablist"
             aria-label="Practice areas"
-            className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-6"
+            className="grid grid-cols-5 border-b border-line"
             onKeyDown={onTabListKeyDown}
           >
             {practiceAreas.map((area) => {
-              const active = area.id === activeId;
+              const selected = area.id === active.id;
               const Icon = area.icon;
               return (
                 <button
                   key={area.id}
                   type="button"
                   role="tab"
-                  id={`tab-${area.id}`}
-                  aria-selected={active}
-                  aria-controls={`panel-${area.id}`}
-                  tabIndex={active ? 0 : -1}
+                  id={`practice-tab-${area.id}`}
+                  aria-selected={selected}
+                  aria-controls="practice-panel"
+                  tabIndex={selected ? 0 : -1}
                   className={`${TAB_CLASS} ${
-                    active
-                      ? "border-brand/40 bg-brand/[0.04] text-neutral-900 md:bg-transparent"
-                      : "border-neutral-200 text-neutral-500 md:hover:text-neutral-900"
+                    selected ? "text-ink" : "text-neutral-500 hover:text-ink"
                   }`}
-                  onClick={() => selectTab(area.id, "click")}
+                  onClick={() => selectArea(area.id, "click")}
                 >
                   <Icon
                     aria-hidden="true"
                     strokeWidth={1.75}
-                    className="mt-0.5 h-4 w-4 shrink-0 text-neutral-400 md:mt-1 md:h-5 md:w-5"
+                    className={`mt-0.5 h-5 w-5 shrink-0 ${selected ? "text-brand" : "text-neutral-400"}`}
                   />
-                  <span className="min-w-0 text-[11px] font-semibold leading-snug md:text-lg md:font-medium">
+                  <span className="min-w-0 text-base font-medium leading-snug">
                     {area.label}
                   </span>
                   <span
                     aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 h-[3px] overflow-hidden rounded-b-xl bg-neutral-100 md:h-[2px] md:rounded-none md:bg-neutral-200 md:group-hover:bg-neutral-300"
-                  >
-                    <span
-                      data-progress
-                      key={active && rotating ? activeId : "idle"}
-                      className="block h-full w-full origin-left bg-brand"
-                      style={progressStyle(active, rotating, running)}
-                      onAnimationEnd={
-                        active && rotating ? onProgressEnd : undefined
-                      }
-                    />
-                  </span>
+                    className={`absolute inset-x-0 -bottom-px h-0.5 ${selected ? "bg-brand" : "bg-transparent"}`}
+                  />
                 </button>
               );
             })}
           </div>
 
-          {practiceAreas.map((area) => {
-            const active = area.id === activeId;
-            return (
-              <div
-                key={area.id}
-                role="tabpanel"
-                id={`panel-${area.id}`}
-                aria-labelledby={`tab-${area.id}`}
-                tabIndex={0}
-                hidden={!active}
-                className="mt-5 rounded-3xl focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none md:mt-8 md:rounded-[2rem]"
-                onPointerDown={(event: PointerEvent<HTMLDivElement>) => {
-                  if (event.pointerType === "touch") setTouchPaused(true);
-                }}
-              >
-                <div
-                  className="flex min-h-[440px] rounded-3xl bg-neutral-100/80 p-3 md:min-h-[540px] md:rounded-[2rem] md:p-10"
-                  style={
-                    reducedMotion
-                      ? undefined
-                      : { animation: "practice-panel-in 300ms ease-out" }
-                  }
-                >
-                  <div className="flex flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-neutral-300 text-sm text-neutral-500">
-                    {area.label} — content coming soon
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          <div
+            role="tabpanel"
+            id="practice-panel"
+            aria-labelledby={`practice-tab-${active.id}`}
+            tabIndex={0}
+            className="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:p-8"
+          >
+            <PracticeAreaBody area={active} onApply={() => openBooking("practice-card")} />
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function progressStyle(
-  active: boolean,
-  rotating: boolean,
-  running: boolean,
-): CSSProperties {
-  if (!active || !rotating) {
-    return { transform: active ? "scaleX(1)" : "scaleX(0)" };
-  }
-  return {
-    transform: "scaleX(0)",
-    animation: `practice-tab-progress ${ROTATE_MS}ms linear forwards`,
-    animationPlayState: running ? "running" : "paused",
-  };
+function PracticeAreaBody({
+  area,
+  onApply,
+}: {
+  area: PracticeAreaEntry;
+  onApply: () => void;
+}) {
+  const card = area.card;
+
+  return (
+    <div className="flex flex-col items-start gap-3">
+      {card ? (
+        <>
+          <p className="m-0 text-base leading-relaxed text-ink md:text-lg">{card.summary}</p>
+          {card.excerpt ? (
+            <p className="m-0 text-base leading-relaxed text-muted">{card.excerpt}</p>
+          ) : null}
+          <a
+            href={card.linkHref}
+            className="inline-flex min-h-11 items-center text-[0.9375rem] font-semibold leading-snug text-brand underline underline-offset-4"
+          >
+            {card.linkLabel}
+          </a>
+        </>
+      ) : null}
+      <button
+        type="button"
+        className="btn btn-primary btn-cta"
+        data-booking-cta=""
+        onClick={onApply}
+      >
+        {keepTogether(officialCopy.header.applyLabel)}
+        <span className="btn-cta-arrow" aria-hidden="true">
+          →
+        </span>
+      </button>
+    </div>
+  );
 }

@@ -29,25 +29,34 @@ export function WhoItsFor() {
         <div className="official-partners-intro">
           <h2 id="official-who-heading" className="official-partners-heading t-h2">
             You bring the ambition.{" "}
-            <span className="block whitespace-nowrap text-brand">
+            <span className="block whitespace-nowrap">
               We build the system.
             </span>
           </h2>
-          <p className="hero-supporting max-w-none! text-left! max-sm:text-base!">
+          <p className="hero-supporting max-w-none! text-left! font-normal! text-[color:#475569]! max-sm:text-base!">
             We partner with firms worth building on,{" "}
             <span className="block lg:inline">and the people with the will to build them.</span>
           </p>
         </div>
-        <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-4 p-0 md:mt-10 md:gap-6 lg:grid-cols-3 lg:gap-8">
+        <h3
+          id="official-who-partners-label"
+          className="m-0 mt-8 text-base font-semibold leading-snug text-[color:var(--official-headline-ink)] md:mt-10"
+        >
+          Who we partner with
+        </h3>
+        <ul
+          className="m-0 mt-3 grid list-none grid-cols-1 gap-4 p-0 md:gap-6 lg:grid-cols-3 lg:gap-8"
+          aria-labelledby="official-who-partners-label"
+        >
           {cards.map((card) => (
             <li
               key={card.title}
               className="h-full rounded-xl border border-line bg-surface p-4"
             >
-              <h3 className="m-0 text-xl font-bold leading-[1.3] text-[color:var(--official-headline-ink)]">
+              <h4 className="m-0 text-lg font-semibold leading-snug text-[color:var(--official-headline-ink)] md:text-xl">
                 {card.title}
-              </h3>
-              <p className="t-body m-0! mt-1.5 max-w-none! font-normal text-muted">
+              </h4>
+              <p className="t-body m-0! mt-2.5! max-w-none! font-normal leading-[1.5]! text-[color:#1e293b]!">
                 {card.body}
               </p>
             </li>
