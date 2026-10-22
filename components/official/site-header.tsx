@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useBooking } from "@/components/official/booking-provider";
 import { useCtaActions } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 
-const navCtaClass =
-  "inline-flex h-10 items-center justify-center rounded-xl bg-brand px-3 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-brand-dark focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none! disabled:cursor-default disabled:opacity-80 sm:px-4";
+const navPrimaryClass =
+  "inline-flex h-10 items-center justify-center rounded-xl bg-brand px-3 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-brand-dark focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none! disabled:cursor-default disabled:opacity-80 lg:h-8 lg:px-3.5";
+
+const navSecondaryClass =
+  "h-10 items-center justify-center rounded-xl border border-brand bg-transparent px-3.5 text-sm font-semibold whitespace-nowrap text-brand transition-colors hover:bg-accent-soft focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none! lg:h-8";
 
 function MenuIcon() {
   return (
@@ -44,12 +46,14 @@ function CloseIcon() {
 }
 
 /**
- * Floating pill nav. Start for free still goes through openBooking("header").
+ * Floating nav. Mobile is a 56px pill (logo, enquiry check, menu).
+ * Desktop is a card up to 1,000px wide and about 48px tall.
  */
 export function SiteHeader() {
   const [standout, group] = siteConfig.businessName.split(" ");
   const navItems = officialCopy.nav.items;
-  const { booked } = useBooking();
+  const headerCta = officialCopy.header.ctaLabel;
+  const askLabel = officialCopy.header.askLabel;
   const { startForFree, speakToAlex } = useCtaActions("header");
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
@@ -126,13 +130,13 @@ export function SiteHeader() {
       inert={headerHidden}
     >
       <nav
-        className="site-nav mx-auto max-w-6xl rounded-2xl border border-ink/10 bg-white shadow-[0_1px_2px_rgba(17,23,41,0.04),0_8px_24px_rgba(17,23,41,0.06)]"
+        className={`site-nav mx-auto w-full max-w-[1000px] border border-line bg-surface shadow-[0_1px_2px_rgba(17,23,41,0.04),0_8px_24px_rgba(17,23,41,0.06)] lg:h-12 lg:rounded-2xl${menuOpen ? " rounded-3xl" : " h-14 rounded-full"}`}
         aria-label="Page"
       >
-        <div className="relative flex h-14 items-center justify-between px-4 md:h-16 md:px-6">
+        <div className="grid h-full grid-cols-[auto_1fr_auto] items-center gap-2 px-3 lg:gap-6 lg:px-5">
           <a
             href="#top"
-            className="brand-mark site-nav-mark relative z-10 text-lg leading-none no-underline md:text-2xl"
+            className="brand-mark site-nav-mark text-lg leading-none no-underline lg:text-xl"
             onClick={() => setMenuOpen(false)}
           >
             <span className="brand-mark-name whitespace-nowrap">
@@ -141,7 +145,7 @@ export function SiteHeader() {
             </span>
           </a>
 
-          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
+          <div className="hidden items-center justify-center gap-7 lg:flex">
             {navItems.map((item) => (
               <a
                 key={item.id}
@@ -153,19 +157,27 @@ export function SiteHeader() {
             ))}
           </div>
 
-          <div className="relative z-10 flex items-center gap-1.5 sm:gap-2">
+          <div className="col-start-3 flex items-center justify-end gap-1.5 lg:gap-2">
             <button
               type="button"
-              className={navCtaClass}
-              data-cta="start-free"
-              data-booking-cta=""
-              disabled={booked}
-              onClick={() => {
+              className={navPrimaryClass}
+              data-cta="measure-enquiries"
+              onClick={(event) => {
                 setMenuOpen(false);
-                startForFree();
+                startForFree(event.currentTarget);
               }}
             >
-              {booked ? "Call booked" : "Start for free"}
+              {headerCta}
+            </button>
+            <button
+              type="button"
+              className={`${navSecondaryClass} hidden lg:inline-flex`}
+              onClick={() => {
+                setMenuOpen(false);
+                speakToAlex();
+              }}
+            >
+              {askLabel}
             </button>
             <button
               ref={menuButtonRef}
@@ -184,13 +196,13 @@ export function SiteHeader() {
         <div
           id="mobile-menu"
           hidden={!menuOpen}
-          className="px-4 pb-4 md:px-6 lg:hidden"
+          className="px-3 pb-4 lg:hidden"
         >
           {navItems.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
-              className="block border-t border-ink/10 py-3 font-sans text-base font-medium text-ink! no-underline"
+              className="block border-t border-line py-3 font-sans text-base font-medium text-ink! no-underline"
               onClick={() => setMenuOpen(false)}
             >
               {item.label}
@@ -198,28 +210,13 @@ export function SiteHeader() {
           ))}
           <button
             type="button"
-            className={`${navCtaClass} mt-3 w-full`}
-            data-cta="start-free"
-            data-booking-cta=""
-            disabled={booked}
-            onClick={() => {
-              setMenuOpen(false);
-              startForFree();
-            }}
-          >
-            {booked ? "Call booked" : "Start for free"}
-          </button>
-          <button
-            type="button"
-            data-cta="speak-to-alex"
-            data-booking-cta=""
+            className={`${navSecondaryClass} mt-3 inline-flex w-full`}
             onClick={() => {
               setMenuOpen(false);
               speakToAlex();
             }}
-            className="mt-2 inline-flex h-10 w-full items-center justify-center rounded-xl border border-ink/15 bg-white px-4 text-sm font-semibold text-ink shadow-sm transition-colors hover:border-ink/30 focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
           >
-            Speak to Alex
+            {askLabel}
           </button>
         </div>
       </nav>

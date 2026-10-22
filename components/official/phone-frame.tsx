@@ -34,7 +34,7 @@ export function PhoneFrame({ src, alt, label }: PhoneFrameProps) {
 
   return (
     <figure className="m-0 mx-auto w-full max-w-60">
-      <div className="rounded-xl border border-line bg-white p-2">
+      <div className="rounded-xl border border-line bg-surface p-2">
         <div className="relative aspect-[9/16] overflow-hidden rounded-xl bg-canvas">
           {available ? (
             <Image

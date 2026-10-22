@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Figtree, Geist_Mono } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
@@ -8,11 +8,17 @@ import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
-const geist = Geist({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  axes: ["opsz"],
   display: "swap",
-  variable: "--font-geist",
+  variable: "--font-display",
+});
+
+const text = Figtree({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-text",
 });
 
 const geistMono = Geist_Mono({
@@ -66,7 +72,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-GB"
-      className={`${geist.variable} ${geistMono.variable}`}
+      className={`${display.variable} ${text.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head>

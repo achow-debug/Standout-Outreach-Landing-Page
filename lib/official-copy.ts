@@ -12,9 +12,61 @@ export const officialCopy = {
   header: {
     applyLabel: "Apply For My 30-Day Pilot",
     applyHref: "#book",
+    /** Compact sibling of the hero test. Opens the same form, not a call. */
+    ctaLabel: "Enquiry check",
+    /** Outlined desktop action. Opens a conversation, not the enquiry form. */
+    askLabel: "Ask a question",
   },
   hero: {
-    secondaryHref: "#how-it-works",
+    eyebrow: "Keep everything that works",
+    /** Near-black line. The accent sits after it, on its own line from the desktop breakpoint. */
+    headingLead: "Turn more",
+    headingAccent: "enquiries into instructions",
+    ctaIntro: "Get started",
+    ctaLabel: "See what happens to your enquiries",
+    /** Opens the Speak to Alex booking, not the enquiry form. */
+    secondaryCtaLabel: "Speak to Alex",
+    caption: "Free enquiry report within 5 days. No obligation to commit.",
+  },
+  showcase: {
+    scenes: [
+      {
+        id: "grow",
+        title: "Grow deliberately",
+        /** Two short lines so the 52px mobile caption slot can hold it. */
+        mobileCaption: "Grow deliberately",
+        detail: "by being selective about the matters you take on",
+      },
+      {
+        id: "legal",
+        title: "Built for legal, not bolted on",
+        mobileCaption: "Built for legal\nnot bolted on",
+        detail: "Designed around SRA/BSB compliance and GDPR from the start",
+      },
+      {
+        id: "known",
+        title: "Be known for your best work",
+        mobileCaption: "Be known for\nyour best work",
+        detail: "An online presence that reflects the quality of your work",
+      },
+    ],
+  },
+  noDisruption: {
+    heading: "No complicated software. No change to how your team works.",
+    body: "Enquiries arrive in the inbox or CRM your team already uses. After one 20-minute call and your logo, we build and run everything for 30 days, and nothing goes live until you've approved it.",
+    label: "Delivers into the tools your firm already uses",
+    tools: [
+      { id: "outlook", name: "Outlook", mark: "O", color: "#0F6CBD" },
+      { id: "gmail", name: "Gmail", mark: "M", color: "#C5221F" },
+      { id: "microsoft-365", name: "Microsoft 365", mark: "365", color: "#107C41" },
+      { id: "monday", name: "Monday CRM", mark: "M", color: "#F62B54" },
+      { id: "clio", name: "Clio CRM", mark: "C", color: "#1A4F8B" },
+      { id: "hubspot", name: "HubSpot CRM", mark: "H", color: "#FF7A59" },
+    ],
+    privacy: "Privacy is a fundamental human right. That's Standout Group.",
+    icoLead: "ICO-registered (",
+    icoNumber: "ZC264255",
+    icoTail: ") provider.",
   },
   nav: {
     items: [

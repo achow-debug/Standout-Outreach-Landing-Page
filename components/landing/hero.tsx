@@ -2,7 +2,7 @@ import { landingCopy } from "@/lib/landing-copy";
 import { siteConfig } from "@/lib/site-config";
 import type { ReactNode } from "react";
 
-const ACCENT_SPAN = "text-[var(--color-accent)] font-extrabold";
+const ACCENT_SPAN = "text-brass font-extrabold";
 
 /** Wrap an exact phrase in the brand accent span; visible text unchanged. */
 function accentPhrase(text: string, phrase: string): ReactNode {
@@ -34,15 +34,15 @@ export function Hero() {
           </span>
         </p>
 
-        <p className="hero-audience motion-enter motion-enter--1 inline-block bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full text-center">
+        <p className="hero-audience motion-enter motion-enter--1 inline-block bg-surface text-muted text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full text-center">
           {hero.audience}
         </p>
       </div>
 
-      <h1 className="hero-title motion-enter motion-enter--2 w-full text-center text-slate-950">
+      <h1 className="hero-title motion-enter motion-enter--2 w-full text-center text-ink">
         {accentPhrase(hero.h1, "£100K")}
       </h1>
-      <p className="hero-supporting motion-enter motion-enter--3 w-full text-center text-slate-800">
+      <p className="hero-supporting motion-enter motion-enter--3 w-full text-center text-ink">
         {accentPhrase(hero.supporting, "£100K")}
       </p>
     </header>

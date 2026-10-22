@@ -109,7 +109,7 @@ export function FirmDay() {
   return (
     <section
       id="firm-day"
-      className="scroll-mt-24 bg-white"
+      className="scroll-mt-24 bg-surface"
       aria-labelledby="firm-day-heading"
     >
       <div className="page-shell py-16">

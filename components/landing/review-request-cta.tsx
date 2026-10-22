@@ -31,11 +31,18 @@ export type CtaLocation =
   | "sticky_mobile"
   | "official_apply"
   | "official_header"
+  | "official_hero"
   | "official_how";
+
+export type ReviewModalOptions = {
+  /** Show the enquiry form. Do not open a call. */
+  formOnly?: boolean;
+};
 
 type OpenFn = (
   trigger: HTMLButtonElement | null,
   location: CtaLocation,
+  options?: ReviewModalOptions,
 ) => void;
 
 const ReviewModalContext = createContext<OpenFn | null>(null);
@@ -207,15 +214,21 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
   const [isComplete, setIsComplete] = useState(false);
   const [initialError, setInitialError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [formOnly, setFormOnly] = useState(false);
   const completedRef = useRef(false);
   const [standout, group] = siteConfig.businessName.split(" ");
   const calendlyEnabled = isCalendlyEnabled();
   const calendlyMode = getCalendlyEmbedMode();
 
   const openModal = useCallback(
-    (trigger: HTMLButtonElement | null, location: CtaLocation) => {
+    (
+      trigger: HTMLButtonElement | null,
+      location: CtaLocation,
+      options?: ReviewModalOptions,
+    ) => {
       lastTriggerRef.current = trigger;
       lastLocationRef.current = location;
+      const useForm = Boolean(options?.formOnly);
 
       trackEvent("review_cta_open", {
         ...attributionProps(),
@@ -223,8 +236,16 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
         device_category: getDeviceCategory(),
         landing_path:
           typeof window !== "undefined" ? window.location.pathname : "/",
-        embed_mode: calendlyEnabled ? calendlyMode : null,
+        embed_mode: useForm ? "form" : calendlyEnabled ? calendlyMode : null,
       });
+
+      if (useForm) {
+        setFormOnly(true);
+        setDialogOpen(true);
+        return;
+      }
+
+      setFormOnly(false);
 
       if (calendlyEnabled && calendlyMode === "popup") {
         document.documentElement.classList.add("modal-open");
@@ -244,12 +265,21 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    if (!formOnly || !dialogOpen) return;
+    const dialog = dialogRef.current;
+    if (!dialog || dialog.open) return;
+    document.documentElement.classList.add("modal-open");
+    dialog.showModal();
+  }, [formOnly, dialogOpen]);
+
+  useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
     function handleClose() {
       document.documentElement.classList.remove("modal-open");
       setDialogOpen(false);
+      setFormOnly(false);
       if (completedRef.current) {
         completedRef.current = false;
         setIsComplete(false);
@@ -296,6 +326,8 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
     window.history.replaceState({}, "", next);
   }, [calendlyEnabled]);
 
+  const showForm = formOnly || !calendlyEnabled;
+
   function closeModal() {
     dialogRef.current?.close();
   }
@@ -325,7 +357,7 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
     <ReviewModalContext.Provider value={openModal}>
       {children}
 
-      {calendlyEnabled && calendlyMode === "popup" && dialogOpen ? (
+      {calendlyEnabled && calendlyMode === "popup" && dialogOpen && !formOnly ? (
         <CalendlyEmbed
           ctaLocation={lastLocationRef.current}
           onPopupClosed={handlePopupClosed}
@@ -334,10 +366,10 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
 
       <dialog
         ref={dialogRef}
-        className={`review-modal${calendlyEnabled ? " review-modal--calendly" : ""}`}
-        aria-labelledby={calendlyEnabled ? undefined : titleId}
+        className={`review-modal${showForm ? "" : " review-modal--calendly"}`}
+        aria-labelledby={showForm ? titleId : undefined}
         aria-label={
-          calendlyEnabled ? reviewRequest.calendly.iframeTitle : undefined
+          showForm ? undefined : reviewRequest.calendly.iframeTitle
         }
         onClick={handleBackdropClick}
       >
@@ -350,11 +382,11 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
                   <span className="brand-mark-accent">{group}</span>
                 </span>
               </p>
-              {calendlyEnabled ? null : (
+              {showForm ? (
                 <h2 id={titleId} className="review-modal-title">
                   {isComplete ? confirmation.heading : reviewRequest.heading}
                 </h2>
-              )}
+              ) : null}
             </div>
             <button
               type="button"
@@ -380,7 +412,7 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
           </header>
 
           <div className="review-modal-body">
-            {calendlyEnabled ? (
+            {!showForm ? (
               calendlyMode === "inline" && dialogOpen ? (
                 <CalendlyEmbed ctaLocation={lastLocationRef.current} />
               ) : null
@@ -409,7 +441,7 @@ export function ReviewRequestShell({ children }: { children: ReactNode }) {
             )}
           </div>
 
-          {calendlyEnabled ? (
+          {!showForm ? (
             <footer className="review-modal-footer">
               <p className="review-modal-footer-copy">
                 <span>{landingCopy.footer.copyrightShort}</span>

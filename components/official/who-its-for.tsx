@@ -20,7 +20,7 @@ const cards = [
 export function WhoItsFor() {
   return (
     <section
-      className="official-who scroll-mt-24! bg-brand-lavender-tint!"
+      className="official-who scroll-mt-24! bg-surface!"
       id="who-its-for"
       aria-labelledby="official-who-heading"
       tabIndex={-1}
@@ -33,7 +33,7 @@ export function WhoItsFor() {
               We build the system.
             </span>
           </h2>
-          <p className="hero-supporting max-w-none! text-left! font-normal! text-[color:#475569]! max-sm:text-base!">
+          <p className="hero-supporting max-w-none! text-left! font-normal! text-muted! max-sm:text-base!">
             We partner with firms worth building on,{" "}
             <span className="block lg:inline">and the people with the will to build them.</span>
           </p>
@@ -56,7 +56,7 @@ export function WhoItsFor() {
               <h4 className="m-0 text-lg font-semibold leading-snug text-[color:var(--official-headline-ink)] md:text-xl">
                 {card.title}
               </h4>
-              <p className="t-body m-0! mt-2.5! max-w-none! font-normal leading-[1.5]! text-[color:#1e293b]!">
+              <p className="t-body m-0! mt-2.5! max-w-none! font-normal leading-[1.5]! text-ink!">
                 {card.body}
               </p>
             </li>

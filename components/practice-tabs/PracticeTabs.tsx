@@ -65,11 +65,11 @@ export function PracticeTabs() {
   return (
     <section
       aria-label="Practice areas"
-      className="relative z-10 -mt-10 scroll-mt-24 rounded-t-[2rem] bg-white py-12 shadow-[0_-12px_40px_-16px_rgba(17,12,46,0.12)] md:-mt-16 md:rounded-t-[3rem] md:py-16"
+      className="relative z-10 -mt-10 scroll-mt-24 rounded-t-[2rem] bg-surface py-12 shadow-[0_-12px_40px_-16px_rgba(17,12,46,0.12)] md:-mt-16 md:rounded-t-[3rem] md:py-16"
     >
       <div className="page-shell">
         <div className="lg:hidden">
-          <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
             {practiceAreas.map((area) => {
               const selected = area.id === active.id;
               const panelId = `practice-accordion-${area.id}`;
@@ -88,7 +88,7 @@ export function PracticeTabs() {
                     <Icon
                       aria-hidden="true"
                       strokeWidth={1.75}
-                      className={`h-5 w-5 shrink-0 ${selected ? "text-brand" : "text-neutral-400"}`}
+                      className={`h-5 w-5 shrink-0 ${selected ? "text-brand" : "text-muted"}`}
                     />
                     <span className="min-w-0 flex-1 text-base font-medium leading-snug text-ink">
                       {area.label}
@@ -96,7 +96,7 @@ export function PracticeTabs() {
                     <ChevronDown
                       aria-hidden="true"
                       strokeWidth={1.75}
-                      className={`h-5 w-5 shrink-0 ${selected ? "rotate-180 text-brand" : "text-neutral-400"}`}
+                      className={`h-5 w-5 shrink-0 ${selected ? "rotate-180 text-brand" : "text-muted"}`}
                     />
                   </button>
                   <div
@@ -137,14 +137,14 @@ export function PracticeTabs() {
                   aria-controls="practice-panel"
                   tabIndex={selected ? 0 : -1}
                   className={`${TAB_CLASS} ${
-                    selected ? "text-ink" : "text-neutral-500 hover:text-ink"
+                    selected ? "text-ink" : "text-muted hover:text-ink"
                   }`}
                   onClick={() => selectArea(area.id, "click")}
                 >
                   <Icon
                     aria-hidden="true"
                     strokeWidth={1.75}
-                    className={`mt-0.5 h-5 w-5 shrink-0 ${selected ? "text-brand" : "text-neutral-400"}`}
+                    className={`mt-0.5 h-5 w-5 shrink-0 ${selected ? "text-brand" : "text-muted"}`}
                   />
                   <span className="min-w-0 text-base font-medium leading-snug">
                     {area.label}
@@ -163,7 +163,7 @@ export function PracticeTabs() {
             id="practice-panel"
             aria-labelledby={`practice-tab-${active.id}`}
             tabIndex={0}
-            className="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:p-8"
+            className="mt-8 rounded-2xl border border-line bg-surface p-6 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:p-8"
           >
             <PracticeAreaBody area={active} onApply={() => openBooking("practice-card")} />
           </div>

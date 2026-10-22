@@ -1,77 +1,66 @@
 "use client";
 
-import HeroBackground from "@/components/HeroBackground";
+import { useRef } from "react";
 import { useCtaActions } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 
+const heroButtonClass =
+  "inline-flex h-14 w-full items-center justify-center gap-2 rounded-lg px-5 text-base font-semibold whitespace-nowrap transition-colors focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-canvas lg:w-auto";
+
 /**
- * Centred hero on the light canvas.
- * Speak to Alex opens the existing booking popup via openBooking("hero").
+ * Centred hero on the paper canvas, in the Fyxer stack:
+ * eyebrow, two-part headline, a short line, two buttons, then a caption.
+ * The primary button opens the enquiry form. Speak to Alex opens the booking.
  */
 export function OfficialHero() {
-  const { secondaryHref } = officialCopy.hero;
+  const { hero } = officialCopy;
   const { startForFree, speakToAlex } = useCtaActions("hero");
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <section id="top" className="relative isolate bg-canvas" aria-labelledby="official-hero-heading">
-      <HeroBackground />
-      <div className="mx-auto flex max-w-5xl flex-col items-center px-5 pb-20 pt-32 text-center md:pb-24 md:pt-44">
-        <div className="hero-in">
-          <p className="text-base font-bold text-ink/55 md:text-xl">
-            Online presence underselling your firm?
+    <section id="top" className="bg-canvas" aria-labelledby="official-hero-heading">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-6 pb-16 text-center pt-[calc(env(safe-area-inset-top)+9.75rem)] md:pt-[calc(env(safe-area-inset-top)+10rem)] lg:pt-[calc(env(safe-area-inset-top)+7.75rem)]">
+        <div className="hero-in w-full">
+          <p className="text-[22px] font-medium leading-[1.25] text-muted lg:text-[26px]">
+            {hero.eyebrow}
           </p>
           <h1
             id="official-hero-heading"
-            className="mt-4 text-balance text-[clamp(2.25rem,6vw,5rem)] font-bold leading-[1.04] tracking-[-0.035em] text-ink"
+            className="mx-auto mt-3 w-full font-display text-[33px] font-semibold leading-[1.1] tracking-[-0.02em] text-ink lg:mt-5 lg:max-w-[780px] lg:text-[64px] lg:leading-none"
           >
-            <span className="md:block">Standout Group</span>{" "}
-            <span className="md:block">makes you known for</span>{" "}
-            <span className="md:block">
-              your <span className="text-brand">best work</span>
-            </span>
+            {hero.headingLead}{" "}
+            <br className="hidden lg:block" />
+            <span className="text-brand">{hero.headingAccent}</span>
           </h1>
         </div>
-        <div className="hero-in hero-in-delay mt-8 flex w-full max-w-xs flex-col items-center md:mt-10 md:max-w-none">
-          <a
-            href={secondaryHref}
-            className="text-sm font-semibold text-ink! no-underline transition-colors hover:text-brand! md:text-base"
-          >
-            See how the pilot works
-          </a>
-
-          <div className="mt-3 flex w-full flex-col md:w-auto md:flex-row md:items-start md:gap-3">
+        <div className="hero-in hero-in-delay mt-8 flex w-full max-w-[421px] flex-col items-center gap-4 lg:max-w-none">
+          <p className="text-base font-normal text-ink">{hero.ctaIntro}</p>
+          <div className="flex w-full flex-col items-stretch gap-4 lg:w-auto lg:flex-row lg:flex-wrap lg:items-center lg:justify-center">
+            <button
+              ref={buttonRef}
+              id="hero-cta"
+              type="button"
+              data-cta="measure-enquiries"
+              onClick={() => startForFree(buttonRef.current)}
+              className={`group ${heroButtonClass} bg-brand text-white shadow-lg shadow-brand/20 hover:bg-brand-dark`}
+            >
+              {hero.ctaLabel}
+              <span
+                aria-hidden
+                className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
+              >
+                →
+              </span>
+            </button>
             <button
               type="button"
-              data-cta="speak-to-alex"
-              data-booking-cta=""
-              onClick={speakToAlex}
-              className="inline-flex h-14 w-full items-center justify-center rounded-2xl border border-ink/15 bg-white px-6 text-base font-semibold text-ink shadow-sm transition-colors hover:border-ink/30 focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-canvas md:h-16 md:w-64 md:text-lg"
+              onClick={() => speakToAlex()}
+              className={`${heroButtonClass} border border-brand bg-transparent text-brand hover:bg-accent-soft`}
             >
-              Speak to Alex
+              {hero.secondaryCtaLabel}
             </button>
-
-            <div className="mt-3 flex w-full flex-col items-center md:mt-0 md:w-64">
-              <button
-                id="hero-cta"
-                type="button"
-                data-cta="start-free"
-                data-booking-cta=""
-                onClick={startForFree}
-                className="group inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-brand px-6 text-base font-semibold text-white shadow-lg shadow-brand/20 transition-colors hover:bg-brand-dark focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-canvas md:h-16 md:text-lg"
-              >
-                Start for free
-                <span
-                  aria-hidden
-                  className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
-                >
-                  →
-                </span>
-              </button>
-              <p className="mt-2 text-[0.9375rem] font-medium text-ink/70">
-                30-day free pilot to see results
-              </p>
-            </div>
           </div>
+          <p className="text-sm font-normal text-muted">{hero.caption}</p>
         </div>
       </div>
     </section>
