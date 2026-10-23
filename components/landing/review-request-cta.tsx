@@ -32,7 +32,8 @@ export type CtaLocation =
   | "official_apply"
   | "official_header"
   | "official_hero"
-  | "official_how";
+  | "official_how"
+  | "official_personalised";
 
 export type ReviewModalOptions = {
   /** Show the enquiry form. Do not open a call. */

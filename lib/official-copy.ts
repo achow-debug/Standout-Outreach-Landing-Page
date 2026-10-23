@@ -68,6 +68,60 @@ export const officialCopy = {
     icoNumber: "ZC264255",
     icoTail: ") provider.",
   },
+  personalised: {
+    rows: [
+      {
+        id: "clock",
+        heading: "Never lose an enquiry to the clock",
+        body: "Within minutes, your clients receive a calm, clear reply that reassures them, and they leave their details before they have thought to try anyone else.",
+        card: "Businesses that reply within an hour are almost seven times likelier to get a proper conversation with the enquirer than those that wait just one hour more.",
+        mention: "recommend",
+        photoLabel: "Photo",
+        badge: "HBR",
+        sourceId: "hbr-2011",
+      },
+      {
+        id: "matters",
+        heading: "Spend your time on matters worth taking",
+        body: "Enquiries that aren't a fit are obvious from the beginning",
+        card: "Your intake form has already asked the right questions. Your team sends a clear next step without chasing.",
+        mention: "Select high value work & healthy margins",
+        photoLabel: "Photo",
+      },
+    ],
+    ctaIntro: "Get started for free",
+    ctaLabel: "See what happens to your enquiries",
+    caption: "Free enquiry report within 5 days. No obligation to continue",
+  },
+  security: {
+    heading: "Privacy & security built on your SRA obligations",
+    linkLabel: "Learn more about our security practices",
+    /** Destination page is built later. This href will 404 until then. */
+    linkHref: "/security",
+    badges: [
+      {
+        id: "cyber-essentials",
+        src: "/images/security/cyber-essentials.svg",
+        alt: "Cyber Essentials",
+        width: 300,
+        height: 72,
+      },
+      {
+        id: "ico",
+        src: "/images/security/ico.png",
+        alt: "Information Commissioner's Office",
+        width: 1056,
+        height: 498,
+      },
+      {
+        id: "google-partner",
+        src: "/images/security/google-certified-partner.svg",
+        alt: "Google Certified Partner",
+        width: 152,
+        height: 146,
+      },
+    ],
+  },
   nav: {
     items: [
       { id: "who-its-for", label: "Who it’s for" },

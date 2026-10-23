@@ -27,6 +27,7 @@ export type BookingLocation =
   | "header"
   | "hero"
   | "how-it-works"
+  | "personalised"
   | "firm-day"
   | "practice-card"
   | "final"
@@ -247,7 +248,9 @@ export function BookingProvider({ children }: { children: ReactNode }) {
             ? "official_header"
             : location === "how-it-works"
               ? "official_how"
-              : "official_apply";
+              : location === "personalised"
+                ? "official_personalised"
+                : "official_apply";
         openModal(null, fallback);
         return;
       }

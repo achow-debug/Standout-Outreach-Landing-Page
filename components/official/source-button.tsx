@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { getSource, sources, type SourceId } from "@/content/sources";
 import { Sheet } from "@/components/official/sheet";
 
@@ -32,7 +32,18 @@ export function openSourcesSection() {
   section?.scrollIntoView({ block: "start", behavior: "auto" });
 }
 
-export function SourceButton({ sourceId }: { sourceId: SourceId }) {
+export function SourceButton({
+  sourceId,
+  children,
+  className,
+  label,
+}: {
+  sourceId: SourceId;
+  children?: ReactNode;
+  className?: string;
+  /** Accessible name when the visible label is a short wordmark. */
+  label?: string;
+}) {
   const source = getSource(sourceId);
   const [open, setOpen] = useState(false);
   const seeAllRef = useRef(false);
@@ -45,8 +56,13 @@ export function SourceButton({ sourceId }: { sourceId: SourceId }) {
 
   return (
     <>
-      <button type="button" className="source-button" onClick={() => setOpen(true)}>
-        {sources.buttonLabel}
+      <button
+        type="button"
+        className={className ?? "source-button"}
+        aria-label={label}
+        onClick={() => setOpen(true)}
+      >
+        {children ?? sources.buttonLabel}
       </button>
       <Sheet open={open} onOpenChange={setOpen} title={source.credit}>
         <p className="source-sheet-citation">

@@ -14,6 +14,7 @@ function formLocation(location: BookingLocation): CtaLocation {
   if (location === "header") return "official_header";
   if (location === "hero") return "official_hero";
   if (location === "how-it-works") return "official_how";
+  if (location === "personalised") return "official_personalised";
   return "official_apply";
 }
 

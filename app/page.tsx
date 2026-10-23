@@ -8,6 +8,8 @@ import { ColpPeaceOfMind } from "@/components/official/colp-peace-of-mind";
 import { Faq } from "@/components/official/faq";
 import { MeetTheFounder } from "@/components/official/meet-the-founder";
 import { NoDisruption } from "@/components/official/no-disruption";
+import { PersonalisedWork } from "@/components/official/personalised-work";
+import { SecurityBadges } from "@/components/official/security-badges";
 import { OfficialHero } from "@/components/official/official-hero";
 import { ProductShowcase } from "@/components/official/product-showcase";
 import { AgencyComparison } from "@/components/official/agency-comparison";
@@ -19,8 +21,9 @@ import { SourcesSection } from "@/components/official/sources-section";
 import { WhoItsFor } from "@/components/official/who-its-for";
 
 /**
- * Official homepage: header → hero → product showcase → no disruption → partners →
- * who it's for → how it works → firm’s day → comparison → COLP → founder → FAQ → footer.
+ * Official homepage: header → hero → product showcase → no disruption →
+ * personalised rows → security → partners → who it's for → how it works →
+ * firm’s day → comparison → COLP → founder → FAQ → footer.
  */
 export default function HomePage() {
   return (
@@ -34,6 +37,8 @@ export default function HomePage() {
               <OfficialHero />
               <ProductShowcase />
               <NoDisruption />
+              <PersonalisedWork />
+              <SecurityBadges />
               <WhatPartnersSay />
               <WhoItsFor />
               <HowItWorks />
