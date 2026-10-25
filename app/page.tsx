@@ -15,6 +15,7 @@ import { ProductShowcase } from "@/components/official/product-showcase";
 import { AgencyComparison } from "@/components/official/agency-comparison";
 import { FirmDay } from "@/components/official/firm-day";
 import { HowItWorks } from "@/components/official/how-it-works";
+import { OfficialFinalCta } from "@/components/official/final-cta";
 import { SiteHeader } from "@/components/official/site-header";
 import { WhatPartnersSay } from "@/components/official/what-partners-say";
 import { SourcesSection } from "@/components/official/sources-section";
@@ -23,7 +24,8 @@ import { WhoItsFor } from "@/components/official/who-its-for";
 /**
  * Official homepage: header → hero → product showcase → no disruption →
  * personalised rows → security → partners → who it's for → how it works →
- * firm’s day → comparison → COLP → founder → FAQ → footer.
+ * firm’s day → comparison → COLP → founder → FAQ → closing CTA → footer.
+ * Sources stays after the footer so an opened list does not split the close.
  */
 export default function HomePage() {
   return (
@@ -47,9 +49,10 @@ export default function HomePage() {
               <ColpPeaceOfMind />
               <MeetTheFounder />
               <Faq />
+              <OfficialFinalCta />
             </main>
-            <SourcesSection />
             <SiteFooter />
+            <SourcesSection />
           </DpaRequestProvider>
         </BookingProvider>
       </PracticeAreaProvider>

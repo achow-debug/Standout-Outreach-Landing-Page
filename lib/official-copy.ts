@@ -12,10 +12,10 @@ export const officialCopy = {
   header: {
     applyLabel: "Apply For My 30-Day Pilot",
     applyHref: "#book",
-    /** Compact sibling of the hero test. Opens the same form, not a call. */
-    ctaLabel: "Enquiry check",
-    /** Outlined desktop action. Opens a conversation, not the enquiry form. */
-    askLabel: "Ask a question",
+    /** Same enquiry form as the hero. Shown alone on the closed mobile bar. */
+    ctaLabel: "Free enquiry check",
+    /** Same booking as the hero. Desktop bar, and the open mobile menu. */
+    askLabel: "Speak to Alex",
   },
   hero: {
     eyebrow: "Keep everything that works",
@@ -124,10 +124,39 @@ export const officialCopy = {
   },
   nav: {
     items: [
-      { id: "who-its-for", label: "Who it’s for" },
-      { id: "how-it-works", label: "How it works" },
-      { id: "founder", label: "Founder" },
-      { id: "faqs", label: "FAQs" },
+      { kind: "link", id: "security", label: "Security", href: "#security" },
+      {
+        kind: "menu",
+        id: "partners",
+        label: "Who we partner with",
+        children: [
+          { id: "partners-1", label: "Placeholder" },
+          { id: "partners-2", label: "Placeholder" },
+          { id: "partners-3", label: "Placeholder" },
+        ],
+      },
+      {
+        kind: "menu",
+        id: "how-it-works",
+        label: "How it works",
+        children: [
+          { id: "how-1", label: "Placeholder" },
+          { id: "how-2", label: "Placeholder" },
+          { id: "how-3", label: "Placeholder" },
+        ],
+      },
+      {
+        kind: "menu",
+        id: "stories",
+        label: "Customer stories",
+        children: [
+          { id: "stories-1", label: "Placeholder" },
+          { id: "stories-2", label: "Placeholder" },
+          { id: "stories-3", label: "Placeholder" },
+        ],
+      },
+      { kind: "link", id: "founder", label: "Our story", href: "#founder" },
+      { kind: "link", id: "faqs", label: "FAQs", href: "#faqs" },
     ],
   },
   whoItsFor: {
@@ -351,16 +380,25 @@ export const officialCopy = {
     ],
   },
   finalCta: {
-    eyebrow: "No cost. No obligation.",
-    heading: "See exactly where",
-    headingAccent: "your enquiries are leaking.",
-    buttonLabel: "Apply For My 30-Day Pilot",
-    nextLabel: "What happens next",
-    nextSteps: [
-      "Pick a time that suits you.",
-      "Identify where high-value matters are currently being lost.",
-      "If there’s a fit, your free pilot starts.",
+    headingLines: ["Fewer enquiries lost", "More of the right matters"],
+    steps: [
+      {
+        title: "See what happens to your enquiries",
+        body: "We trace how enquiries reach your firm, and where competitors are winning ones that should be yours.",
+      },
+      {
+        title: "Approve your new enquiry journey",
+        body: "We build the page, form and follow-up. Nothing goes live until you sign it off.",
+      },
+      {
+        title: "Take on more of the right matters",
+        body: "Every enquiry followed up and qualified, in the inbox or CRM you already use.",
+      },
     ],
+    primaryCta: "See what happens to your enquiries",
+    secondaryCta: "Speak to Alex",
+    trust: "ICO-registered · Data Processing Agreement · UK data only",
+    microcopy: "Free enquiry report within 5 days. No obligation to commit.",
   },
   thankYou: {
     heading: "Your call is booked.",
@@ -372,6 +410,8 @@ export const officialCopy = {
 } as const;
 
 export type OfficialNavItem = (typeof officialCopy.nav.items)[number];
+export type OfficialNavLink = Extract<OfficialNavItem, { kind: "link" }>;
+export type OfficialNavMenu = Extract<OfficialNavItem, { kind: "menu" }>;
 export type OfficialWhoItsForItem =
   (typeof officialCopy.whoItsFor.items)[number];
 export type OfficialHowItWorksStep =
