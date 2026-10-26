@@ -12,9 +12,9 @@ import { siteConfig } from "@/lib/site-config";
 const navFocus =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
-const navPrimaryClass = `site-nav-cta site-nav-cta-primary inline-flex items-center justify-center min-h-[44px] whitespace-nowrap rounded-xl bg-brand px-5 text-white text-button hover:bg-brand-hover ${navFocus}`;
+const navPrimaryClass = `site-nav-cta site-nav-cta-primary inline-flex min-h-9 shrink items-center justify-center whitespace-nowrap rounded-lg bg-brand px-3 text-sm font-semibold text-white hover:bg-brand-hover ${navFocus}`;
 
-const navSecondaryClass = `site-nav-cta site-nav-cta-secondary items-center justify-center min-h-[44px] whitespace-nowrap rounded-xl border-[1.5px] border-ink bg-transparent px-5 text-ink text-button hover:bg-ink/5 ${navFocus}`;
+const navSecondaryClass = `site-nav-cta site-nav-cta-secondary min-h-9 shrink items-center justify-center whitespace-nowrap rounded-lg border-[1.5px] border-ink bg-transparent px-3 text-sm font-semibold text-ink hover:bg-ink/5 ${navFocus}`;
 
 const navLinkClass =
   "site-nav-link inline-flex items-center px-1.5 py-2 text-[1.0625rem] font-normal whitespace-nowrap text-ink no-underline xl:px-3";
@@ -46,28 +46,47 @@ function MenuToggle({ open }: { open: boolean }) {
   return (
     <span className="relative block h-5 w-5" aria-hidden="true">
       <span
-        className={`site-nav-burger-bar absolute left-0 h-0.5 w-5 origin-center bg-current${open ? " top-[9px] rotate-45" : " top-[3px]"}`}
+        className={`site-nav-burger-bar absolute left-0 h-0.5 w-5 origin-center bg-ink${open ? " top-[9px] rotate-45" : " top-[3px]"}`}
       />
       <span
-        className={`site-nav-burger-bar absolute top-[9px] left-0 h-0.5 w-5 bg-current${open ? " opacity-0" : ""}`}
+        className={`site-nav-burger-bar absolute top-[9px] left-0 h-0.5 w-5 bg-ink${open ? " opacity-0" : ""}`}
       />
       <span
-        className={`site-nav-burger-bar absolute left-0 h-0.5 w-5 origin-center bg-current${open ? " top-[9px] -rotate-45" : " top-[15px]"}`}
+        className={`site-nav-burger-bar absolute left-0 h-0.5 w-5 origin-center bg-ink${open ? " top-[9px] -rotate-45" : " top-[15px]"}`}
       />
     </span>
   );
 }
 
-function PlaceholderList({ item }: { item: OfficialNavMenu }) {
+function PlaceholderList({
+  item,
+  onNavigate,
+}: {
+  item: OfficialNavMenu;
+  onNavigate?: () => void;
+}) {
   return (
     <ul className="flex flex-col gap-1 py-1">
-      {item.children.map((child) => (
-        <li key={child.id}>
-          <span className="block px-3 py-2 text-small text-ink-muted">
-            {child.label}
-          </span>
-        </li>
-      ))}
+      {item.children.map((child) => {
+        const href = "href" in child ? child.href : undefined;
+        return (
+          <li key={child.id}>
+            {href ? (
+              <a
+                href={href}
+                className={`block rounded-md px-3 py-2 text-small text-ink no-underline hover:bg-ink/5 ${navFocus}`}
+                onClick={onNavigate}
+              >
+                {child.label}
+              </a>
+            ) : (
+              <span className="block px-3 py-2 text-small text-ink-muted">
+                {child.label}
+              </span>
+            )}
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -238,7 +257,7 @@ export function SiteHeader() {
                     inert={!open}
                   >
                     <div className="site-nav-panel-inner">
-                      <PlaceholderList item={item} />
+                      <PlaceholderList item={item} onNavigate={closeMenus} />
                     </div>
                   </div>
                 </div>
@@ -246,7 +265,7 @@ export function SiteHeader() {
             })}
           </div>
 
-          <div className="col-start-3 flex items-center justify-end gap-1.5 lg:gap-2">
+          <div className="col-start-3 flex shrink-0 items-center justify-end gap-1.5 lg:gap-2">
             <button
               type="button"
               className={navPrimaryClass}
@@ -271,7 +290,7 @@ export function SiteHeader() {
             <button
               ref={menuButtonRef}
               type="button"
-              className="inline-flex h-11 w-11 items-center justify-center text-ink lg:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-ink lg:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
@@ -327,7 +346,7 @@ export function SiteHeader() {
                 >
                   <div className="site-nav-panel-inner">
                     <div className="pb-3 pl-4">
-                      <PlaceholderList item={item} />
+                      <PlaceholderList item={item} onNavigate={closeMenus} />
                     </div>
                   </div>
                 </div>

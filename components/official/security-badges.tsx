@@ -30,7 +30,7 @@ export function SecurityBadges() {
                 width={badge.width}
                 height={badge.height}
                 unoptimized
-                className="h-[68px] w-auto object-contain lg:h-[110px]"
+                className={`${badge.className} object-contain`}
               />
             </li>
           ))}

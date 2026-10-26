@@ -35,8 +35,8 @@ const reviews: Review[] = [
   },
 ];
 
-/** Set a path here when a band photo is ready. The scrim paints only then. */
-const backgroundSrc: string | null = null;
+/** Office session behind the band. The scrim paints because this is set. */
+const backgroundSrc = "/images/partners/office-session.jpg";
 
 function firstName(name: string) {
   return name.split(/\s+/).find(Boolean) ?? name;
@@ -71,12 +71,13 @@ function ReviewCard({
               <span className="official-partners-quote-mark" aria-hidden="true">
                 “
               </span>
-              {item.pullQuote}”
+              <span className="lg:hidden">{item.pullQuote}</span>
+              <span className="hidden lg:inline">{item.fullQuote}</span>”
             </p>
           </blockquote>
           <button
             type="button"
-            className="official-partners-more"
+            className="official-partners-more lg:hidden"
             onClick={() => onReadFull(item.id)}
           >
             Read {firstName(item.name)}’s full review

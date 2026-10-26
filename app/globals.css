@@ -4101,6 +4101,12 @@ html.motion-ok .results-proof:not(.is-revealed) .results-proof-after {
   outline-offset: 2px;
 }
 
+@media (min-width: 1024px) {
+  .official-partners-more {
+    display: none;
+  }
+}
+
 .official-partners-caption {
   display: flex;
   flex-direction: row;

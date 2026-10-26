@@ -75,12 +75,11 @@ export function OfficialFinalCta() {
                     <ul className="m-0 flex list-none flex-wrap items-center gap-3 p-0 pt-2">
                       {tools.map((tool) => (
                         <li key={tool.id}>
-                          <span
-                            aria-hidden
-                            className="flex h-12 items-center text-small font-semibold text-ink-muted md:h-14"
-                          >
-                            {tool.mark}
-                          </span>
+                          <img
+                            src={tool.src}
+                            alt=""
+                            className="h-8 w-auto max-w-full object-contain"
+                          />
                           <span className="sr-only">{tool.name}</span>
                         </li>
                       ))}

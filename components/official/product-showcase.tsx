@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { officialCopy } from "@/lib/official-copy";
 
 const SCENES = officialCopy.showcase.scenes;
@@ -11,22 +11,11 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function sceneIndex(progress: number) {
-  return Math.min(SCENE_COUNT - 1, Math.floor(progress * SCENE_COUNT));
-}
-
-function barFill(progress: number, index: number) {
-  const scaled = progress * SCENE_COUNT;
-  if (index < Math.floor(scaled)) return 1;
-  if (index === Math.floor(scaled)) return scaled - index;
-  if (progress >= 1 && index === SCENE_COUNT - 1) return 1;
-  return 0;
-}
-
 /**
  * Fyxer product showcase: three scenes.
  * Mobile is a centred caption, dots, and an empty card over a blank photo crop.
- * Desktop is a sticky one-screen panel; scrolling about three screens advances the scene.
+ * Desktop is one horizontal band: scene tabs, the active title, and an empty card.
+ * Both autoplay until a scene is chosen, the pointer is over the band, or motion is reduced.
  */
 export function ProductShowcase() {
   return (
@@ -57,11 +46,11 @@ function MobileShowcase() {
 
   return (
     <div className="mx-auto flex w-full max-w-[480px] flex-col bg-canvas pt-6 lg:hidden">
-      <div className="relative min-h-16 px-4">
+      <div className="relative min-h-[4.25rem] px-4">
         {SCENES.map((scene, index) => (
           <p
             key={scene.id}
-            className={`absolute inset-x-4 bottom-0 text-center text-h2 text-ink whitespace-pre-line transition-opacity duration-300 motion-reduce:transition-none ${
+            className={`absolute inset-x-4 bottom-0 text-center text-[1.625rem] leading-[1.15] font-bold tracking-[-0.02em] text-ink whitespace-pre-line transition-opacity duration-300 motion-reduce:transition-none ${
               index === active ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
             aria-hidden={index !== active}
@@ -100,73 +89,77 @@ function MobileShowcase() {
 }
 
 function DesktopShowcase() {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
-  const active = sceneIndex(progress);
-
-  const measure = useCallback(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const rect = root.getBoundingClientRect();
-    const total = root.offsetHeight - window.innerHeight;
-    const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(total, 0));
-    setProgress(total > 0 ? scrolled / total : 0);
-  }, []);
+  const [active, setActive] = useState(0);
+  const [chosen, setChosen] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const paused = chosen || hovering;
+  const scene = SCENES[active];
 
   useEffect(() => {
-    measure();
-    window.addEventListener("scroll", measure, { passive: true });
-    window.addEventListener("resize", measure);
-    return () => {
-      window.removeEventListener("scroll", measure);
-      window.removeEventListener("resize", measure);
-    };
-  }, [measure]);
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    if (paused || prefersReducedMotion()) return;
 
-  function scrollToScene(index: number) {
-    const root = rootRef.current;
-    if (!root) return;
-    const total = root.offsetHeight - window.innerHeight;
-    const top = root.getBoundingClientRect().top + window.scrollY;
-    const target = top + (index / SCENE_COUNT) * total;
-    window.scrollTo({
-      top: target,
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
-    });
+    let id = 0;
+    const stop = () => window.clearInterval(id);
+    const start = () => {
+      stop();
+      if (!desktop.matches) return;
+      id = window.setInterval(() => {
+        setActive((current) => (current + 1) % SCENE_COUNT);
+      }, AUTOPLAY_MS);
+    };
+    const onChange = () => start();
+
+    start();
+    desktop.addEventListener("change", onChange);
+    return () => {
+      stop();
+      desktop.removeEventListener("change", onChange);
+    };
+  }, [paused]);
+
+  function selectScene(index: number) {
+    setActive(index);
+    setChosen(true);
   }
 
   return (
-    <div ref={rootRef} className="relative hidden h-[300svh] lg:block">
-      <div className="sticky top-0 h-svh overflow-hidden bg-canvas">
-        <PhotoFrame crop="left" />
-        <div className="absolute top-[4%] left-[72px] z-20 flex w-[345.6px] max-w-[360px] flex-col">
-          {SCENES.map((scene, index) => {
-            const fill = barFill(progress, index);
-            const current = index === active;
+    <div
+      className="relative hidden overflow-hidden bg-canvas lg:block"
+      onPointerEnter={() => setHovering(true)}
+      onPointerLeave={() => setHovering(false)}
+    >
+      <PhotoFrame crop="left" />
+      <div className="relative z-20 mx-auto flex w-full max-w-[1120px] flex-col gap-10 px-10 py-16 xl:px-4 xl:py-24">
+        <div className="flex flex-wrap items-end gap-x-8 gap-y-3" role="tablist" aria-label="Scenes">
+          {SCENES.map((item, index) => {
+            const selected = index === active;
             return (
               <button
-                key={scene.id}
+                key={item.id}
                 type="button"
-                className={`flex flex-col items-start gap-2 py-2 text-left transition-opacity duration-150 motion-reduce:transition-none ${
-                  current ? "opacity-100" : "opacity-35"
+                role="tab"
+                aria-selected={selected}
+                className={`border-b-2 pb-2 text-left text-base leading-snug transition-opacity duration-150 motion-reduce:transition-none ${
+                  selected
+                    ? "border-[color-mix(in_oklab,var(--color-ink)_70%,transparent)] text-ink opacity-100"
+                    : "border-transparent text-ink opacity-40 hover:opacity-70"
                 }`}
-                aria-current={current ? "step" : undefined}
-                onClick={() => scrollToScene(index)}
+                onClick={() => selectScene(index)}
               >
-                <span className="text-h2 text-ink">{scene.title}</span>
-                <span className="text-lead text-ink">{scene.detail}</span>
-                <span className="mt-1 block h-[3px] w-full overflow-hidden rounded-full bg-[color-mix(in_oklab,var(--color-ink)_10%,transparent)]">
-                  <span
-                    className="block h-full origin-left rounded-full bg-[color-mix(in_oklab,var(--color-ink)_70%,transparent)]"
-                    style={{ transform: `scaleX(${fill})` }}
-                  />
-                </span>
+                {item.title}
               </button>
             );
           })}
         </div>
-        <div className="absolute top-[12%] right-[8%] z-10 w-[min(320px,34vw)]">
-          <CardStack active={active} />
+        <div className="flex items-center justify-between gap-16">
+          <div className="max-w-[34rem]">
+            <p className="text-h2 text-ink">{scene.title}</p>
+            <p className="text-lead mt-4 text-ink">{scene.detail}</p>
+          </div>
+          <div className="w-[min(340px,32vw)] shrink-0">
+            <CardStack active={active} />
+          </div>
         </div>
       </div>
     </div>

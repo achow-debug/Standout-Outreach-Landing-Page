@@ -20,19 +20,18 @@ export function NoDisruption() {
           No complicated software. <br className="hidden sm:inline" />
           No change to how your team works.
         </h2>
-        <p className="mt-5 text-lead text-ink-muted max-w-[60ch] mx-auto text-center">
+        <p className="mt-5 max-w-[60ch] mx-auto text-center text-lead font-semibold text-ink">
           {copy.body}
         </p>
         <p className="mt-12 text-small font-semibold text-ink-muted md:mt-16">{copy.label}</p>
         <ul className="m-0 mt-8 grid w-full list-none grid-cols-3 gap-y-8 p-0 md:grid-cols-6">
           {copy.tools.map((tool) => (
             <li key={tool.id} className="flex flex-col items-center">
-              <span
-                aria-hidden
-                className="flex h-12 items-center text-small font-semibold text-ink md:h-14"
-              >
-                {tool.mark}
-              </span>
+              <img
+                src={tool.src}
+                alt=""
+                className="h-10 w-auto max-w-full object-contain md:h-12"
+              />
               <span className="text-small text-ink-muted mt-2">{tool.name}</span>
             </li>
           ))}
