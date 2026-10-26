@@ -20,13 +20,13 @@ export const officialCopy = {
   hero: {
     eyebrow: "Keep everything that works",
     /** Near-black line. The accent sits after it, on its own line from the desktop breakpoint. */
-    headingLead: "Turn more",
-    headingAccent: "enquiries into instructions",
+    headingLead: "Turn more enquiries",
+    headingAccent: "into instructions",
     ctaIntro: "Get started",
     ctaLabel: "See what happens to your enquiries",
     /** Opens the Speak to Alex booking, not the enquiry form. */
     secondaryCtaLabel: "Speak to Alex",
-    caption: "Free enquiry report within 5 days. No obligation to commit.",
+    caption: "Free enquiry report within 5 days. No obligation.",
   },
   showcase: {
     scenes: [
@@ -63,10 +63,10 @@ export const officialCopy = {
       { id: "clio", name: "Clio CRM", mark: "C", color: "#1A4F8B" },
       { id: "hubspot", name: "HubSpot CRM", mark: "H", color: "#FF7A59" },
     ],
-    privacy: "Privacy is a fundamental human right. That's Standout Group.",
-    icoLead: "ICO-registered (",
+    privacy: "Standout Group is an ICO-registered data processor (",
+    icoLead: "",
     icoNumber: "ZC264255",
-    icoTail: ") provider.",
+    icoTail: ").",
   },
   personalised: {
     rows: [
@@ -366,13 +366,14 @@ export const officialCopy = {
     ],
   },
   founder: {
-    heading: "Meet the founder",
+    eyebrow: "Meet the founder",
+    heading: "Founded by a future solicitor",
+    lead: "Alex founded Standout Group while training to qualify as a solicitor, believing established law firms shouldn't have to choose between the expertise that built their reputation and the technology they need to compete.",
     name: "Alex",
     readMore: "Read Alex's story",
     portraitAlt: "Alex, founder of Standout Group",
     portraitSrc: "/images/founder-alex.jpg",
     paragraphs: [
-      "Alex founded Standout Group while training to qualify as a solicitor, with a belief that established law firms should not have to choose between the expertise that built their reputation and the technology needed to compete in 2026.",
       "His commercial experience across the automotive industry gave him a strong understanding of how businesses acquire customers, manage sales processes and identify the bottlenecks that prevent growth. Alongside that, working inside a top 500 law firm has given him a deeper understanding of how top players operate, the economics behind their work and the importance of protecting the standards and reputation they have built over many years.",
       "Alex believes the opportunity for established high street and regional firms is not to replace what already works, but to build on it: combining proven legal expertise with a stronger digital sales funnel, better enquiry handling, AI search visibility and the systems needed to turn more of existing demand into valuable instructions.",
       "That approach is deliberately evidence-led. Standout measures what is happening at each stage of the enquiry journey, uses those results to identify where opportunities are being lost, and adapts the strategy to the individual firm’s market, practice areas and objectives.",
@@ -398,7 +399,7 @@ export const officialCopy = {
     primaryCta: "See what happens to your enquiries",
     secondaryCta: "Speak to Alex",
     trust: "ICO-registered · Data Processing Agreement · UK data only",
-    microcopy: "Free enquiry report within 5 days. No obligation to commit.",
+    microcopy: "Free enquiry report within 5 days. No obligation.",
   },
   thankYou: {
     heading: "Your call is booked.",

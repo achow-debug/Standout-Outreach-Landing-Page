@@ -46,7 +46,7 @@ export function PhoneFrame({ src, alt, label }: PhoneFrameProps) {
             />
           ) : (
             <div className="flex h-full items-center justify-center px-4 text-center">
-              <p className="m-0 text-sm font-medium leading-snug text-ink/70">
+              <p className="m-0 text-small text-ink-muted">
                 {label}
               </p>
             </div>

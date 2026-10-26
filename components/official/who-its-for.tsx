@@ -25,27 +25,25 @@ export function WhoItsFor() {
       aria-labelledby="official-who-heading"
       tabIndex={-1}
     >
-      <div className="page-shell official-partners-inner gap-0! py-12! md:py-16!">
+      <div className="page-shell official-partners-inner gap-0! py-20! md:py-32!">
         <div className="official-partners-intro">
-          <h2 id="official-who-heading" className="official-partners-heading t-h2">
+          <h2 id="official-who-heading" className="official-partners-heading text-h2 text-ink max-w-[22ch]">
             You bring the ambition.{" "}
-            <span className="block whitespace-nowrap">
-              We build the system.
-            </span>
+            <span className="block">We build the system.</span>
           </h2>
-          <p className="hero-supporting max-w-none! text-left! font-normal! text-muted! max-sm:text-base!">
+          <p className="mt-5 text-lead text-ink-muted max-w-[60ch]">
             We partner with firms worth building on,{" "}
             <span className="block lg:inline">and the people with the will to build them.</span>
           </p>
         </div>
         <h3
           id="official-who-partners-label"
-          className="m-0 mt-8 text-base font-semibold leading-snug text-[color:var(--official-headline-ink)] md:mt-10"
+          className="m-0 mt-12 text-h3 text-ink md:mt-16"
         >
           Who we partner with
         </h3>
         <ul
-          className="m-0 mt-3 grid list-none grid-cols-1 gap-4 p-0 md:gap-6 lg:grid-cols-3 lg:gap-8"
+          className="m-0 mt-5 grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-3 md:gap-12"
           aria-labelledby="official-who-partners-label"
         >
           {cards.map((card) => (
@@ -53,10 +51,8 @@ export function WhoItsFor() {
               key={card.title}
               className="h-full rounded-xl border border-line bg-surface p-4"
             >
-              <h4 className="m-0 text-lg font-semibold leading-snug text-[color:var(--official-headline-ink)] md:text-xl">
-                {card.title}
-              </h4>
-              <p className="t-body m-0! mt-2.5! max-w-none! font-normal leading-[1.5]! text-ink!">
+              <h4 className="m-0 text-h3 text-ink">{card.title}</h4>
+              <p className="m-0 mt-4 text-body text-ink max-w-[62ch]">
                 {card.body}
               </p>
             </li>

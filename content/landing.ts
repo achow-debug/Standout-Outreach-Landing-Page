@@ -225,7 +225,7 @@ export const compliance = {
       id: "sra-aligned-marketing",
       title: "SRA-aligned marketing",
       body: "All ad copy, landing pages and lead funnels are checked against the SRA Codes of Conduct and Transparency Rules before they go live.",
-      note: "Empower your public image to grow boldly, backed by complete accuracy and compliance..",
+      note: "Protects the firm's SRA standing.",
     },
     {
       id: "data-protection",

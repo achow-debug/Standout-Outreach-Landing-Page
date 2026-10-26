@@ -25,8 +25,8 @@ export function ColpPeaceOfMind() {
           {compliance.items.map((item) => (
             <li key={item.id} className="official-colp-item">
               <h3 className="official-colp-title t-h3">{item.title}</h3>
-              <p className="official-colp-body t-body">{item.body}</p>
-              <p className="official-colp-value t-small">{item.note}</p>
+              <p className="official-colp-body text-lead text-ink">{item.body}</p>
+              <p className="official-colp-value mt-3 text-small text-ink-muted">{item.note}</p>
               {"button" in item ? (
                 <DpaRequestTrigger className="official-colp-dpa">
                   {item.button}

@@ -12,13 +12,15 @@ export function MeetTheFounder() {
   const panelId = useId();
   const [open, setOpen] = useState(false);
   const {
+    eyebrow,
     heading,
+    lead,
     readMore,
     portraitAlt,
     portraitSrc,
     paragraphs,
   } = officialCopy.founder;
-  const [statement, bioLead, ...bioRest] = paragraphs;
+  const [bioLead, ...bioRest] = paragraphs;
 
   useEffect(() => {
     const openIfFounderHash = () => {
@@ -50,12 +52,9 @@ export function MeetTheFounder() {
     >
       <div className="page-shell official-founder-inner">
         <div className="official-founder-panel">
-          <h2
-            id="official-founder-heading"
-            className="official-founder-eyebrow t-kicker t-kicker--on-dark"
-          >
-            {heading}
-          </h2>
+          <p className="official-founder-eyebrow text-eyebrow text-on-dark-muted">
+            {eyebrow}
+          </p>
           <figure className="official-founder-portrait">
             <div className="official-founder-photo-frame">
               <Image
@@ -68,13 +67,22 @@ export function MeetTheFounder() {
             </div>
           </figure>
           <div className="official-founder-copy-col">
-            <p className="official-founder-statement t-h3">{statement}</p>
-            {bioLead ? <p className="official-founder-copy t-body">{bioLead}</p> : null}
+            <h2 id="official-founder-heading" className="official-founder-statement text-h2 text-on-dark">
+              {heading}
+            </h2>
+            <p className="official-founder-copy mt-5 text-lead text-on-dark-muted max-w-[60ch]">
+              {lead}
+            </p>
+            {bioLead ? (
+              <p className="official-founder-copy mt-4 text-body text-on-dark-muted max-w-[62ch]">
+                {bioLead}
+              </p>
+            ) : null}
             {bioRest.length > 0 ? (
               <>
                 <button
                   type="button"
-                  className="official-founder-more"
+                  className="official-founder-more text-brand-on-dark underline underline-offset-4 focus-visible:outline-brand-on-dark"
                   aria-expanded={open}
                   aria-controls={panelId}
                   onClick={() => setOpen((value) => !value)}
@@ -88,7 +96,7 @@ export function MeetTheFounder() {
                 >
                   <div className="official-founder-rest">
                     {bioRest.map((paragraph) => (
-                      <p key={paragraph} className="official-founder-copy t-body">
+                      <p key={paragraph} className="official-founder-copy mt-4 text-body text-on-dark-muted max-w-[62ch]">
                         {keepTogether(paragraph)}
                       </p>
                     ))}

@@ -7,8 +7,12 @@ import { useCtaActions } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 
-const closeButtonClass =
-  "inline-flex h-14 w-full items-center justify-center gap-2 rounded-lg px-5 text-base font-semibold whitespace-nowrap transition-colors focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-surface lg:w-auto";
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+
+const closePrimaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl bg-brand text-white text-button hover:bg-brand-hover sm:w-auto ${focusRing}`;
+
+const closeSecondaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl border-[1.5px] border-ink text-ink text-button bg-transparent hover:bg-ink/5 sm:w-auto ${focusRing}`;
 
 /**
  * Cream close before the footer. Two-line headline, three numbered steps,
@@ -32,10 +36,10 @@ export function OfficialFinalCta() {
       aria-labelledby="official-closing-heading"
       tabIndex={-1}
     >
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center px-4 py-16 lg:px-6 lg:py-24">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center px-6 py-20 md:px-8 md:py-32">
         <h2
           id="official-closing-heading"
-          className="m-0 flex flex-col items-center text-center font-display text-[26px] font-semibold leading-[1.1] tracking-[-0.02em] text-ink lg:text-5xl lg:leading-[1.1]"
+          className="m-0 flex flex-col items-center text-center text-h2 text-ink max-w-[22ch]"
         >
           {headingLines.map((line) => (
             <span key={line}>{line}</span>
@@ -58,15 +62,13 @@ export function OfficialFinalCta() {
                 )}
                 <span
                   aria-hidden
-                  className="official-closing-step-num relative z-10 flex size-9 shrink-0 items-center justify-center rounded-full border border-line bg-white text-sm leading-none text-ink"
+                  className="official-closing-step-num relative z-10 flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-small leading-none text-ink"
                 >
                   {index + 1}
                 </span>
                 <div className="flex min-w-0 flex-col gap-2 pt-1.5 lg:pt-0">
-                  <h3 className="m-0 font-display text-lg leading-none font-medium tracking-[-0.01em] text-balance text-ink lg:text-xl">
-                    {step.title}
-                  </h3>
-                  <p className="m-0 text-sm leading-snug text-pretty text-ink lg:w-[90%]">
+                  <h3 className="m-0 text-h3 text-ink">{step.title}</h3>
+                  <p className="m-0 mt-4 text-body text-ink max-w-[62ch]">
                     {step.body}
                   </p>
                   {isLast ? (
@@ -75,12 +77,7 @@ export function OfficialFinalCta() {
                         <li key={tool.id}>
                           <span
                             aria-hidden
-                            className={`flex size-6 items-center justify-center rounded-md font-semibold text-white ${
-                              tool.mark.length > 1
-                                ? "text-[8px] tracking-tight"
-                                : "text-[11px]"
-                            }`}
-                            style={{ backgroundColor: tool.color }}
+                            className="flex h-12 items-center text-small font-semibold text-ink-muted md:h-14"
                           >
                             {tool.mark}
                           </span>
@@ -95,37 +92,31 @@ export function OfficialFinalCta() {
           })}
         </ol>
 
-        <div className="mt-10 flex w-full max-w-[421px] flex-col items-center gap-4 text-center lg:mt-14 lg:max-w-none">
+        <div className="mt-8 flex w-full flex-col items-center text-center">
           <div
             id="final-cta"
-            className="flex w-full flex-col gap-4 lg:w-auto lg:flex-row lg:flex-wrap lg:justify-center"
+            className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center"
           >
             <button
               ref={primaryRef}
               type="button"
               data-cta="measure-enquiries"
               onClick={() => startForFree(primaryRef.current)}
-              className={`group ${closeButtonClass} bg-brand text-white shadow-lg shadow-brand/20 hover:bg-brand-dark`}
+              className={closePrimaryClass}
             >
               {primaryCta}
-              <span
-                aria-hidden
-                className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
-              >
-                →
-              </span>
             </button>
             <button
               type="button"
               data-booking-cta=""
               onClick={() => speakToAlex()}
-              className={`${closeButtonClass} border border-brand bg-transparent text-brand hover:bg-accent-soft`}
+              className={closeSecondaryClass}
             >
               {secondaryCta}
             </button>
           </div>
-          <p className="m-0 text-sm leading-snug text-balance text-muted">{trust}</p>
-          <p className="m-0 text-sm leading-snug text-balance text-muted">{microcopy}</p>
+          <p className="mt-3 text-small text-ink-muted">{trust}</p>
+          <p className="mt-3 text-small text-ink-muted">{microcopy}</p>
         </div>
 
         {booked ? (
@@ -139,24 +130,22 @@ export function OfficialFinalCta() {
                 className="absolute inset-0 size-full origin-[50%_8%] scale-[2] object-cover object-[50%_8%]"
               />
             </div>
-            <h3 className="m-0 font-display text-2xl leading-none font-semibold tracking-[-0.02em] text-ink">
-              {thankYou.heading}
-            </h3>
-            <ul className="m-0 flex list-none flex-col gap-2 p-0 text-base leading-snug text-ink">
+            <h3 className="m-0 text-h2 text-ink max-w-[22ch]">{thankYou.heading}</h3>
+            <ul className="m-0 mt-5 flex list-none flex-col gap-4 p-0 text-lead text-ink-muted">
               {thankYou.steps.map((step) => (
                 <li key={step}>{step}</li>
               ))}
             </ul>
             <div className="flex flex-col items-center">
               <a
-                className="inline-flex min-h-11 items-center gap-3 font-semibold text-ink underline underline-offset-[3px] hover:text-brand"
+                className="inline-flex min-h-11 items-center gap-3 text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 href={`mailto:${siteConfig.contactEmail}`}
               >
                 Email
                 <span className="font-normal">{siteConfig.contactEmail}</span>
               </a>
               <a
-                className="inline-flex min-h-11 items-center font-semibold text-ink underline underline-offset-[3px] hover:text-brand"
+                className="inline-flex min-h-11 items-center text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 href={siteConfig.contactWhatsAppHref}
                 target="_blank"
                 rel="noopener noreferrer"

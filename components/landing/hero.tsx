@@ -34,7 +34,7 @@ export function Hero() {
           </span>
         </p>
 
-        <p className="hero-audience motion-enter motion-enter--1 inline-block bg-surface text-muted text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full text-center">
+        <p className="hero-audience motion-enter motion-enter--1 inline-block bg-surface text-muted text-small font-semibold py-1 px-3 rounded-full text-center">
           {hero.audience}
         </p>
       </div>

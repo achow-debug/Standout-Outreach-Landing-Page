@@ -17,7 +17,7 @@ export function SecurityBadges() {
       <div className="mx-auto flex w-full max-w-[1024px] flex-col items-center px-4 py-16 lg:px-12 lg:py-24">
         <h2
           id="security-heading"
-          className="m-0 text-center font-display text-[22.4px] leading-none font-medium tracking-[0.01em] text-balance text-ink lg:text-[35.2px]"
+          className="m-0 text-center text-h2 text-ink max-w-[22ch]"
         >
           {copy.heading}
         </h2>
@@ -37,26 +37,9 @@ export function SecurityBadges() {
         </ul>
         <a
           href={copy.linkHref}
-          className="group mt-2 inline-flex items-center justify-center gap-1 text-center text-xs leading-4 underline transition-colors duration-150 hover:opacity-80 lg:text-sm lg:leading-5"
-          style={{ color: "var(--color-purple)" }}
+          className="mt-8 inline-flex min-h-11 items-center text-small text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
         >
-          <span>{copy.linkLabel}</span>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            aria-hidden="true"
-            className="size-4 shrink-0 transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none"
-          >
-            <path
-              d="M3 8h10M9 4l4 4-4 4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          {copy.linkLabel}
         </a>
       </div>
     </section>

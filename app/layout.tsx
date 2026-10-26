@@ -1,4 +1,4 @@
-import { Bricolage_Grotesque, Figtree, Geist_Mono } from "next/font/google";
+import { Source_Sans_3 } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
@@ -8,24 +8,11 @@ import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
-const display = Bricolage_Grotesque({
+const sourceSans = Source_Sans_3({
   subsets: ["latin"],
-  axes: ["opsz"],
+  weight: ["400", "600", "700", "800"],
   display: "swap",
-  variable: "--font-display",
-});
-
-const text = Figtree({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-text",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  weight: ["500"],
-  display: "swap",
-  variable: "--font-geist-mono",
+  variable: "--font-source-sans",
 });
 
 export const viewport: Viewport = {
@@ -72,14 +59,14 @@ export default function RootLayout({
   return (
     <html
       lang="en-GB"
-      className={`${display.variable} ${text.variable} ${geistMono.variable}`}
+      className={sourceSans.variable}
       suppressHydrationWarning
     >
       <head>
         <link rel="preconnect" href="https://assets.calendly.com" />
         <link rel="preconnect" href="https://calendly.com" />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased bg-paper text-ink">
         {/*
           Enables CSS load/scroll motion only when JS runs and the visitor
           has not requested reduced motion. Without this class, content stays

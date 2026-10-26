@@ -9,13 +9,15 @@ import {
 } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 
-const navPrimaryClass =
-  "site-nav-cta site-nav-cta-primary inline-flex items-center justify-center rounded-lg bg-brand text-xs font-semibold whitespace-nowrap text-white focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none!";
+const navFocus =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
-const navSecondaryClass =
-  "site-nav-cta site-nav-cta-secondary items-center justify-center rounded-lg border border-brand bg-transparent text-xs font-semibold whitespace-nowrap text-brand focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none!";
+const navPrimaryClass = `site-nav-cta site-nav-cta-primary inline-flex items-center justify-center min-h-[44px] whitespace-nowrap rounded-xl bg-brand px-5 text-white text-button hover:bg-brand-hover ${navFocus}`;
 
-const barCtaClass = "h-8 px-3 lg:h-10 lg:px-4 xl:px-6";
+const navSecondaryClass = `site-nav-cta site-nav-cta-secondary items-center justify-center min-h-[44px] whitespace-nowrap rounded-xl border-[1.5px] border-ink bg-transparent px-5 text-ink text-button hover:bg-ink/5 ${navFocus}`;
+
+const navLinkClass =
+  "site-nav-link inline-flex items-center px-1.5 py-2 text-[1.0625rem] font-normal whitespace-nowrap text-ink no-underline xl:px-3";
 
 function isNavMenu(item: OfficialNavItem): item is OfficialNavMenu {
   return item.kind === "menu";
@@ -61,7 +63,7 @@ function PlaceholderList({ item }: { item: OfficialNavMenu }) {
     <ul className="flex flex-col gap-1 py-1">
       {item.children.map((child) => (
         <li key={child.id}>
-          <span className="block px-3 py-1.5 text-sm text-muted">
+          <span className="block px-3 py-2 text-small text-ink-muted">
             {child.label}
           </span>
         </li>
@@ -202,7 +204,7 @@ export function SiteHeader() {
                   <a
                     key={item.id}
                     href={item.href}
-                    className="site-nav-link inline-flex h-9 items-center px-1.5 text-[13px] font-normal whitespace-nowrap no-underline xl:px-3 xl:text-[15px]"
+                    className={navLinkClass}
                     onClick={closeMenus}
                   >
                     {item.label}
@@ -221,7 +223,7 @@ export function SiteHeader() {
                       if (node) triggerRefs.current.set(key, node);
                       else triggerRefs.current.delete(key);
                     }}
-                    className="site-nav-link inline-flex h-9 items-center gap-1 px-1.5 text-[13px] font-normal whitespace-nowrap xl:px-3 xl:text-[15px]"
+                    className={`${navLinkClass} gap-1`}
                     aria-expanded={open}
                     aria-controls={panelId}
                     onClick={() => setOpenMenuId(open ? null : item.id)}
@@ -247,7 +249,7 @@ export function SiteHeader() {
           <div className="col-start-3 flex items-center justify-end gap-1.5 lg:gap-2">
             <button
               type="button"
-              className={`${navPrimaryClass} ${barCtaClass}`}
+              className={navPrimaryClass}
               data-cta="measure-enquiries"
               onClick={(event) => {
                 closeMenus();
@@ -258,7 +260,7 @@ export function SiteHeader() {
             </button>
             <button
               type="button"
-              className={`${navSecondaryClass} ${barCtaClass} hidden lg:inline-flex`}
+              className={`${navSecondaryClass} hidden lg:inline-flex`}
               onClick={() => {
                 closeMenus();
                 speakToAlex();
@@ -269,7 +271,7 @@ export function SiteHeader() {
             <button
               ref={menuButtonRef}
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center text-ink lg:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center text-ink lg:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
@@ -290,7 +292,7 @@ export function SiteHeader() {
                 <a
                   key={item.id}
                   href={item.href}
-                  className="site-nav-menu-link block border-t border-line py-3 text-lg font-semibold text-ink! no-underline"
+                  className="site-nav-menu-link block border-t border-line py-2 text-[1.0625rem] font-normal text-ink no-underline"
                   onClick={closeMenus}
                 >
                   {item.label}
@@ -309,7 +311,7 @@ export function SiteHeader() {
                     if (node) triggerRefs.current.set(key, node);
                     else triggerRefs.current.delete(key);
                   }}
-                  className="site-nav-menu-link flex w-full items-center justify-between py-3 text-left text-lg font-semibold text-ink"
+                  className="site-nav-menu-link flex w-full items-center justify-between py-2 text-left text-[1.0625rem] font-normal text-ink"
                   aria-expanded={open}
                   aria-controls={panelId}
                   onClick={() => setOpenMenuId(open ? null : item.id)}
@@ -335,7 +337,7 @@ export function SiteHeader() {
           <div className="mt-3 flex flex-col gap-3">
             <button
               type="button"
-              className={`${navPrimaryClass} h-10 w-full px-3`}
+              className={`${navPrimaryClass} w-full`}
               data-cta="measure-enquiries"
               onClick={(event) => {
                 closeMenus();
@@ -346,7 +348,7 @@ export function SiteHeader() {
             </button>
             <button
               type="button"
-              className={`${navSecondaryClass} h-10 w-full px-3 inline-flex`}
+              className={`${navSecondaryClass} inline-flex w-full`}
               onClick={() => {
                 closeMenus();
                 speakToAlex();

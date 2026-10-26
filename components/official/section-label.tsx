@@ -11,7 +11,7 @@ export function SectionLabel({ children, id }: SectionLabelProps) {
   return (
     <p
       id={id}
-      className="section-label m-0 inline-flex items-center px-0 py-1.5 font-sans text-[15px] leading-none font-semibold tracking-normal normal-case text-muted"
+      className="section-label m-0 inline-flex items-center text-eyebrow text-ink-muted"
     >
       {children}
     </p>

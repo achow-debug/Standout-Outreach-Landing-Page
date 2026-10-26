@@ -136,9 +136,6 @@ export function HowItWorks() {
               onClick={() => openBooking("how-it-works")}
             >
               {keepTogether(ctaLabel)}
-              <span className="btn-cta-arrow" aria-hidden="true">
-                →
-              </span>
             </button>
             <CtaMicrocopy tone="light" />
           </div>

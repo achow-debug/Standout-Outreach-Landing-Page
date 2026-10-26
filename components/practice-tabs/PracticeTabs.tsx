@@ -88,15 +88,15 @@ export function PracticeTabs() {
                     <Icon
                       aria-hidden="true"
                       strokeWidth={1.75}
-                      className={`h-5 w-5 shrink-0 ${selected ? "text-brand" : "text-muted"}`}
+                      className={`h-5 w-5 shrink-0 ${selected ? "text-ink" : "text-muted"}`}
                     />
-                    <span className="min-w-0 flex-1 text-base font-medium leading-snug text-ink">
+                    <span className="min-w-0 flex-1 text-base font-semibold leading-snug text-ink">
                       {area.label}
                     </span>
                     <ChevronDown
                       aria-hidden="true"
                       strokeWidth={1.75}
-                      className={`h-5 w-5 shrink-0 ${selected ? "rotate-180 text-brand" : "text-muted"}`}
+                      className={`h-5 w-5 shrink-0 ${selected ? "rotate-180 text-ink" : "text-muted"}`}
                     />
                   </button>
                   <div
@@ -144,9 +144,9 @@ export function PracticeTabs() {
                   <Icon
                     aria-hidden="true"
                     strokeWidth={1.75}
-                    className={`mt-0.5 h-5 w-5 shrink-0 ${selected ? "text-brand" : "text-muted"}`}
+                    className={`mt-0.5 h-5 w-5 shrink-0 ${selected ? "text-ink" : "text-muted"}`}
                   />
-                  <span className="min-w-0 text-base font-medium leading-snug">
+                  <span className="min-w-0 text-base font-semibold leading-snug">
                     {area.label}
                   </span>
                   <span
@@ -192,7 +192,7 @@ function PracticeAreaBody({
           ) : null}
           <a
             href={card.linkHref}
-            className="inline-flex min-h-11 items-center text-[0.9375rem] font-semibold leading-snug text-brand underline underline-offset-4"
+            className="inline-flex min-h-11 items-center text-small text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             {card.linkLabel}
           </a>
@@ -205,9 +205,6 @@ function PracticeAreaBody({
         onClick={onApply}
       >
         {keepTogether(officialCopy.header.applyLabel)}
-        <span className="btn-cta-arrow" aria-hidden="true">
-          →
-        </span>
       </button>
     </div>
   );

@@ -53,7 +53,7 @@ function BeatCopy({ beat }: { beat: FirmBeat }) {
           {proof.research ? (
             <p className="t-body m-0 mt-3">{proof.research}</p>
           ) : null}
-          <p className="m-0 mt-2 flex flex-wrap items-center gap-1 text-sm font-semibold text-ink">
+          <p className="m-0 mt-3 flex flex-wrap items-center gap-1 text-small font-semibold text-ink-muted">
             {proof.credit}
             <SourceButton sourceId={proof.sourceId} />
           </p>
@@ -193,11 +193,8 @@ export function FirmDay() {
               onClick={() => openBooking("firm-day")}
             >
               {keepTogether(ctaLabel)}
-              <span className="btn-cta-arrow" aria-hidden="true">
-                →
-              </span>
             </button>
-            <p className="m-0 mt-3 max-w-md text-[0.9375rem] font-medium leading-snug text-ink/70">
+            <p className="m-0 mt-3 max-w-[62ch] text-small text-ink-muted">
               {microcopy}
             </p>
           </div>

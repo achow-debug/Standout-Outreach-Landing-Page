@@ -57,11 +57,11 @@ function MobileShowcase() {
 
   return (
     <div className="mx-auto flex w-full max-w-[480px] flex-col bg-canvas pt-6 lg:hidden">
-      <div className="relative h-[52px] px-4">
+      <div className="relative min-h-16 px-4">
         {SCENES.map((scene, index) => (
           <p
             key={scene.id}
-            className={`absolute inset-x-4 bottom-0 text-center font-display text-[21px] leading-[21px] font-medium tracking-[0.01em] whitespace-pre-line text-ink transition-opacity duration-300 motion-reduce:transition-none ${
+            className={`absolute inset-x-4 bottom-0 text-center text-h2 text-ink whitespace-pre-line transition-opacity duration-300 motion-reduce:transition-none ${
               index === active ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
             aria-hidden={index !== active}
@@ -153,12 +153,8 @@ function DesktopShowcase() {
                 aria-current={current ? "step" : undefined}
                 onClick={() => scrollToScene(index)}
               >
-                <span className="font-display text-[26px] leading-none font-medium tracking-[0.01em] text-ink xl:text-[32px]">
-                  {scene.title}
-                </span>
-                <span className="font-display text-[26px] leading-none font-medium tracking-[0.01em] text-muted xl:text-[32px]">
-                  {scene.detail}
-                </span>
+                <span className="text-h2 text-ink">{scene.title}</span>
+                <span className="text-lead text-ink">{scene.detail}</span>
                 <span className="mt-1 block h-[3px] w-full overflow-hidden rounded-full bg-[color-mix(in_oklab,var(--color-ink)_10%,transparent)]">
                   <span
                     className="block h-full origin-left rounded-full bg-[color-mix(in_oklab,var(--color-ink)_70%,transparent)]"
@@ -216,7 +212,7 @@ function CardStack({ active }: { active: number }) {
       {SCENES.map((scene, index) => (
         <div
           key={scene.id}
-          className={`absolute inset-0 rounded-lg bg-white shadow-[0_4px_0_0_rgba(0,0,0,0.25)] transition-opacity duration-300 motion-reduce:transition-none ${
+          className={`absolute inset-0 rounded-2xl bg-surface transition-opacity duration-300 motion-reduce:transition-none ${
             index === active ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
           aria-hidden={index !== active}
