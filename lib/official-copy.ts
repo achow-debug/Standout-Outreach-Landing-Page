@@ -31,11 +31,12 @@ export const officialCopy = {
   showcase: {
     scenes: [
       {
-        id: "grow",
-        title: "Grow deliberately",
+        id: "intake",
+        title: "A client enquiry, annotated",
         /** Two short lines so the 52px mobile caption slot can hold it. */
-        mobileCaption: "Grow deliberately",
-        detail: "by being selective about the matters you take on",
+        mobileCaption: "A client enquiry,\nannotated",
+        detail:
+          "Use the form as a client would. Tap the numbered dots to see why each detail is there.",
       },
       {
         id: "legal",

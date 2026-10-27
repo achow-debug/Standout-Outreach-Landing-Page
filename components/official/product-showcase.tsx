@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnnotatedIntakeDemo } from "@/components/official/annotated-intake-demo";
 import { officialCopy } from "@/lib/official-copy";
 
 const SCENES = officialCopy.showcase.scenes;
 const SCENE_COUNT = SCENES.length;
+const INTAKE_INDEX = SCENES.findIndex((scene) => scene.id === "intake");
 const AUTOPLAY_MS = 4000;
 
 function prefersReducedMotion() {
@@ -12,10 +14,8 @@ function prefersReducedMotion() {
 }
 
 /**
- * Fyxer product showcase: three scenes.
- * Mobile is a centred caption, dots, and an empty card over a blank photo crop.
- * Desktop is one horizontal band: scene tabs, the active title, and an empty card.
- * Both autoplay until a scene is chosen, the pointer is over the band, or motion is reduced.
+ * Product showcase: annotated intake demo by default, then the remaining
+ * scene cards. Autoplay never runs while the interactive demo is active.
  */
 export function ProductShowcase() {
   return (
@@ -27,17 +27,19 @@ export function ProductShowcase() {
 }
 
 function MobileShowcase() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(Math.max(0, INTAKE_INDEX));
   const [paused, setPaused] = useState(false);
+  const onDemo = SCENES[active]?.id === "intake";
 
   useEffect(() => {
     const mobile = window.matchMedia("(max-width: 1023px)");
-    if (paused || prefersReducedMotion() || !mobile.matches) return;
+    // Never auto-rotate away from the interactive demo.
+    if (paused || onDemo || prefersReducedMotion() || !mobile.matches) return;
     const id = window.setInterval(() => {
-      setActive((current) => (current + 1) % SCENE_COUNT);
+      setActive((current) => nextNonIntakeIndex(current));
     }, AUTOPLAY_MS);
     return () => window.clearInterval(id);
-  }, [paused]);
+  }, [paused, onDemo]);
 
   function selectScene(index: number) {
     setActive(index);
@@ -45,7 +47,7 @@ function MobileShowcase() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[480px] flex-col bg-canvas pt-6 lg:hidden">
+    <div className="mx-auto flex w-full max-w-[520px] flex-col bg-canvas pt-6 lg:hidden">
       <div className="relative min-h-[4.25rem] px-4">
         {SCENES.map((scene, index) => (
           <p
@@ -83,16 +85,19 @@ function MobileShowcase() {
           );
         })}
       </div>
-      <ShowcaseStage active={active} />
+      <div className="px-3 pt-4 pb-8">
+        <ShowcaseBody active={active} />
+      </div>
     </div>
   );
 }
 
 function DesktopShowcase() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(Math.max(0, INTAKE_INDEX));
   const [chosen, setChosen] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const paused = chosen || hovering;
+  const onDemo = SCENES[active]?.id === "intake";
+  const paused = chosen || hovering || onDemo;
   const scene = SCENES[active];
 
   useEffect(() => {
@@ -105,7 +110,7 @@ function DesktopShowcase() {
       stop();
       if (!desktop.matches) return;
       id = window.setInterval(() => {
-        setActive((current) => (current + 1) % SCENE_COUNT);
+        setActive((current) => nextNonIntakeIndex(current));
       }, AUTOPLAY_MS);
     };
     const onChange = () => start();
@@ -152,31 +157,46 @@ function DesktopShowcase() {
             );
           })}
         </div>
-        <div className="flex items-center justify-between gap-16">
-          <div className="max-w-[34rem]">
-            <p className="text-h2 text-ink">{scene.title}</p>
-            <p className="text-lead mt-4 text-ink">{scene.detail}</p>
+
+        {onDemo ? (
+          <div className="flex justify-center">
+            <AnnotatedIntakeDemo />
           </div>
-          <div className="w-[min(340px,32vw)] shrink-0">
-            <CardStack active={active} />
+        ) : (
+          <div className="flex items-center justify-between gap-16">
+            <div className="max-w-[34rem]">
+              <p className="text-h2 text-ink">{scene.title}</p>
+              <p className="text-lead mt-4 text-ink">{scene.detail}</p>
+            </div>
+            <div className="w-[min(340px,32vw)] shrink-0">
+              <EmptySceneCard sceneId={scene.id} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 }
 
-function ShowcaseStage({ active }: { active: number }) {
+function ShowcaseBody({ active }: { active: number }) {
+  const scene = SCENES[active];
+  if (scene?.id === "intake") {
+    return <AnnotatedIntakeDemo />;
+  }
   return (
-    <div className="relative mt-4 aspect-[375/320] w-full overflow-hidden">
-      <div className="absolute bottom-0 aspect-[2222/1728] w-full">
-        <PhotoFrame crop="center" />
-      </div>
-      <div className="absolute top-[2%] right-3 left-[41%]">
-        <CardStack active={active} />
-      </div>
+    <div className="relative mt-2 min-h-40">
+      <EmptySceneCard sceneId={scene.id} />
     </div>
   );
+}
+
+/** Skip the interactive demo when autoplaying secondary scenes. */
+function nextNonIntakeIndex(current: number): number {
+  for (let step = 1; step <= SCENE_COUNT; step += 1) {
+    const next = (current + step) % SCENE_COUNT;
+    if (SCENES[next]?.id !== "intake") return next;
+  }
+  return current;
 }
 
 /**
@@ -199,18 +219,12 @@ function PhotoFrame({ crop }: { crop: "center" | "left" }) {
   );
 }
 
-function CardStack({ active }: { active: number }) {
+function EmptySceneCard({ sceneId }: { sceneId: string }) {
   return (
-    <div className="relative min-h-40">
-      {SCENES.map((scene, index) => (
-        <div
-          key={scene.id}
-          className={`absolute inset-0 rounded-2xl bg-surface transition-opacity duration-300 motion-reduce:transition-none ${
-            index === active ? "opacity-100" : "pointer-events-none opacity-0"
-          }`}
-          aria-hidden={index !== active}
-        />
-      ))}
-    </div>
+    <div
+      className="min-h-40 rounded-2xl bg-surface"
+      data-scene={sceneId}
+      aria-hidden
+    />
   );
 }
