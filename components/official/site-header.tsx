@@ -12,12 +12,12 @@ import { siteConfig } from "@/lib/site-config";
 const navFocus =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
-const navPrimaryClass = `site-nav-cta site-nav-cta-primary inline-flex min-h-9 shrink items-center justify-center whitespace-nowrap rounded-lg bg-brand px-3 text-sm font-semibold text-white hover:bg-brand-hover ${navFocus}`;
+const navPrimaryClass = `site-nav-cta site-nav-cta-primary inline-flex min-h-10 shrink items-center justify-center whitespace-nowrap rounded-lg bg-brand px-3.5 text-[0.9375rem] font-semibold text-white hover:bg-brand-hover ${navFocus}`;
 
-const navSecondaryClass = `site-nav-cta site-nav-cta-secondary min-h-9 shrink items-center justify-center whitespace-nowrap rounded-lg border-[1.5px] border-ink bg-transparent px-3 text-sm font-semibold text-ink hover:bg-ink/5 ${navFocus}`;
+const navSecondaryClass = `site-nav-cta site-nav-cta-secondary min-h-10 shrink items-center justify-center whitespace-nowrap rounded-lg border-[1.5px] border-ink bg-transparent px-3.5 text-[0.9375rem] font-semibold text-ink hover:bg-ink/5 ${navFocus}`;
 
 const navLinkClass =
-  "site-nav-link inline-flex items-center px-1.5 py-2 text-[1.0625rem] font-normal whitespace-nowrap text-ink no-underline xl:px-3";
+  "site-nav-link inline-flex items-center px-1.5 py-2 text-[1.1875rem] font-normal whitespace-nowrap text-ink no-underline xl:px-3";
 
 function isNavMenu(item: OfficialNavItem): item is OfficialNavMenu {
   return item.kind === "menu";
@@ -92,7 +92,7 @@ function PlaceholderList({
 }
 
 /**
- * Floating nav card. Mobile is a 52px bar (logo, free enquiry check, menu).
+ * Floating nav card. Mobile is a ~57px bar (logo, free enquiry check, menu).
  * Desktop is a card up to 1,280px wide with both CTAs.
  */
 export function SiteHeader() {
@@ -204,10 +204,10 @@ export function SiteHeader() {
         className="site-nav mx-auto w-full max-w-[1280px] rounded-2xl border border-line bg-surface shadow-[0_1px_2px_rgba(17,23,41,0.04),0_8px_24px_rgba(17,23,41,0.06)]"
         aria-label="Page"
       >
-        <div className="grid min-h-[52px] grid-cols-[auto_1fr_auto] items-center gap-2 px-3 lg:min-h-14 lg:gap-3 lg:px-4 xl:px-6">
+        <div className="grid min-h-[57px] grid-cols-[auto_1fr_auto] items-center gap-2 px-3 lg:min-h-[62px] lg:gap-3 lg:px-4 xl:px-6">
           <a
-            href="#top"
-            className="brand-mark site-nav-mark text-base leading-none no-underline lg:text-lg xl:text-xl"
+            href="/"
+            className="brand-mark site-nav-mark text-[1.125rem] leading-none no-underline lg:text-[1.25rem] xl:text-[1.375rem]"
             onClick={closeMenus}
           >
             <span className="brand-mark-name whitespace-nowrap">
@@ -311,7 +311,7 @@ export function SiteHeader() {
                 <a
                   key={item.id}
                   href={item.href}
-                  className="site-nav-menu-link block border-t border-line py-2 text-[1.0625rem] font-normal text-ink no-underline"
+                  className="site-nav-menu-link block border-t border-line py-2 text-[1.1875rem] font-normal text-ink no-underline"
                   onClick={closeMenus}
                 >
                   {item.label}
@@ -330,7 +330,7 @@ export function SiteHeader() {
                     if (node) triggerRefs.current.set(key, node);
                     else triggerRefs.current.delete(key);
                   }}
-                  className="site-nav-menu-link flex w-full items-center justify-between py-2 text-left text-[1.0625rem] font-normal text-ink"
+                  className="site-nav-menu-link flex w-full items-center justify-between py-2 text-left text-[1.1875rem] font-normal text-ink"
                   aria-expanded={open}
                   aria-controls={panelId}
                   onClick={() => setOpenMenuId(open ? null : item.id)}

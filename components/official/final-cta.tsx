@@ -114,8 +114,8 @@ export function OfficialFinalCta() {
               {secondaryCta}
             </button>
           </div>
-          <p className="mt-3 text-small text-ink-muted">{trust}</p>
-          <p className="mt-3 text-small text-ink-muted">{microcopy}</p>
+          <p className="mt-6 text-small text-ink-muted md:mt-8">{trust}</p>
+          <p className="mt-2 text-small text-ink-muted md:mt-3">{microcopy}</p>
         </div>
 
         {booked ? (

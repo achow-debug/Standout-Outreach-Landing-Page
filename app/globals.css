@@ -49,8 +49,8 @@
   /* Sticky dock surface (button + padding); clearance includes buffer */
   --mobile-sticky-cta-height: 80px;
 
-  /* Bottom edge of the floating bar, so sticky columns clear it. */
-  --header-h: calc(env(safe-area-inset-top, 0px) + 0.5rem + 3.25rem); /* 8px + 52px */
+  /* Bottom edge of the floating bar, so sticky columns clear it. ~10% taller than 52px. */
+  --header-h: calc(env(safe-area-inset-top, 0px) + 0.5rem + 3.5625rem); /* 8px + 57px */
 
   /* Type scale: fluid from 375px to ~1440px. Weights: 400 body, 600 labels, 700 headings, 800 hero only. */
   --text-display: clamp(2.5rem, 1.6rem + 3.4vw, 4.5rem);
@@ -86,13 +86,13 @@
 
 @media (min-width: 768px) {
   :root {
-    --header-h: calc(1rem + 3.25rem); /* top-4 + 52px bar */
+    --header-h: calc(1rem + 3.5625rem); /* top-4 + 57px bar */
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --header-h: calc(1rem + 3.5rem); /* top-4 + 56px card */
+    --header-h: calc(1rem + 3.875rem); /* top-4 + 62px card */
   }
 }
 
@@ -4865,6 +4865,7 @@ html.sheet-open body {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  margin-top: 0.5rem;
   color: var(--color-accent);
   font-weight: 600;
   text-decoration: underline;
@@ -5018,6 +5019,15 @@ html.sheet-open body {
   animation-delay: 220ms;
 }
 
+/* Hero-only eyebrow: larger toward the display headline, still secondary (600). */
+.hero-eyebrow {
+  margin: 0;
+  font-size: clamp(1.25rem, 1rem + 1.4vw, 2.75rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
 .hero-proof.results-proof {
   max-width: 36rem;
   margin-top: 6rem; /* 96px below the caption */
@@ -5062,6 +5072,39 @@ html.sheet-open body {
   }
 }
 
+@keyframes showcase-tab-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.showcase-tab-fill {
+  width: 100%;
+  transform: scaleX(0);
+}
+
+.showcase-tab-fill.is-running {
+  animation: showcase-tab-progress 5s linear forwards;
+}
+
+.showcase-tab-fill.is-running.is-paused {
+  animation-play-state: paused;
+}
+
+.showcase-tab-fill.is-complete {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-tab-fill.is-running {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
+
 @keyframes practice-panel-in {
   from {
     opacity: 0;
@@ -5070,5 +5113,135 @@ html.sheet-open body {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Annotated intake demo motion */
+@keyframes intake-tip-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intake-pin-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes intake-pin-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes intake-overlay-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intake-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes intake-side-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intake-screen-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intake-switch-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-brand) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-brand) 0%, transparent);
+  }
+}
+
+.intake-tip-enter {
+  animation: intake-tip-in 220ms ease-out both;
+}
+
+.intake-pin-enter {
+  animation: intake-pin-in 220ms ease-out both;
+}
+
+.intake-pin-pulse {
+  animation: intake-pin-pulse 480ms ease-in-out 1;
+}
+
+.intake-overlay-enter {
+  animation: intake-overlay-in 180ms ease-out both;
+}
+
+.intake-backdrop-enter {
+  animation: intake-backdrop-in 180ms ease-out both;
+}
+
+.intake-side-enter {
+  animation: intake-side-in 200ms ease-out both;
+}
+
+.intake-screen-enter {
+  animation: intake-screen-in 220ms ease-out both;
+}
+
+.intake-switch-pulse {
+  animation: intake-switch-pulse 1.2s ease-out 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intake-tip-enter,
+  .intake-pin-enter,
+  .intake-pin-pulse,
+  .intake-overlay-enter,
+  .intake-backdrop-enter,
+  .intake-side-enter,
+  .intake-screen-enter,
+  .intake-switch-pulse {
+    animation: none;
   }
 }

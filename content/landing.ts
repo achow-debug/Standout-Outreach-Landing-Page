@@ -11,8 +11,8 @@ export const sectionLabels = {
   how: "How it works",
   compare: "Compare",
   compliance: "Compliance",
-  founder: "Founder",
-  faqs: "FAQs",
+  founder: "Our story",
+  faqs: "Frequently asked questions",
 } as const;
 
 export const ctaMicrocopy = {

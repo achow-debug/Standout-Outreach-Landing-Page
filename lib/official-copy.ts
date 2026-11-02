@@ -36,7 +36,7 @@ export const officialCopy = {
         /** Two short lines so the 52px mobile caption slot can hold it. */
         mobileCaption: "A client enquiry,\nannotated",
         detail:
-          "Use the form as a client would. Tap the numbered dots to see why each detail is there.",
+          "Use the form as a client would. Turn on Annotations, then tap the numbered dots to see why each detail is there.",
       },
       {
         id: "legal",
@@ -54,15 +54,15 @@ export const officialCopy = {
   },
   noDisruption: {
     heading: "No complicated software. No change to how your team works.",
-    body: "Enquiries arrive in the inbox or CRM your team already uses. After one 20-minute call and your logo, we build and run everything for 30 days, and nothing goes live until you've approved it.",
+    body: "Enquiries arrive in the inbox or CRM your team already uses.",
     label: "Delivers into the tools your firm already uses",
     tools: [
       { id: "outlook", name: "Outlook", src: "/images/tools/outlook.svg" },
       { id: "gmail", name: "Gmail", src: "/images/tools/gmail.svg" },
       { id: "microsoft-365", name: "Microsoft 365", src: "/images/tools/microsoft-365.svg" },
-      { id: "monday", name: "Monday CRM", src: "/images/tools/monday.png" },
-      { id: "clio", name: "Clio CRM", src: "/images/tools/clio.png" },
-      { id: "hubspot", name: "HubSpot CRM", src: "/images/tools/hubspot.svg" },
+      { id: "monday", name: "Monday", src: "/images/tools/monday.svg" },
+      { id: "clio", name: "Clio", src: "/images/tools/clio.svg" },
+      { id: "hubspot", name: "HubSpot", src: "/images/tools/hubspot.svg" },
     ],
     privacy: "Standout Group is an ICO-registered data processor (",
     icoLead: "",
@@ -128,25 +128,38 @@ export const officialCopy = {
   },
   nav: {
     items: [
-      { kind: "link", id: "security", label: "Security", href: "#security" },
+      { kind: "link", id: "security", label: "Security", href: "/#security" },
       {
-        kind: "menu",
+        kind: "link",
         id: "partners",
         label: "Who we partner with",
-        children: [
-          { id: "partners-1", label: "Placeholder" },
-          { id: "partners-2", label: "Placeholder" },
-          { id: "partners-3", label: "Placeholder" },
-        ],
+        href: "/who-we-partner-with",
       },
       {
         kind: "menu",
         id: "how-it-works",
         label: "How it works",
         children: [
-          { id: "how-1", label: "Placeholder" },
-          { id: "how-2", label: "Placeholder" },
-          { id: "how-3", label: "Placeholder" },
+          {
+            id: "how",
+            label: "How it works",
+            href: "/how-it-works#how-it-works",
+          },
+          {
+            id: "firm-day",
+            label: "Your firm’s day",
+            href: "/how-it-works#firm-day",
+          },
+          {
+            id: "compare",
+            label: "Compare",
+            href: "/how-it-works#agency-comparison",
+          },
+          {
+            id: "compliance",
+            label: "Compliance",
+            href: "/how-it-works#colp",
+          },
         ],
       },
       {
@@ -154,8 +167,16 @@ export const officialCopy = {
         id: "stories",
         label: "Customer stories",
         children: [
-          { id: "founder", label: "Our story", href: "#founder" },
-          { id: "faqs", label: "FAQs", href: "#faqs" },
+          {
+            id: "founder",
+            label: "Our story",
+            href: "/customer-stories#founder",
+          },
+          {
+            id: "faqs",
+            label: "Frequently asked questions",
+            href: "/customer-stories#faqs",
+          },
         ],
       },
     ],
@@ -325,7 +346,7 @@ export const officialCopy = {
     ],
   },
   faq: {
-    heading: "FAQs",
+    heading: "Frequently asked questions",
     items: [
       {
         id: "existing-setup",
@@ -367,7 +388,7 @@ export const officialCopy = {
     ],
   },
   founder: {
-    eyebrow: "Meet the founder",
+    eyebrow: "Our story",
     heading: "Founded by a future solicitor",
     lead: "Alex founded Standout Group while training to qualify as a solicitor, believing established law firms shouldn't have to choose between the expertise that built their reputation and the technology they need to compete.",
     name: "Alex",

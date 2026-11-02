@@ -38,7 +38,7 @@ export function PersonalisedWork() {
         {copy.rows.map((row, index) => (
           <FeatureRow key={row.id} row={row} index={index} />
         ))}
-        <div className="mx-auto flex w-full max-w-[421px] flex-col items-center gap-4 pt-4 text-center lg:pt-8">
+        <div className="mx-auto flex w-full max-w-[421px] flex-col items-center pt-4 text-center lg:pt-8">
           <button
             ref={buttonRef}
             type="button"
@@ -48,7 +48,7 @@ export function PersonalisedWork() {
           >
             {copy.ctaLabel}
           </button>
-          <p className="mt-3 text-small text-ink-muted">{copy.caption}</p>
+          <p className="mt-6 text-small text-ink-muted md:mt-8">{copy.caption}</p>
         </div>
       </div>
     </section>
@@ -65,14 +65,14 @@ function FeatureRow({ row, index }: { row: Row; index: number }) {
           textFirst ? "lg:justify-end" : "lg:justify-start"
         }`}
       >
-        <div className="flex w-full max-w-[480px] flex-col gap-3 text-center lg:gap-6 lg:text-left">
+        <div className="flex w-full max-w-[480px] flex-col text-center lg:text-left">
           <h2
             id={index === 0 ? "personalised-heading" : undefined}
             className="m-0 text-h2 text-ink max-w-[22ch]"
           >
             {row.heading}
           </h2>
-          <p className="m-0 mt-5 text-lead text-ink-muted max-w-[60ch]">
+          <p className="m-0 mt-3 text-lead text-ink-muted max-w-[60ch] md:mt-4">
             {row.body}
           </p>
         </div>
@@ -109,7 +109,7 @@ function FeatureRow({ row, index }: { row: Row; index: number }) {
               </SourceButton>
             ) : null}
             <p className="m-0 text-lead text-ink">{row.card}</p>
-            <p className="m-0 mt-3 text-small font-semibold text-ink-muted">{row.mention}</p>
+            <p className="m-0 mt-6 text-small font-semibold text-ink-muted md:mt-8">{row.mention}</p>
           </div>
         </div>
       </div>

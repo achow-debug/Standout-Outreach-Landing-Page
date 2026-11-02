@@ -17,10 +17,10 @@ const askAiQuery = encodeURIComponent(ASK_AI_PROMPT);
 const LINKEDIN_URL = "https://uk.linkedin.com/showcase/standoutgroup/";
 
 const siteLinks = [
-  { href: "/#who-its-for", label: "Who we partner with" },
-  { href: "/#how-it-works", label: "How it works" },
-  { href: "/#founder", label: "Founder" },
-  { href: "/#faqs", label: "FAQs" },
+  { href: "/who-we-partner-with", label: "Who we partner with" },
+  { href: "/how-it-works", label: "How it works" },
+  { href: "/customer-stories#founder", label: "Our story" },
+  { href: "/customer-stories#faqs", label: "Frequently asked questions" },
 ] as const;
 
 const askAiLinks = [

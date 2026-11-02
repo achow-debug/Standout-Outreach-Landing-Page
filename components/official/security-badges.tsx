@@ -14,14 +14,14 @@ export function SecurityBadges() {
       className="relative z-10 -mt-10 scroll-mt-24 rounded-t-[2rem] bg-white lg:-mt-16 lg:rounded-t-[3.75rem]"
       aria-labelledby="security-heading"
     >
-      <div className="mx-auto flex w-full max-w-[1024px] flex-col items-center px-4 py-16 lg:px-12 lg:py-24">
+      <div className="mx-auto flex w-full max-w-[1024px] flex-col items-center px-4 pt-14 pb-16 lg:px-12 lg:pt-20 lg:pb-24">
         <h2
           id="security-heading"
           className="m-0 text-center text-h2 text-ink max-w-[22ch]"
         >
           {copy.heading}
         </h2>
-        <ul className="m-0 mt-8 flex list-none flex-wrap items-center justify-center gap-x-4 gap-y-3 p-0 lg:gap-x-8 lg:gap-y-4">
+        <ul className="m-0 mt-8 flex list-none flex-wrap items-center justify-center gap-x-4 gap-y-3 p-0 md:mt-10 lg:gap-x-8 lg:gap-y-4">
           {copy.badges.map((badge) => (
             <li key={badge.id}>
               <Image
@@ -37,7 +37,7 @@ export function SecurityBadges() {
         </ul>
         <a
           href={copy.linkHref}
-          className="mt-8 inline-flex min-h-11 items-center text-small text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="mt-10 inline-flex min-h-11 items-center text-small text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand md:mt-12"
         >
           {copy.linkLabel}
         </a>

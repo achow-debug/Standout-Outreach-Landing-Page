@@ -72,9 +72,15 @@ export type ChoiceOption<Id extends string> = {
 
 export const intakeDemoChrome = {
   brand: "Standout Group",
-  instruction:
-    "Use the form as a client would. Tap the numbered dots to see why each detail is there.",
-  notesLabel: "Notes",
+  instructionPrimary: "Use the form as a client would.",
+  instructionSecondary:
+    "Turn on Annotations, then tap the numbered dots to see why each detail is there.",
+  annotationsLabel: "Annotations",
+  tipBody:
+    "Fill it like a client. Annotations explain each detail when you’re ready.",
+  tipDismiss: "Got it",
+  nudgeBody: "Turn on Annotations to see why each detail is there.",
+  sidePanelEmpty: "Tap a purple number to see why it’s there.",
   disclaimer:
     "Standout Legal is a fictional firm. Rankings, accreditations and registration numbers are placeholders.",
 } as const;
@@ -120,7 +126,7 @@ export const intakeHelp = {
     {
       id: "divorce",
       label: "Divorce and finances",
-      description: "Dividing property, pensions, businesses and maintenance",
+      description: "Property, pensions, businesses, maintenance",
     },
     {
       id: "children",
@@ -130,12 +136,12 @@ export const intakeHelp = {
     {
       id: "cohabitation",
       label: "Separating without marriage",
-      description: "Property and finances for couples who lived together",
+      description: "Property and finances for cohabiting couples",
     },
     {
       id: "nuptial",
       label: "Pre- or post-nuptial agreement",
-      description: "Protecting assets before or during a marriage",
+      description: "Protecting assets before or during marriage",
     },
     {
       id: "abuse",
@@ -154,13 +160,12 @@ export const intakeHelp = {
 
 export const intakeUrgency = {
   heading: "Is anything time-critical right now?",
-  hint: "For example, a hearing in the coming weeks, or concern about your safety, your children or assets being moved.",
+  hint: "A hearing soon, or concern about safety, children, or assets being moved.",
   options: [
     {
       id: "urgent",
       label: "Yes, I need help urgently",
-      description:
-        "We’ll prioritise your enquiry and only ask what we need to call you.",
+      description: "We’ll prioritise your enquiry and only ask what we need to call.",
       brassEdge: true,
       leadsTo: "callback" as const,
       route: "urgent" as const,
@@ -210,7 +215,7 @@ export const intakeStage = {
 
 export const intakeSignals = {
   heading: "Are any of these part of the picture?",
-  hint: "Choose any that apply. This helps us match you with the partner best suited to your matter.",
+  hint: "Choose any that apply — helps us match the right partner.",
   continueLabel: "Continue",
   options: [
     {
@@ -257,8 +262,7 @@ export const intakeCallback = {
   urgent: {
     badge: "Priority enquiry",
     heading: "We’ll treat your enquiry as a priority.",
-    subtext:
-      "Choose how soon you’d like a partner to call you. All times are UK time, Monday to Friday.",
+    subtext: "Choose when you’d like a partner to call. UK time, Mon–Fri.",
     asap: {
       id: "asap" as const,
       label: "As soon as possible",
@@ -268,7 +272,7 @@ export const intakeCallback = {
   },
   nonUrgent: {
     heading: "When would you like us to call?",
-    subtext: "All times are UK time, Monday to Friday.",
+    subtext: "UK time, Monday to Friday.",
     asap: {
       id: "asap" as const,
       label: "As soon as possible",

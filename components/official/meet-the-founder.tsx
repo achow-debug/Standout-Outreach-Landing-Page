@@ -33,7 +33,7 @@ export function MeetTheFounder() {
     const onClick = (event: MouseEvent) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest('a[href="#founder"]')) setOpen(true);
+      if (target.closest('a[href="#founder"], a[href$="#founder"]')) setOpen(true);
     };
     document.addEventListener("click", onClick);
 
