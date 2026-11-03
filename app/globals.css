@@ -5233,6 +5233,56 @@ html.sheet-open body {
   animation: intake-switch-pulse 1.2s ease-out 2;
 }
 
+:root {
+  --color-intake-gold: #b8893a;
+}
+
+.intake-tab-panels {
+  display: grid;
+}
+
+.intake-tab-panel {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.intake-tab-panel.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.intake-steps {
+  display: grid;
+  min-height: 28rem;
+}
+
+.intake-step {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.intake-step.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.intake-demo {
+  margin-bottom: 1.5rem;
+}
+
+.intake-team-record {
+  line-height: 1.35;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .intake-tip-enter,
   .intake-pin-enter,
@@ -5241,7 +5291,10 @@ html.sheet-open body {
   .intake-backdrop-enter,
   .intake-side-enter,
   .intake-screen-enter,
-  .intake-switch-pulse {
+  .intake-switch-pulse,
+  .intake-tab-panel,
+  .intake-step {
     animation: none;
+    transition: none;
   }
 }

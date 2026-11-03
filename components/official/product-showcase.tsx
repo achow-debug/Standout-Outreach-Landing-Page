@@ -55,30 +55,32 @@ function MobileShowcase() {
 
   return (
     <div className="mx-auto flex w-full max-w-[520px] flex-col bg-canvas pt-4 lg:hidden">
-      <div className="relative min-h-[3.75rem] px-4">
-        {SCENES.map((scene, index) => {
-          const Icon = SCENE_ICONS[scene.id] ?? FilePenLine;
-          const selected = index === active;
-          return (
-            <div
-              key={scene.id}
-              className={`absolute inset-x-4 bottom-0 flex items-start justify-center gap-2.5 transition-opacity duration-300 motion-reduce:transition-none ${
-                selected ? "opacity-100" : "pointer-events-none opacity-0"
-              }`}
-              aria-hidden={!selected}
-            >
-              <Icon
-                aria-hidden
-                className="mt-1 size-5 shrink-0 text-ink-muted opacity-55"
-                strokeWidth={1.75}
-              />
-              <p className="text-center text-[1.5rem] leading-[1.15] font-bold tracking-[-0.02em] text-ink whitespace-pre-line">
-                {scene.mobileCaption}
-              </p>
-            </div>
-          );
-        })}
-      </div>
+      {onDemo ? null : (
+        <div className="relative min-h-[3.75rem] px-4">
+          {SCENES.map((scene, index) => {
+            const Icon = SCENE_ICONS[scene.id] ?? FilePenLine;
+            const selected = index === active;
+            return (
+              <div
+                key={scene.id}
+                className={`absolute inset-x-4 bottom-0 flex items-start justify-center gap-2.5 transition-opacity duration-300 motion-reduce:transition-none ${
+                  selected ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+                aria-hidden={!selected}
+              >
+                <Icon
+                  aria-hidden
+                  className="mt-1 size-5 shrink-0 text-ink-muted opacity-55"
+                  strokeWidth={1.75}
+                />
+                <p className="text-center text-[1.5rem] leading-[1.15] font-bold tracking-[-0.02em] text-ink whitespace-pre-line">
+                  {scene.mobileCaption}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div className="flex justify-center pt-2" role="tablist" aria-label="Scenes">
         {SCENES.map((scene, index) => {
           const selected = index === active;
@@ -103,7 +105,7 @@ function MobileShowcase() {
           );
         })}
       </div>
-      <div className={`px-3 pt-3 ${onDemo ? "pb-10" : "pb-8"}`}>
+      <div className={`px-3 pt-3 ${onDemo ? "pb-12" : "pb-8"}`}>
         <ShowcaseBody active={active} />
       </div>
     </div>

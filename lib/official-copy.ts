@@ -36,7 +36,7 @@ export const officialCopy = {
         /** Two short lines so the 52px mobile caption slot can hold it. */
         mobileCaption: "A client enquiry,\nannotated",
         detail:
-          "Use the form as a client would. Turn on Annotations, then tap the numbered dots to see why each detail is there.",
+          "Use the form as a client would. Tap the numbered dots to see why each detail is there.",
       },
       {
         id: "legal",
