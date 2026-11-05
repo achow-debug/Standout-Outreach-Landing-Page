@@ -1,25 +1,20 @@
-"use client";
-
-import { useRef } from "react";
-import { useCtaActions } from "@/lib/cta";
+import Link from "next/link";
+import { ENQUIRY_CHECK_HREF, SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
-const heroPrimaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl bg-brand text-white text-button shadow-[var(--shadow-cta)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_oklab,var(--color-brand-hover)_88%,black)] hover:shadow-[0_10px_26px_-6px_rgb(79_49_146_/_45%)] sm:min-h-[58px] sm:px-8 sm:text-[1.125rem] sm:w-auto ${focusRing}`;
+const heroPrimaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl bg-brand text-white text-button no-underline shadow-[var(--shadow-cta)] transition-[background-color,box-shadow] duration-150 hover:bg-[color-mix(in_oklab,var(--color-brand-hover)_88%,black)] hover:shadow-[0_10px_26px_-6px_rgb(79_49_146_/_45%)] sm:min-h-[58px] sm:px-8 sm:text-[1.125rem] sm:w-auto ${focusRing}`;
 
-const heroSecondaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl border-2 border-ink bg-surface text-ink text-button transition-colors duration-150 hover:bg-ink/5 sm:min-h-[58px] sm:px-8 sm:text-[1.125rem] sm:w-auto ${focusRing}`;
+const heroSecondaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl border-2 border-ink bg-surface text-ink text-button no-underline transition-colors duration-150 hover:bg-ink/5 sm:min-h-[58px] sm:px-8 sm:text-[1.125rem] sm:w-auto ${focusRing}`;
 
 /**
  * Centred hero on the paper canvas, in the Fyxer stack:
  * eyebrow, two-part headline, a short line, two buttons, then a caption.
- * The primary button opens the enquiry form. Speak to Alex opens the booking.
  */
 export function OfficialHero() {
   const { hero } = officialCopy;
-  const { startForFree, speakToAlex } = useCtaActions("hero");
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   return (
     <section id="top" className="bg-canvas" aria-labelledby="official-hero-heading">
@@ -33,19 +28,17 @@ export function OfficialHero() {
         </div>
         <div className="hero-in hero-in-delay mt-8 flex w-full flex-col items-center">
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center sm:gap-4">
-            <button
-              ref={buttonRef}
+            <Link
               id="hero-cta"
-              type="button"
+              href={ENQUIRY_CHECK_HREF}
               data-cta="measure-enquiries"
-              onClick={() => startForFree(buttonRef.current)}
               className={heroPrimaryClass}
             >
               {hero.ctaLabel}
-            </button>
-            <button type="button" onClick={() => speakToAlex()} className={heroSecondaryClass}>
+            </Link>
+            <Link href={SPEAK_TO_ALEX_HREF} className={heroSecondaryClass}>
               {hero.secondaryCtaLabel}
-            </button>
+            </Link>
           </div>
           <p className="mt-6 text-small text-ink-muted md:mt-8">{hero.caption}</p>
         </div>

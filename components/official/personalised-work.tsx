@@ -1,14 +1,9 @@
 "use client";
 
-import { useRef } from "react";
 import { SourceButton } from "@/components/official/source-button";
-import { useCtaActions } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 
 const copy = officialCopy.personalised;
-
-const ctaButtonClass =
-  "inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl bg-brand text-white text-button hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto";
 
 const badgeClass =
   "absolute -top-3.5 -right-2 z-20 inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-xl border-0 bg-surface px-2 text-small font-semibold text-ink-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:-top-5 lg:-left-5 lg:right-auto";
@@ -25,9 +20,6 @@ function hasBadge(row: Row): row is Extract<Row, { badge: string }> {
  * Photos stay labelled placeholders until the real crops are dropped in.
  */
 export function PersonalisedWork() {
-  const { startForFree } = useCtaActions("personalised");
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
   return (
     <section
       id="personalised"
@@ -38,18 +30,6 @@ export function PersonalisedWork() {
         {copy.rows.map((row, index) => (
           <FeatureRow key={row.id} row={row} index={index} />
         ))}
-        <div className="mx-auto flex w-full max-w-[421px] flex-col items-center pt-4 text-center lg:pt-8">
-          <button
-            ref={buttonRef}
-            type="button"
-            data-cta="measure-enquiries"
-            onClick={() => startForFree(buttonRef.current)}
-            className={ctaButtonClass}
-          >
-            {copy.ctaLabel}
-          </button>
-          <p className="mt-6 text-small text-ink-muted md:mt-8">{copy.caption}</p>
-        </div>
       </div>
     </section>
   );

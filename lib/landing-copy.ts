@@ -68,16 +68,16 @@ export const landingCopy = {
     },
   },
   cta: {
-    label: "Apply For My 30-Day Pilot",
-    mobileLabel: "Apply For My 30-Day Pilot",
+    label: "Free enquiry check",
+    mobileLabel: "Free enquiry check",
     /** Shown once after the breakdown video finishes — static cue, no motion. */
-    afterVideoCue: "Ready when you are — apply for your 30-day pilot.",
+    afterVideoCue: "Ready when you are — request your free enquiry check.",
   },
   reviewRequest: {
-    heading: "Apply For My 30-Day Pilot",
+    heading: "Free enquiry check",
     subtitle:
       "Tell us about your firm and we will review your current enquiry journey before confirming the next steps.",
-    submitCta: "Apply For My 30-Day Pilot",
+    submitCta: "See what happens to your enquiries",
     trustMicrocopy: {
       gdpr: "100% GDPR & ICO Compliant. Data processed under strict UK privacy standards. We never resell your enquiry data.",
       sra: "Compliant with SRA Transparency Rules & Advertising Guidelines.",

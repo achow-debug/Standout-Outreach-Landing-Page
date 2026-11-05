@@ -563,7 +563,8 @@ a:hover {
   color: var(--color-ink); /* slate-700 */
 }
 
-.field input {
+.field input,
+.field textarea {
   min-height: var(--control-min-height);
   padding: 0.75rem 1rem; /* px-4 py-3 */
   font-family: inherit;
@@ -578,6 +579,12 @@ a:hover {
     background-color 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.field textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+  width: 100%;
 }
 
 .field select {
@@ -616,7 +623,8 @@ a:hover {
 }
 
 .field input:disabled,
-.field select:disabled {
+.field select:disabled,
+.field textarea:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
@@ -624,7 +632,9 @@ a:hover {
 .field input:focus,
 .field input:focus-visible,
 .field select:focus,
-.field select:focus-visible {
+.field select:focus-visible,
+.field textarea:focus,
+.field textarea:focus-visible {
   background-color: var(--color-surface);
   border-color: var(--color-accent);
   outline: none;
@@ -632,7 +642,8 @@ a:hover {
 }
 
 .field--error input,
-.field--error select {
+.field--error select,
+.field--error textarea {
   border-color: var(--color-error);
   background-color: var(--color-error-bg);
 }
@@ -640,7 +651,9 @@ a:hover {
 .field--error input:focus,
 .field--error input:focus-visible,
 .field--error select:focus,
-.field--error select:focus-visible {
+.field--error select:focus-visible,
+.field--error textarea:focus,
+.field--error textarea:focus-visible {
   border-color: var(--color-error);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 22%, transparent);
 }
@@ -673,6 +686,38 @@ a:hover {
 
   .field-error {
     color: Mark;
+  }
+}
+
+/* Multi-step form pages: step fade + sticky action bar clearance */
+.form-step-fade {
+  animation: form-step-fade-in 150ms var(--ease-out);
+}
+
+@keyframes form-step-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-step-fade {
+    animation: none;
+  }
+}
+
+.form-page-main {
+  scroll-padding-bottom: 7rem;
+  padding-bottom: 7rem; /* pb-28 — clears the mobile sticky action bar */
+}
+
+@media (min-width: 1024px) {
+  .form-page-main {
+    scroll-padding-bottom: 0;
+    padding-bottom: 0;
   }
 }
 

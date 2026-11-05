@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
-import { ReviewRequestShell } from "@/components/landing/review-request-cta";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { BookingProvider } from "@/components/official/booking-provider";
 import { DpaRequestProvider } from "@/components/official/dpa-request";
@@ -22,25 +21,23 @@ export const metadata: Metadata = {
 
 export default function CustomerStoriesPage() {
   return (
-    <ReviewRequestShell>
-      <PracticeAreaProvider>
-        <BookingProvider>
-          <DpaRequestProvider>
-            <main
-              id="main-content"
-              tabIndex={-1}
-              className="pt-[calc(env(safe-area-inset-top)+5.5rem)] md:pt-[calc(env(safe-area-inset-top)+6rem)]"
-            >
-              <MotionBootstrap />
-              <SiteHeader />
-              <MeetTheFounder />
-              <Faq />
-            </main>
-            <SiteFooter />
-            <SourcesSection />
-          </DpaRequestProvider>
-        </BookingProvider>
-      </PracticeAreaProvider>
-    </ReviewRequestShell>
+    <PracticeAreaProvider>
+      <BookingProvider>
+        <DpaRequestProvider>
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="pt-[calc(env(safe-area-inset-top)+5.5rem)] md:pt-[calc(env(safe-area-inset-top)+6rem)]"
+          >
+            <MotionBootstrap />
+            <SiteHeader />
+            <MeetTheFounder />
+            <Faq />
+          </main>
+          <SiteFooter />
+          <SourcesSection />
+        </DpaRequestProvider>
+      </BookingProvider>
+    </PracticeAreaProvider>
   );
 }

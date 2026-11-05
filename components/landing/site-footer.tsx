@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, type ReactNode } from "react";
-import { useBookingOptional } from "@/components/official/booking-provider";
 import {
   DpaRequestProvider,
   DpaRequestTrigger,
@@ -10,6 +9,7 @@ import {
 } from "@/components/official/dpa-request";
 import { openSourcesSection } from "@/components/official/source-button";
 import { credentials } from "@/content/landing";
+import { ENQUIRY_CHECK_HREF, SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { siteConfig } from "@/lib/site-config";
 
 const ASK_AI_PROMPT = "How can Standout Group, the law firm growth partner, help me?";
@@ -52,40 +52,23 @@ function FooterDpaBoundary({ children }: { children: ReactNode }) {
 
 function FooterBookingControl({
   label,
-  cta,
+  href,
   className,
 }: {
   label: string;
-  cta: "start-free" | "speak-to-alex";
+  href: string;
   className: string;
 }) {
-  const booking = useBookingOptional();
-
-  if (!booking) {
-    return (
-      <Link className={className} href="/?book=1">
-        {label}
-      </Link>
-    );
-  }
-
   return (
-    <button
-      type="button"
-      className={className}
-      data-cta={cta}
-      data-booking-cta=""
-      disabled={cta === "start-free" && booking.booked}
-      onClick={() => booking.openBooking("footer")}
-    >
-      {cta === "start-free" && booking.booked ? "Call booked" : label}
-    </button>
+    <Link className={className} href={href} data-cta={href}>
+      {label}
+    </Link>
   );
 }
 
 function FooterSourcesLink() {
   return (
-    <a
+    <Link
       className="site-footer-link"
       href="/#sources"
       onClick={(event) => {
@@ -96,7 +79,7 @@ function FooterSourcesLink() {
       }}
     >
       Sources & methodology
-    </a>
+    </Link>
   );
 }
 
@@ -131,8 +114,8 @@ function SiteFooterContent() {
               built them and the technology to compete.
             </p>
             <FooterBookingControl
-              label="Start for free"
-              cta="start-free"
+              label="Free enquiry check"
+              href={ENQUIRY_CHECK_HREF}
               className="btn btn-primary site-footer-cta"
             />
           </div>
@@ -169,7 +152,7 @@ function SiteFooterContent() {
                 </a>
                 <FooterBookingControl
                   label="Speak to Alex"
-                  cta="speak-to-alex"
+                  href={SPEAK_TO_ALEX_HREF}
                   className="site-footer-link"
                 />
               </div>

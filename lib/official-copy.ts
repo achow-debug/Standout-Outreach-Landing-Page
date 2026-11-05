@@ -10,11 +10,9 @@ export const officialCopy = {
       "Standout Group is a law firm growth partner. We turn the work you already attract into retained matters. Free for 30 days.",
   },
   header: {
-    applyLabel: "Apply For My 30-Day Pilot",
-    applyHref: "#book",
     /** Same enquiry form as the hero. Shown alone on the closed mobile bar. */
     ctaLabel: "Free enquiry check",
-    /** Same booking as the hero. Desktop bar, and the open mobile menu. */
+    /** Speak to Alex form. Desktop bar, and the open mobile menu. */
     askLabel: "Speak to Alex",
   },
   hero: {
@@ -241,7 +239,7 @@ export const officialCopy = {
       id: "built-for-legal",
       title: "Built for legal, not bolted on",
     },
-    ctaLabel: "Apply For My 30-Day Pilot",
+    ctaLabel: "Speak to Alex",
   },
   firmDay: {
     heading: "Your firm’s day with Standout Group",

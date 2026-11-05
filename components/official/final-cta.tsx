@@ -1,22 +1,22 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useBooking } from "@/components/official/booking-provider";
-import { useCtaActions } from "@/lib/cta";
+import { ENQUIRY_CHECK_HREF, SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
-const closePrimaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl bg-brand text-white text-button hover:bg-brand-hover sm:w-auto ${focusRing}`;
+const closePrimaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl bg-brand text-white text-button no-underline hover:bg-brand-hover sm:w-auto ${focusRing}`;
 
-const closeSecondaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl border-[1.5px] border-ink text-ink text-button bg-transparent hover:bg-ink/5 sm:w-auto ${focusRing}`;
+const closeSecondaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl border-[1.5px] border-ink text-ink text-button no-underline bg-transparent hover:bg-ink/5 sm:w-auto ${focusRing}`;
 
 /**
  * Cream close before the footer. Two-line headline, three numbered steps,
- * then the enquiry form and Speak to Alex. A booking adds the thank-you
+ * then the enquiry check and Speak to Alex links. A booking adds the thank-you
  * underneath and leaves this close in place.
  */
 export function OfficialFinalCta() {
@@ -26,8 +26,6 @@ export function OfficialFinalCta() {
   const thankYou = officialCopy.thankYou;
   const { portraitSrc, portraitAlt } = officialCopy.founder;
   const { booked } = useBooking();
-  const { startForFree, speakToAlex } = useCtaActions("final");
-  const primaryRef = useRef<HTMLButtonElement>(null);
 
   return (
     <section
@@ -96,23 +94,20 @@ export function OfficialFinalCta() {
             id="final-cta"
             className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center"
           >
-            <button
-              ref={primaryRef}
-              type="button"
+            <Link
+              href={ENQUIRY_CHECK_HREF}
               data-cta="measure-enquiries"
-              onClick={() => startForFree(primaryRef.current)}
               className={closePrimaryClass}
             >
               {primaryCta}
-            </button>
-            <button
-              type="button"
+            </Link>
+            <Link
+              href={SPEAK_TO_ALEX_HREF}
               data-booking-cta=""
-              onClick={() => speakToAlex()}
               className={closeSecondaryClass}
             >
               {secondaryCta}
-            </button>
+            </Link>
           </div>
           <p className="mt-6 text-small text-ink-muted md:mt-8">{trust}</p>
           <p className="mt-2 text-small text-ink-muted md:mt-3">{microcopy}</p>

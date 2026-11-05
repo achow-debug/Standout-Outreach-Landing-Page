@@ -204,7 +204,7 @@ function PracticeAreaBody({
         data-booking-cta=""
         onClick={onApply}
       >
-        {keepTogether(officialCopy.header.applyLabel)}
+        {keepTogether(officialCopy.header.askLabel)}
       </button>
     </div>
   );

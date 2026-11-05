@@ -1,20 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useCtaActions } from "@/lib/cta";
+import Link from "next/link";
 import {
   officialCopy,
   type OfficialNavItem,
   type OfficialNavMenu,
 } from "@/lib/official-copy";
+import { ENQUIRY_CHECK_HREF, SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { siteConfig } from "@/lib/site-config";
 
 const navFocus =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
-const navPrimaryClass = `site-nav-cta site-nav-cta-primary inline-flex min-h-10 shrink items-center justify-center whitespace-nowrap rounded-lg bg-brand px-3.5 text-[0.9375rem] font-semibold text-white hover:bg-brand-hover ${navFocus}`;
+const navPrimaryClass = `site-nav-cta site-nav-cta-primary inline-flex min-h-10 shrink items-center justify-center whitespace-nowrap rounded-lg bg-brand px-3.5 text-[0.9375rem] font-semibold text-white no-underline hover:bg-brand-hover ${navFocus}`;
 
-const navSecondaryClass = `site-nav-cta site-nav-cta-secondary min-h-10 shrink items-center justify-center whitespace-nowrap rounded-lg border-[1.5px] border-ink bg-transparent px-3.5 text-[0.9375rem] font-semibold text-ink hover:bg-ink/5 ${navFocus}`;
+const navSecondaryClass = `site-nav-cta site-nav-cta-secondary min-h-10 shrink items-center justify-center whitespace-nowrap rounded-lg border-[1.5px] border-ink bg-transparent px-3.5 text-[0.9375rem] font-semibold text-ink no-underline hover:bg-ink/5 ${navFocus}`;
 
 const navLinkClass =
   "site-nav-link inline-flex items-center px-1.5 py-2 text-[1.1875rem] font-normal whitespace-nowrap text-ink no-underline xl:px-3";
@@ -100,7 +101,6 @@ export function SiteHeader() {
   const navItems = officialCopy.nav.items;
   const headerCta = officialCopy.header.ctaLabel;
   const askLabel = officialCopy.header.askLabel;
-  const { startForFree, speakToAlex } = useCtaActions("header");
   const [menuOpen, setMenuOpen] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [headerHidden, setHeaderHidden] = useState(false);
@@ -205,7 +205,7 @@ export function SiteHeader() {
         aria-label="Page"
       >
         <div className="grid min-h-[57px] grid-cols-[auto_1fr_auto] items-center gap-2 px-3 lg:min-h-[62px] lg:gap-3 lg:px-4 xl:px-6">
-          <a
+          <Link
             href="/"
             className="brand-mark site-nav-mark text-[1.125rem] leading-none no-underline lg:text-[1.25rem] xl:text-[1.375rem]"
             onClick={closeMenus}
@@ -214,7 +214,7 @@ export function SiteHeader() {
               {standout}{" "}
               <span className="brand-mark-accent">{group}</span>
             </span>
-          </a>
+          </Link>
 
           <div className="hidden items-center justify-center lg:flex">
             {navItems.map((item) => {
@@ -266,27 +266,21 @@ export function SiteHeader() {
           </div>
 
           <div className="col-start-3 flex shrink-0 items-center justify-end gap-1.5 lg:gap-2">
-            <button
-              type="button"
+            <Link
+              href={ENQUIRY_CHECK_HREF}
               className={navPrimaryClass}
               data-cta="measure-enquiries"
-              onClick={(event) => {
-                closeMenus();
-                startForFree(event.currentTarget);
-              }}
+              onClick={closeMenus}
             >
               {headerCta}
-            </button>
-            <button
-              type="button"
+            </Link>
+            <Link
+              href={SPEAK_TO_ALEX_HREF}
               className={`${navSecondaryClass} hidden lg:inline-flex`}
-              onClick={() => {
-                closeMenus();
-                speakToAlex();
-              }}
+              onClick={closeMenus}
             >
               {askLabel}
-            </button>
+            </Link>
             <button
               ref={menuButtonRef}
               type="button"
@@ -354,27 +348,21 @@ export function SiteHeader() {
             );
           })}
           <div className="mt-3 flex flex-col gap-3">
-            <button
-              type="button"
+            <Link
+              href={ENQUIRY_CHECK_HREF}
               className={`${navPrimaryClass} w-full`}
               data-cta="measure-enquiries"
-              onClick={(event) => {
-                closeMenus();
-                startForFree(event.currentTarget);
-              }}
+              onClick={closeMenus}
             >
               {headerCta}
-            </button>
-            <button
-              type="button"
+            </Link>
+            <Link
+              href={SPEAK_TO_ALEX_HREF}
               className={`${navSecondaryClass} inline-flex w-full`}
-              onClick={() => {
-                closeMenus();
-                speakToAlex();
-              }}
+              onClick={closeMenus}
             >
               {askLabel}
-            </button>
+            </Link>
           </div>
         </div>
       </nav>

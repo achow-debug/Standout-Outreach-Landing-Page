@@ -9,7 +9,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useReviewModal } from "@/components/landing/review-request-cta";
 import {
   attributionProps,
   getDeviceCategory,
@@ -17,6 +16,7 @@ import {
 } from "@/lib/analytics";
 import { loadCalendly, bookingPopupUrl, openCalendlyPopup } from "@/lib/booking";
 import { usePracticeArea, type PracticeArea } from "@/components/official/practice-area";
+import { SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { landingCopy } from "@/lib/landing-copy";
 import {
   isCalendlyEnabled,
@@ -92,7 +92,6 @@ function bookingUtm(location: BookingLocation, practiceArea: PracticeArea | null
  */
 export function BookingProvider({ children }: { children: ReactNode }) {
   const { practiceArea } = usePracticeArea();
-  const openModal = useReviewModal();
   const [bookingOpen, setBookingOpen] = useState(false);
   const [booked, setBooked] = useState(false);
   const locationRef = useRef<BookingLocation>("final");
@@ -243,15 +242,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
       });
 
       if (!isCalendlyEnabled()) {
-        const fallback =
-          location === "header"
-            ? "official_header"
-            : location === "how-it-works"
-              ? "official_how"
-              : location === "personalised"
-                ? "official_personalised"
-                : "official_apply";
-        openModal(null, fallback);
+        window.location.assign(SPEAK_TO_ALEX_HREF);
         return;
       }
 
@@ -264,7 +255,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         }
       });
     },
-    [openModal, practiceArea],
+    [practiceArea],
   );
 
   const bookParamHandled = useRef(false);
