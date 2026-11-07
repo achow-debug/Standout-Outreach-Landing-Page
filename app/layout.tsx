@@ -1,4 +1,4 @@
-import { Source_Sans_3 } from "next/font/google";
+import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
@@ -13,6 +13,13 @@ const sourceSans = Source_Sans_3({
   weight: ["400", "600", "700", "800"],
   display: "swap",
   variable: "--font-source-sans",
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: "600",
+  display: "swap",
+  variable: "--font-source-serif",
 });
 
 export const viewport: Viewport = {
@@ -59,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-GB"
-      className={sourceSans.variable}
+      className={`${sourceSans.variable} ${sourceSerif.variable}`}
       suppressHydrationWarning
     >
       <head>

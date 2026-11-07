@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Sheet } from "@/components/official/sheet";
+import { officialCopy } from "@/lib/official-copy";
 
 type Review = {
   id: string;
@@ -10,6 +11,7 @@ type Review = {
   location: string;
   pullQuote: string;
   fullQuote: string;
+  portraitSrc?: string;
 };
 
 const reviews: Review[] = [
@@ -18,6 +20,7 @@ const reviews: Review[] = [
     name: "Florenda A",
     specialism: "Conveyancing law specialist",
     location: "Staffordshire",
+    portraitSrc: "/images/partners/florenda-abdo.jpg",
     pullQuote:
       "Standout didn’t promise a flood of new clients. They proposed diagnosing first. I agreed to expand only once we could see it working.",
     fullQuote:
@@ -28,6 +31,7 @@ const reviews: Review[] = [
     name: "Jayden C",
     specialism: "Family law specialist",
     location: "Greater Manchester",
+    portraitSrc: "/images/partners/jayden-chow.jpg",
     pullQuote:
       "The call was framed as a collaboration, not a sales pitch. Without Alex’s help, I would have missed opportunities that turned into commissions.",
     fullQuote:
@@ -91,7 +95,11 @@ function ReviewCard({
             </span>
           </span>
           <span className="official-partners-portrait" aria-hidden="true">
-            {initialsFromName(item.name)}
+            {item.portraitSrc ? (
+              <img src={item.portraitSrc} alt="" />
+            ) : (
+              initialsFromName(item.name)
+            )}
           </span>
         </figcaption>
       </figure>
@@ -182,7 +190,7 @@ export function WhatPartnersSay() {
       <div className="page-shell official-partners-inner">
         <div className="official-partners-toolbar">
           <h2 id="official-partners-heading" className="official-partners-heading t-h2">
-            Trusted by people clients count on
+            {officialCopy.partners.heading}
           </h2>
           <div className="official-partners-nav">
             <button type="button" aria-label="Previous review" onClick={() => step(-1)}>

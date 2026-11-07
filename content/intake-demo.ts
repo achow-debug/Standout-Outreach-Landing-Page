@@ -1,6 +1,6 @@
 /**
  * Typed content for the annotated Standout Legal enquiry demo.
- * Compiled from New enquiry form demo.md — strings are exact.
+ * Compiled from Newenquiryformdemo.md — strings are exact.
  */
 
 export type IntakeNoteId =
@@ -22,8 +22,7 @@ export type IntakeNoteId =
   | 16
   | 17
   | 18
-  | 19
-  | 20;
+  | 19;
 
 export type IntakeScreenId =
   | "welcome"
@@ -86,15 +85,29 @@ export type IntakeCitation = {
   sourceUrl: string;
 };
 
+export type IntakeNoteSection = {
+  label: string;
+  body: string;
+};
+
 export type IntakeNote = {
   id: IntakeNoteId;
   title: string;
-  forClient: string;
-  forFirm: string;
+  /** Shown in this order: only the parts that apply. */
+  sections: readonly IntakeNoteSection[];
   citation?: IntakeCitation;
-  /** Note 20 opens routing tables. */
+  /** Note 19 opens the routing tables. */
   showRoutingTables?: boolean;
 };
+
+export const intakeNoteLabels = {
+  canWeAct: "Can we act?",
+  shouldPursue: "Should we pursue it?",
+  helpsConvert: "How it helps convert",
+  clientBelieves: "What the client believes",
+  protectsFirm: "How it protects the firm",
+  whyHere: "Why it sits here",
+} as const;
 
 export type ChoiceOption<Id extends string> = {
   id: Id;
@@ -122,7 +135,7 @@ export const intakeTotalSteps = 8;
 // ── Demo frame (outside the card) ───────────────────────────────────────────
 
 export const intakeDemoChrome = {
-  title: "A client enquiry, annotated",
+  title: "See our enquiry form yourself",
   leadLine:
     "Use the form as a client would. Tap the numbered dots to see why each detail is there.",
   annotationsLabel: "Annotations",
@@ -150,7 +163,7 @@ export const intakeFirmChrome = {
 // ── Welcome ─────────────────────────────────────────────────────────────────
 
 export const intakeWelcome = {
-  eyebrow: "PRIVATE ENQUIRY",
+  eyebrow: "Private enquiry",
   heading: "Let’s talk, in confidence.",
   reassurances: [
     {
@@ -177,27 +190,27 @@ export const intakeHelp = {
     {
       id: "divorce",
       label: "Divorce and finances",
-      description: "Dividing property, pensions, businesses and maintenance",
+      description: "Assets, pensions and maintenance",
     },
     {
       id: "children",
       label: "Arrangements for children",
-      description: "Where children live and time with each parent",
+      description: "Where they live and spend time",
     },
     {
       id: "cohabitation",
       label: "Separating without marriage",
-      description: "Property and finances for couples who lived together",
+      description: "For couples who lived together",
     },
     {
       id: "nuptial",
       label: "Pre- or post-nuptial agreement",
-      description: "Protecting assets before or during a marriage",
+      description: "Protecting assets in a marriage",
     },
     {
       id: "abuse",
       label: "Protection from domestic abuse",
-      description: "Court orders to keep you and your family safe",
+      description: "Court orders to keep you safe",
     },
     {
       id: "other",
@@ -216,17 +229,17 @@ export const intakeUrgency = {
     {
       id: "court-date",
       label: "I have a court date coming up",
-      description: "A hearing or court deadline in the coming weeks",
+      description: "A hearing or court deadline soon",
     },
     {
       id: "safety",
       label: "I’m worried about my or my children’s safety",
-      description: "We’ll make sure someone calls you as a priority",
+      description: "We’ll call you as a priority",
     },
     {
       id: "abroad-risk",
       label: "I’m worried my children may be taken abroad",
-      description: "We can act quickly to help prevent it",
+      description: "We can act quickly to prevent it",
     },
   ] as const satisfies readonly ChoiceOption<
     Exclude<UrgencyOptionId, "none">
@@ -234,7 +247,7 @@ export const intakeUrgency = {
   noneOption: {
     id: "none" as const,
     label: "No, nothing urgent",
-    description: "We’ll arrange a call at a time that suits you",
+    description: "We’ll call when it suits you",
   } satisfies ChoiceOption<"none">,
   alwaysVisible: [
     "If anything here is urgent, we’ll prioritise your enquiry and only ask what we need to call you.",
@@ -250,12 +263,12 @@ export const intakeStage = {
     {
       id: "thinking",
       label: "Thinking about separating",
-      description: "Exploring your options before deciding anything",
+      description: "Exploring your options first",
     },
     {
       id: "recently",
       label: "Recently separated",
-      description: "Looking for advice on what happens next",
+      description: "Advice on what happens next",
     },
     {
       id: "court",
@@ -265,7 +278,7 @@ export const intakeStage = {
     {
       id: "change",
       label: "I have a solicitor and want to change",
-      description: "A second opinion or new representation",
+      description: "A second opinion or new solicitor",
     },
   ] as const satisfies readonly ChoiceOption<StageOptionId>[],
 };
@@ -318,7 +331,8 @@ export const intakeSignals = {
 
 export const intakeValue = {
   heading: "Roughly, what’s the combined value of property, savings and pensions?",
-  subtext: "Optional. A rough idea helps us match you with the right lawyer.",
+  subtext:
+    "Optional. A rough idea helps us match you with the right lawyer and give you a clearer fee estimate.",
   options: [
     { id: "under-250k", label: "Under £250,000", description: "" },
     { id: "250k-1m", label: "£250,000 to £1 million", description: "" },
@@ -338,7 +352,7 @@ export const intakeCallback = {
     asap: {
       id: "asap" as const,
       label: "As soon as possible",
-      description: "A family lawyer will call you as a priority",
+      description: "We’ll call you as a priority",
     },
   },
   nonUrgent: {
@@ -347,7 +361,7 @@ export const intakeCallback = {
     asap: {
       id: "asap" as const,
       label: "As soon as possible",
-      description: "We’ll call at the first opportunity",
+      description: "At the first opportunity",
     },
   },
   orChooseLabel: "Or choose a time",
@@ -407,7 +421,7 @@ export const intakeBeforeCall = {
 
 export const intakeSuccess = {
   urgentBadge: "Flagged as a priority",
-  eyebrow: "ENQUIRY RECEIVED",
+  eyebrow: "Enquiry received",
   heading: (firstName: string) => `Thank you, ${firstName}.`,
   subtext: "Here is what happens next.",
   timeline: [
@@ -526,16 +540,24 @@ export function prevIntakeScreen(
   return steps[index - 1] ?? "help";
 }
 
-// ── Annotations (notes 1–20) — Task A will audit copy ───────────────────────
+// ── Annotations (notes 1–19) ───────────────────────────────────────────────
+
+const L = intakeNoteLabels;
 
 export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   1: {
     id: 1,
     title: "Proof where people compare",
-    forClient:
-      "Independent rankings sit right under the firm’s name, so they are visible on every step of the form.",
-    forFirm:
-      "Family clients compare firms more than most, so the proof belongs on the form, not three clicks away on an About page.",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "Family clients compare firms more than most, so the proof belongs on the form, not three clicks away on an About page.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“People who would know rate this firm.” Independent rankings sit right under the firm’s name, so they are visible on every step of the form.",
+      },
+    ],
     citation: {
       figure: "55%",
       text: "of people looking for family law services shopped around, the highest of any area surveyed.",
@@ -547,25 +569,44 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   2: {
     id: 2,
     title: "Quick exit",
-    forClient:
-      "Someone using a shared laptop or phone can leave in one tap. The form is replaced with a neutral page and removed from the browser’s Back history.",
-    forFirm:
-      "In family law, a quick-exit button is a safety feature for people experiencing abuse, and standard practice on UK family and domestic abuse sites. Having it on the form before a single question shows the firm understands its clients.",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "Someone using a shared laptop or phone can start the form knowing they can leave in one tap. The form is replaced with a neutral page and removed from the browser’s Back history.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“They understand people in my situation.” In family law, a quick-exit button is a safety feature for people experiencing abuse, and standard practice on UK family and domestic abuse sites. Having it on the form before a single question shows the firm understands its clients.",
+      },
+    ],
   },
   3: {
     id: 3,
     title: "An invitation, not a screening",
-    forClient:
-      "The first line promises a confidential conversation, with no hint that they might be turned away.",
-    forFirm:
-      "Replaces “whether we may be able to assist”, which made enquirers feel screened out before they had started.",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "Replaces “whether we may be able to assist”, which made enquirers feel screened out before they had started.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“They want to hear from me.” The first line promises a confidential conversation, with no hint that they might be turned away.",
+      },
+    ],
   },
   4: {
     id: 4,
     title: "Privacy and no commitment, up front",
-    forClient:
-      "Answers the two worries people have before typing anything sensitive: who will see it, and whether they are committing to anything.",
-    forFirm: "Trust is built before the first question, so fewer people leave at the start.",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "Trust is built before the first question, so fewer people leave at the start.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“This stays private, and I’m not signing up to anything.” It answers the two worries people have before typing anything sensitive: who will see it, and whether they are committing to anything.",
+      },
+    ],
     citation: {
       figure: "82%",
       text: "of consumers said reputation was the most important factor when choosing a legal provider.",
@@ -577,9 +618,16 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   5: {
     id: 5,
     title: "The effort, stated up front",
-    forClient:
-      "“Takes about 2 minutes” tells them how much time it takes before they commit to starting.",
-    forFirm: "A short, known task is easier to start and easier to finish.",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "A short, known task is easier to start and easier to finish.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“This won’t take long.” They know how much time it takes before they commit to starting.",
+      },
+    ],
     citation: {
       figure: "17%",
       text: "of US online shoppers have abandoned an order because checkout was too long or complicated. This is an ecommerce benchmark, used here as a guide.",
@@ -589,11 +637,25 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   },
   6: {
     id: 6,
-    title: "One question per screen",
-    forClient:
-      "Six options, each with a plain-English description, instead of a 16-row wall. Square checkboxes show they can choose more than one, and they recognise their situation without needing legal terms.",
-    forFirm:
-      "Cleaner categories arrive in your inbox, so the enquiry reaches the right person first time.",
+    title: "The matter, in plain English",
+    sections: [
+      {
+        label: L.canWeAct,
+        body: "It checks the matter is within the firm’s expertise.",
+      },
+      {
+        label: L.shouldPursue,
+        body: "Financial remedy work (“Divorce and finances” on the form) and international matters are usually the highest-value work. International elements are picked up later in the form, on steps 2 and 4.",
+      },
+      {
+        label: L.helpsConvert,
+        body: "It routes the enquiry to the right specialist. Six options with plain-English descriptions replace a 16-row wall, so cleaner categories reach the right person first time.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“They handle exactly this.” They recognise their situation without needing legal terms, and square checkboxes show they can choose more than one.",
+      },
+    ],
     citation: {
       figure: "20–60%",
       text: "fewer form elements could be shown by default in most checkouts, according to Baymard’s usability research.",
@@ -605,10 +667,20 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   7: {
     id: 7,
     title: "A reason, not a label",
-    forClient:
-      "They say what’s urgent in plain terms. Urgent enquiries skip two questions, so there are fewer questions to answer when time matters most.",
-    forFirm:
-      "Almost everyone ticks a plain “urgent” box. A reason tells your team how fast to respond and who should pick it up, and it covers court dates, safety and child abduction risk in one question.",
+    sections: [
+      {
+        label: L.shouldPursue,
+        body: "It measures urgency. A court date, a safety concern and a risk of children being taken abroad each call for a different response, and almost everyone would tick a plain “urgent” box.",
+      },
+      {
+        label: L.helpsConvert,
+        body: "It sets how fast the firm responds and who picks it up. Urgent enquirers skip two questions, so there’s less to answer when time matters most.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“They get how urgent this is.”",
+      },
+    ],
     citation: {
       figure: "82%",
       text: "of consumers rated timeliness of response as the most important factor when looking for a lawyer (US survey).",
@@ -620,38 +692,84 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   8: {
     id: 8,
     title: "Stage, kept apart from urgency",
-    forClient: "One tap to answer, and nothing changes until they press Continue.",
-    forFirm:
-      "Because stage and urgency are separate questions, you learn both how far along they are and how fast to act.",
+    sections: [
+      {
+        label: L.shouldPursue,
+        body: "It measures willingness to proceed. Someone who has a solicitor and wants to change, or whose court proceedings have started, is high-intent and usually ready to pay fees. “Thinking about separating” is a nurture lead.",
+      },
+      {
+        label: L.helpsConvert,
+        body: "Because stage and urgency are separate questions, your team learns both how far along they are and how fast to act.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“I can be honest about where I am.” One tap to answer, and nothing changes until they press Continue.",
+      },
+    ],
   },
   9: {
     id: 9,
     title: "High-value signals, without a means test",
-    forClient:
-      "Plain descriptions of their situation, with no exact figures, so it never feels like a means test.",
-    forFirm:
-      "Business interests, overseas assets, trusts and existing nuptial agreements point to complex or specialist matters, so the right person makes the call.",
+    sections: [
+      {
+        label: L.shouldPursue,
+        body: "Business interests, overseas assets, trusts and existing nuptial agreements point to complex or specialist matters. An international element usually means more complexity and higher fees, often a boutique’s sweet spot.",
+      },
+      {
+        label: L.helpsConvert,
+        body: "The right person makes the first call.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“They’re not judging my finances.” Plain descriptions of their situation, with no figures, so it never feels like a means test.",
+      },
+    ],
   },
   10: {
     id: 10,
     title: "An honest way out",
-    forClient: "“Not sure” is a valid answer, so nobody is forced to guess.",
-    forFirm: "Keeps the signals accurate. A forced choice produces false flags.",
+    sections: [
+      {
+        label: L.shouldPursue,
+        body: "It keeps the signals accurate. A forced choice produces false flags.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“I don’t have to guess.” “Not sure” is a valid answer.",
+      },
+    ],
   },
   11: {
     id: 11,
     title: "A rough value, never a figure",
-    forClient: "Three broad bands and “Prefer not to say”. Nobody is asked how they’ll pay.",
-    forFirm:
-      "Together with the signals, this does more for routing than any other question. It tells you whether it’s a partner matter or one for an associate, and whether your fees fit.",
+    sections: [
+      {
+        label: L.shouldPursue,
+        body: "It covers profitability and ability to pay. That’s a real filter in family work, because no-win-no-fee agreements aren’t available in family proceedings. Together with the signals, this does more for routing than any other question: it tells you whether it’s a partner matter or one for an associate, and whether your fees fit.",
+      },
+      {
+        label: L.helpsConvert,
+        body: "It tells the firm which fee conversation to have, such as a fixed-fee package or hourly rates. It also prepares whoever calls to raise a legal services payment order where the other party controls the money, and to signpost anyone who needs legal aid, which most boutique firms don’t offer. Nobody is asked on the form how they’ll pay.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“They’re asking so they can help me.” Bands feel far less intrusive than exact figures, and “Prefer not to say” is always there. The subtext says a rough idea helps match them with the right lawyer and give a clearer fee estimate, which makes the question a benefit to them.",
+      },
+    ],
   },
   12: {
     id: 12,
     title: "A promise without a stopwatch",
-    forClient:
-      "Urgent enquirers are told they are a priority. Everyone else chooses a time that suits them.",
-    forFirm:
-      "No fixed deadline is promised to the client, so the firm never breaks one on a busy day. Your team still sees its own response target on the record.",
+    sections: [
+      {
+        label: L.protectsFirm,
+        body: "No fixed deadline is promised to the client, so the firm never breaks one on a busy day. Your team still sees its own response target on the record.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "Urgent enquirers are told they are a priority. Everyone else chooses a time that suits them.",
+      },
+    ],
     citation: {
       figure: "79%",
       text: "of consumers expect a response from a law firm within 24 hours (US survey).",
@@ -663,8 +781,16 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   13: {
     id: 13,
     title: "They choose when you call",
-    forClient: "Morning, afternoon or evening windows fit around work and family.",
-    forFirm: "Calling when someone expects it means more calls are answered.",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "Calling when someone expects it means more calls are answered.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "Morning, afternoon or evening windows fit around work and family.",
+      },
+    ],
     citation: {
       figure: "48%",
       text: "of firms either didn’t answer the phone or failed to call back in a 2024 secret-shopper test of 500 US firms.",
@@ -675,42 +801,75 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   },
   14: {
     id: 14,
-    title: "Discretion built in",
-    forClient:
-      "One tick says it’s safe to leave a voicemail or send an email. It’s unticked by default, which matters on a shared phone or inbox.",
-    forFirm:
-      "No automatic email goes out unless they tick it, and the instruction sits next to the phone number on your record, exactly where someone looks before dialling.",
+    title: "Safe to contact, at the moment of disclosure",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "It gives the firm what it needs for a fast response. Confidentiality is restated just as they hand over their name and number. That’s the point where people hesitate most, so the reassurance protects completion.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“They know it might not be safe to contact me.” For anyone in an abusive relationship, a confirmation email or voicemail can be seen by the other party, and asking shows the firm understands that. The box is unticked by default, which matters on a shared phone or inbox.",
+      },
+      {
+        label: L.protectsFirm,
+        body: "No automatic email goes out unless they tick it, and the instruction sits next to the phone number on your record, exactly where someone looks before dialling.",
+      },
+      {
+        label: L.whyHere,
+        body: "By this step they’re invested, and contact details feel less exposing once the firm has shown it’s relevant.",
+      },
+    ],
   },
   15: {
     id: 15,
-    title: "Reassurance at the moment of disclosure",
-    forClient:
-      "Confidentiality is restated just as they hand over their name and number.",
-    forFirm:
-      "This is the point where people hesitate most, so the reassurance protects completion.",
+    title: "The conflict check, before the call",
+    sections: [
+      {
+        label: L.canWeAct,
+        body: "This is the conflict check. Without it, the firm can’t safely hold a substantive conversation, so your team runs it before dialling and nobody spends twenty minutes on a call the firm then has to end. If it’s left blank, the record says to ask it first on the call.",
+      },
+      {
+        label: L.protectsFirm,
+        body: "The form only asks for broad answers, and the record holds back the one free-text note until the conflict check is marked as cleared. That limits the risk of the firm being “conflicted out” by a spouse who approaches several top firms.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“I can see why they need this.” Explaining the reason turns a friction point into a trust signal, and being told the other person won’t be contacted means most people give the name.",
+      },
+    ],
   },
   16: {
     id: 16,
-    title: "The conflict check, before the call",
-    forClient:
-      "They’re told why the name is needed and that the other person won’t be contacted, so most people give it.",
-    forFirm:
-      "Your team runs the conflict check before dialling, so nobody spends twenty minutes on a call the firm then has to end. If it’s left blank, the record says to ask it first on the call.",
+    title: "Optional, never required",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "Whoever calls has context before dialling, so the first call goes further.",
+      },
+      {
+        label: L.protectsFirm,
+        body: "The note is held back on the record until the conflict check is cleared (see note 15).",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“I can explain in my own words, if I want to.” There’s room to explain, with no pressure to write anything.",
+      },
+    ],
   },
   17: {
     id: 17,
-    title: "Optional, never required",
-    forClient:
-      "Room to explain in their own words, with no pressure to write anything.",
-    forFirm: "Whoever calls has context before dialling, so the first call goes further.",
-  },
-  18: {
-    id: 18,
     title: "What happens next",
-    forClient:
-      "A clear three-step timeline replaces “we’ll be in touch”, with their own call time and contact limits repeated back to them.",
-    forFirm:
-      "Fewer “did you get my enquiry?” calls, and an enquirer who is less likely to keep shopping around.",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "Fewer “did you get my enquiry?” calls, and an enquirer who is less likely to keep shopping around.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“I know exactly what happens now.” A clear three-step timeline replaces “we’ll be in touch”, with their own call time and contact limits repeated back to them.",
+      },
+    ],
     citation: {
       figure: "64%",
       text: "of consumers said they had contacted a law firm that never responded (US survey).",
@@ -719,21 +878,37 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
         "https://www.2civility.org/clio-legal-trends-report-finds-law-firms-arent-responsive-to-potential-clients/",
     },
   },
+  18: {
+    id: 18,
+    title: "Regulation, at the start and the end",
+    sections: [
+      {
+        label: L.helpsConvert,
+        body: "It shows the standards behind the name, on the first and last screens, while the steps in between stay focused on the questions. On a live site, show only rankings the firm actually holds, with its real SRA number.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“This is a properly regulated firm.” SRA regulation and confidentiality are confirmed before they start and after they finish.",
+      },
+    ],
+  },
   19: {
     id: 19,
-    title: "Regulation, at the start and the end",
-    forClient:
-      "SRA regulation and confidentiality are confirmed on the first and last screens, and kept out of the way while they answer questions.",
-    forFirm:
-      "Shows the standards behind the name. On a live site, show only rankings the firm actually holds, with its real SRA number.",
-  },
-  20: {
-    id: 20,
     title: "Who calls, and how fast",
-    forClient:
-      "An urgent enquiry gets a call within the hour from whoever is free, not whoever is most senior.",
-    forFirm:
-      "Speed and seniority are decided separately. Urgent matters go to the first available fee earner with a partner notified, because waiting for a partner’s diary loses the client. “Prefer not to say” routes up, not down, because wealthy clients are among the most likely to keep their numbers private. The reason on the “Route to” line shows why the rule matched, so your team can trust it or override it.",
+    sections: [
+      {
+        label: L.shouldPursue,
+        body: "“Prefer not to say” routes up, not down, because wealthy clients are among the most likely to keep their numbers private.",
+      },
+      {
+        label: L.helpsConvert,
+        body: "Speed and seniority are decided separately. Urgent matters go to the first available fee earner with a partner notified, because waiting for a partner’s diary loses the client. The reason on the “Route to” line shows why the rule matched, so your team can trust it or override it.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“They called me straight back.” An urgent enquiry gets a call within the hour from whoever is free, not whoever is most senior.",
+      },
+    ],
     showRoutingTables: true,
   },
 };
@@ -742,26 +917,21 @@ export const intakeNotesByScreen: Record<
   Exclude<IntakeScreenId, "exit">,
   readonly IntakeNoteId[]
 > = {
-  welcome: [1, 2, 3, 4, 5, 19],
+  welcome: [1, 2, 3, 4, 5, 18],
   help: [1, 2, 6],
   urgency: [1, 2, 7],
   stage: [1, 2, 8],
   signals: [1, 2, 9, 10],
   value: [1, 2, 11],
   callback: [1, 2, 12, 13],
-  contact: [1, 2, 14, 15],
-  beforeCall: [1, 2, 16, 17],
-  success: [1, 2, 18, 19],
+  contact: [1, 2, 14],
+  beforeCall: [1, 2, 15, 16],
+  success: [1, 2, 17, 18],
 };
-
-export const intakeNoteAudienceLabels = {
-  forClient: "For your client",
-  forFirm: "For your firm",
-} as const;
 
 /** Tab 2: What your team receives */
 export const intakeTeamRecord = {
-  sampleLabel: "Sample — complete the form to see yours.",
+  sampleLabel: "Sample — complete the form to see yours",
   yourLabel: "Your enquiry record",
   emptyHint:
     "Complete the form to see how this enquiry lands for your team.",
@@ -778,13 +948,18 @@ export const intakeTeamRecord = {
     checkBeforeCalling: "Check before calling",
     notProvided: "Not provided — ask first on the call",
     noNote: "No note",
+    heldBack: "Held back until the conflict check is cleared.",
+    markCleared: "Mark as cleared",
+    markChecked: "Mark as checked on the call",
+    cleared: "Cleared",
+    fullNote: "Full note in your CRM",
     doNotContact: "Do not leave voicemail or email",
     contactOk: "Voicemail and email OK",
     notAskedUrgent: "Not asked (urgent route)",
     notAskedChildren: "Not asked (children only)",
   },
   sample: {
-    priorityLine: "STANDARD · call in the morning window, within 1 working day",
+    priorityLine: "Standard · call in the morning window, within 1 working day",
     routeTo: "Partner — over £1m, business or company shares",
     name: "Rachel Ahmed",
     phone: "07700 900123",
@@ -870,22 +1045,39 @@ export type IntakeTeamAnswers = {
   note: string;
 };
 
+export type PriorityKind = "urgent" | "priority" | "standard";
+
 export type BuiltTeamRecord = {
-  priorityLine: string;
+  priorityKind: PriorityKind;
+  priorityDetail: string;
   routeTo: string;
   name: string;
   phone: string;
   email: string;
   contactInstruction: string;
-  conflictLine: string;
+  conflictName: string | null;
   matter: string;
   stage: string;
   flags: string;
   assetBand: string;
-  note: string;
+  /** Null when the client left the note blank. */
+  noteText: string | null;
   bestTime: string;
   received: string;
 };
+
+function splitPriorityLine(line: string): {
+  priorityKind: PriorityKind;
+  priorityDetail: string;
+} {
+  const [badge, ...rest] = line.split(" · ");
+  const normalized = badge.toLowerCase();
+  const priorityKind: PriorityKind =
+    normalized === "urgent" || normalized === "priority"
+      ? normalized
+      : "standard";
+  return { priorityKind, priorityDetail: rest.join(" · ") };
+}
 
 function helpLabels(help: readonly HelpOptionId[]): string {
   return help
@@ -934,19 +1126,24 @@ function computePriorityLine(input: IntakeTeamAnswers): string {
     input.urgency.includes("abroad-risk") ||
     input.help.includes("abuse");
   if (safety) {
-    return "URGENT · call within 1 hour · partner notified";
+    return "Urgent · call within 1 hour · partner notified";
   }
   if (input.urgency.includes("court-date")) {
-    return "PRIORITY · same-day callback";
+    return "Priority · same-day callback";
   }
   const time = bestTimeLabel(input.callback, input.route);
   if (input.callback === "asap") {
-    return "STANDARD · call as soon as possible, within 1 working day";
+    return "Standard · call as soon as possible, within 1 working day";
   }
   if (time) {
-    return `STANDARD · call in the ${time.toLowerCase().includes("morning") ? "morning" : time.toLowerCase().includes("afternoon") ? "afternoon" : "evening"} window, within 1 working day`;
+    const windowName = time.toLowerCase().includes("morning")
+      ? "morning"
+      : time.toLowerCase().includes("afternoon")
+        ? "afternoon"
+        : "evening";
+    return `Standard · call in the ${windowName} window, within 1 working day`;
   }
-  return "STANDARD · within 1 working day";
+  return "Standard · within 1 working day";
 }
 
 function computeRouteTo(input: IntakeTeamAnswers): string {
@@ -955,20 +1152,21 @@ function computeRouteTo(input: IntakeTeamAnswers): string {
   const abroad =
     flags.includes("abroad") || input.urgency.includes("abroad-risk");
   if (abroad) {
-    return "International family specialist — children or spouse abroad";
+    const reasons = [
+      flags.includes("abroad") ? "children or spouse abroad" : null,
+      input.urgency.includes("abroad-risk")
+        ? "risk of children being taken abroad"
+        : null,
+    ].filter(Boolean);
+    return `International family specialist — ${reasons.join(", ") || "children or spouse abroad"}`;
   }
-  if (
-    input.value === "over-1m" ||
-    flags.includes("business") ||
-    flags.includes("overseas")
-  ) {
-    const reason =
-      input.value === "over-1m"
-        ? "over £1m"
-        : flags.includes("business")
-          ? "business or company shares"
-          : "overseas property";
-    return `Partner — ${reason}`;
+  const partnerReasons = [
+    input.value === "over-1m" ? "over £1m" : null,
+    flags.includes("business") ? "business or company shares" : null,
+    flags.includes("overseas") ? "overseas property" : null,
+  ].filter(Boolean);
+  if (partnerReasons.length > 0) {
+    return `Partner — ${partnerReasons.join(", ")}`;
   }
   if (input.value === "250k-1m" || flags.includes("nup")) {
     const reason =
@@ -992,12 +1190,19 @@ export function buildIntakeTeamRecord(
 ): BuiltTeamRecord {
   const labels = intakeTeamRecord.labels;
   const matter = helpLabels(input.help) || "—";
-  const flags = signalLabels(input.signals);
+  const flagList = signalLabels(input.signals);
   const childrenOnly = isChildrenOnlyMatter(input.help);
   const stage =
     input.route === "urgent"
       ? labels.notAskedUrgent
       : stageLabel(input.stage) || "—";
+  const flags =
+    input.route === "urgent"
+      ? labels.notAskedUrgent
+      : flagList ||
+        (input.signals.includes("none")
+          ? intakeSignals.noneOption.label
+          : "—");
   const assetBand = childrenOnly
     ? labels.notAskedChildren
     : valueLabel(input.value) || "—";
@@ -1013,8 +1218,12 @@ export function buildIntakeTeamRecord(
     hour12: true,
   })} · ${(helpLabels(input.help).split(";")[0] || "Enquiry").trim()} page`;
 
+  const priority = splitPriorityLine(computePriorityLine(input));
+  const conflictName = input.otherPerson.trim() || null;
+  const noteText = input.note.trim() || null;
+
   return {
-    priorityLine: computePriorityLine(input),
+    ...priority,
     routeTo: computeRouteTo(input),
     name: input.name.trim() || "—",
     phone: input.phone.trim() || "—",
@@ -1022,14 +1231,12 @@ export function buildIntakeTeamRecord(
     contactInstruction: input.contactSafe
       ? labels.contactOk
       : labels.doNotContact,
-    conflictLine: input.otherPerson.trim()
-      ? `${input.otherPerson.trim()} · ${labels.checkBeforeCalling}`
-      : labels.notProvided,
+    conflictName,
     matter,
     stage,
     flags: flags || "—",
     assetBand,
-    note: input.note.trim() || labels.noNote,
+    noteText,
     bestTime: bestTimeLabel(input.callback, input.route) || "—",
     received,
   };
@@ -1038,18 +1245,18 @@ export function buildIntakeTeamRecord(
 export function sampleTeamRecordView(): BuiltTeamRecord {
   const sample = intakeTeamRecord.sample;
   return {
-    priorityLine: sample.priorityLine,
+    ...splitPriorityLine(sample.priorityLine),
     routeTo: sample.routeTo,
     name: sample.name,
     phone: sample.phone,
     email: sample.email,
     contactInstruction: intakeTeamRecord.labels.doNotContact,
-    conflictLine: `${sample.conflictName} · ${intakeTeamRecord.labels.checkBeforeCalling}`,
+    conflictName: sample.conflictName,
     matter: sample.matter,
     stage: sample.stage,
     flags: sample.flags,
     assetBand: sample.assetBand,
-    note: `“${sample.note}”`,
+    noteText: sample.note,
     bestTime: sample.bestTime,
     received: sample.received,
   };

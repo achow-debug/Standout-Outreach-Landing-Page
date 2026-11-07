@@ -30,9 +30,9 @@ export const officialCopy = {
     scenes: [
       {
         id: "intake",
-        title: "A client enquiry, annotated",
+        title: "See our enquiry form yourself",
         /** Two short lines so the 52px mobile caption slot can hold it. */
-        mobileCaption: "A client enquiry,\nannotated",
+        mobileCaption: "See our enquiry\nform yourself",
         detail:
           "Use the form as a client would. Tap the numbered dots to see why each detail is there.",
       },
@@ -104,7 +104,6 @@ export const officialCopy = {
         alt: "Cyber Essentials",
         width: 300,
         height: 72,
-        className: "h-16 w-auto lg:h-20",
       },
       {
         id: "ico",
@@ -112,7 +111,6 @@ export const officialCopy = {
         alt: "Information Commissioner's Office",
         width: 1056,
         height: 498,
-        className: "h-11 w-auto lg:h-14",
       },
       {
         id: "google-partner",
@@ -120,7 +118,6 @@ export const officialCopy = {
         alt: "Google Certified Partner",
         width: 106,
         height: 76,
-        className: "h-16 w-auto lg:h-24",
       },
     ],
   },
@@ -317,7 +314,7 @@ export const officialCopy = {
   },
   partners: {
     eyebrow: "What partners say",
-    heading: "Don’t take our word for it.",
+    heading: "Trusted by firms clients count on",
     items: [
       {
         id: "florenda-abdo",

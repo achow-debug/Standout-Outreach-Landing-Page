@@ -80,7 +80,7 @@ export const reviews = {
     region: "Staffordshire",
     date: "July 2026",
     outcome: reviewOutcomePlaceholder,
-    photo: null,
+    photo: "/images/partners/florenda-abdo.jpg",
   },
   jayden: {
     id: "review-jayden",
@@ -89,7 +89,7 @@ export const reviews = {
     region: "Greater Manchester",
     date: "September 2026",
     outcome: reviewOutcomePlaceholder,
-    photo: null,
+    photo: "/images/partners/jayden-chow.jpg",
     /** Do not render until the owner confirms Jayden approved it. */
     trimmedQuote:
       "I found Alex after he emailed me describing problems I recognised. What got us working together was that it was low risk and definitely sounded worth trying.",

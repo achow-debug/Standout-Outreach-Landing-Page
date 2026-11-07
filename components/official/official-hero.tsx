@@ -18,15 +18,18 @@ export function OfficialHero() {
 
   return (
     <section id="top" className="bg-canvas" aria-labelledby="official-hero-heading">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center px-6 pb-20 text-center pt-[calc(env(safe-area-inset-top)+9.75rem)] md:px-8 md:pb-32 md:pt-[calc(env(safe-area-inset-top)+10rem)] lg:pt-[calc(env(safe-area-inset-top)+7.75rem)]">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center px-6 pb-20 text-center pt-[calc(env(safe-area-inset-top)+9.75rem)] md:px-8 md:pb-32 md:pt-[calc(env(safe-area-inset-top)+10rem)] lg:gap-8 lg:pt-[calc(env(safe-area-inset-top)+var(--header-h)+2px+2rem)]">
         <div className="hero-in w-full">
           <p className="hero-eyebrow text-ink/75 font-semibold">{hero.eyebrow}</p>
-          <h1 id="official-hero-heading" className="text-display text-ink max-w-[18ch] mx-auto mt-3">
+          <h1
+            id="official-hero-heading"
+            className="official-hero-title text-display text-ink max-w-[18ch] mx-auto mt-3 lg:mt-8"
+          >
             {hero.headingLead} <br className="hidden sm:inline" />
             <span className="text-brand">{hero.headingAccent}</span>
           </h1>
         </div>
-        <div className="hero-in hero-in-delay mt-8 flex w-full flex-col items-center">
+        <div className="hero-in hero-in-delay mt-8 flex w-full flex-col items-center lg:mt-0">
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center sm:gap-4">
             <Link
               id="hero-cta"

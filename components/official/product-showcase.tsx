@@ -105,7 +105,7 @@ function MobileShowcase() {
           );
         })}
       </div>
-      <div className={`px-3 pt-3 ${onDemo ? "pb-12" : "pb-8"}`}>
+      <div className={`px-3 pt-3 ${onDemo ? "pb-24" : "pb-8"}`}>
         <ShowcaseBody active={active} />
       </div>
     </div>
@@ -151,8 +151,10 @@ function DesktopShowcase() {
     >
       <PhotoFrame crop="left" />
       <div
-        className={`relative z-20 mx-auto flex w-full max-w-[1120px] flex-col px-10 xl:px-4 ${
-          onDemo ? "gap-6 py-10 xl:py-12" : "gap-10 py-16 xl:py-24"
+        className={`relative z-20 mx-auto flex w-full flex-col ${
+          onDemo
+            ? "max-w-[80rem] gap-6 px-6 pt-10 pb-28 xl:px-10 xl:pt-12 xl:pb-32"
+            : "max-w-[1120px] gap-10 px-10 py-16 xl:px-4 xl:py-24"
         }`}
       >
         <div
@@ -205,7 +207,15 @@ function DesktopShowcase() {
         </div>
 
         {onDemo ? (
-          <div className="flex justify-center">
+          <div className="enquiry-pair">
+            <div className="enquiry-pair-photo">
+              <img
+                src="/images/enquiry-form-scene.png"
+                alt="A solicitor at a laptop reviewing a client enquiry"
+                width={879}
+                height={658}
+              />
+            </div>
             <AnnotatedIntakeDemo />
           </div>
         ) : (

@@ -21,16 +21,16 @@ export function SecurityBadges() {
         >
           {copy.heading}
         </h2>
-        <ul className="m-0 mt-8 flex list-none flex-wrap items-center justify-center gap-x-4 gap-y-3 p-0 md:mt-10 lg:gap-x-8 lg:gap-y-4">
+        <ul className="m-0 mt-8 flex list-none flex-wrap items-center justify-center gap-x-6 gap-y-5 p-0 md:mt-10 lg:flex-nowrap lg:gap-x-12">
           {copy.badges.map((badge) => (
-            <li key={badge.id}>
+            <li key={badge.id} className="flex items-center justify-center">
               <Image
                 src={badge.src}
                 alt={badge.alt}
                 width={badge.width}
                 height={badge.height}
                 unoptimized
-                className={`${badge.className} object-contain`}
+                className="h-10 w-auto object-contain lg:h-16"
               />
             </li>
           ))}
