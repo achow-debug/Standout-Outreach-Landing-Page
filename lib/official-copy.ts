@@ -16,10 +16,18 @@ export const officialCopy = {
     askLabel: "Speak to Alex",
   },
   hero: {
-    eyebrow: "Keep everything that works",
-    /** Near-black line. The accent sits after it, on its own line from the desktop breakpoint. */
-    headingLead: "Turn more enquiries",
-    headingAccent: "into instructions",
+    /** Near-black lead. Brand accent name sits after it. */
+    headingLead: "Be known for your best work with",
+    headingAccent: "Standout Group",
+    /** Prefaces the rotating firm-type niche. */
+    growthPartnerLead: "The growth partner for",
+    firmTypes: [
+      "Full service firms",
+      "Family Law firms",
+      "Personal Injury & Medical Negligence firms",
+      "Employment Law firms",
+      "Private Client firms",
+    ],
     ctaIntro: "Get started",
     ctaLabel: "See what happens to your enquiries",
     /** Opens the Speak to Alex booking, not the enquiry form. */
@@ -27,6 +35,8 @@ export const officialCopy = {
     caption: "Free enquiry report within 5 days. No obligation.",
   },
   showcase: {
+    /** Lock line under carousel dots/arrows. */
+    lockLine: "Private by default. Built around SRA and GDPR.",
     scenes: [
       {
         id: "intake",
@@ -34,58 +44,55 @@ export const officialCopy = {
         /** Two short lines so the 52px mobile caption slot can hold it. */
         mobileCaption: "See our enquiry\nform yourself",
         detail:
-          "Use the form as a client would. Tap the numbered dots to see why each detail is there.",
+          "Use it as a client would. Tap the numbered dots to see why each detail is there.",
       },
       {
-        id: "legal",
-        title: "Built for legal, not bolted on",
-        mobileCaption: "Built for legal\nnot bolted on",
-        detail: "Designed around SRA/BSB compliance and GDPR from the start",
+        id: "geo",
+        title: "AI Search Visibility (GEO)",
+        mobileCaption: "AI Search\nVisibility (GEO)",
+        detail:
+          "Reach potential clients as they research legal advice, compare law firms and consider their next steps, with your firm positioned prominently in AI-powered search experiences like ChatGPT, Gemini and Perplexity.",
       },
       {
-        id: "known",
-        title: "Be known for your best work",
-        mobileCaption: "Be known for\nyour best work",
-        detail: "An online presence that reflects the quality of your work",
+        id: "settlement",
+        title: "Settlement Agreement Enquiry Conversion",
+        mobileCaption: "Settlement Agreement\nEnquiry Conversion",
+        detail:
+          "Explore our dedicated mobile first landing page demo where a departing employee can upload their settlement agreement, confirm employer is covering legal fee and request a 15 min slot directly into your calendar.",
       },
     ],
   },
   noDisruption: {
-    heading: "No complicated software. No change to how your team works.",
-    body: "Enquiries arrive in the inbox or CRM your team already uses.",
-    label: "Delivers into the tools your firm already uses",
+    heading: "Delivers into the tools your firm already uses",
+    /** Logo artwork deferred — components render grey placeholders until `src` is added. */
     tools: [
-      { id: "outlook", name: "Outlook", src: "/images/tools/outlook.svg" },
-      { id: "gmail", name: "Gmail", src: "/images/tools/gmail.svg" },
-      { id: "microsoft-365", name: "Microsoft 365", src: "/images/tools/microsoft-365.svg" },
-      { id: "monday", name: "Monday", src: "/images/tools/monday.svg" },
-      { id: "clio", name: "Clio", src: "/images/tools/clio.svg" },
-      { id: "hubspot", name: "HubSpot", src: "/images/tools/hubspot.svg" },
+      { id: "gmail", name: "Gmail" },
+      { id: "outlook", name: "Outlook" },
+      { id: "teams", name: "Teams" },
+      { id: "google-calendar", name: "Google Calendar" },
+      { id: "zoom", name: "Zoom" },
+      { id: "hubspot", name: "HubSpot" },
+      { id: "claude", name: "Claude" },
+      { id: "chatgpt", name: "ChatGPT" },
+      { id: "monday", name: "Monday" },
+      { id: "clio", name: "Clio" },
+      { id: "mimecast", name: "Mimecast" },
+      { id: "microsoft-365", name: "Microsoft 365" },
     ],
-    privacy: "Standout Group is an ICO-registered data processor (",
-    icoLead: "",
-    icoNumber: "ZC264255",
-    icoTail: ").",
   },
   personalised: {
     rows: [
       {
-        id: "clock",
-        heading: "Never lose an enquiry to the clock",
-        body: "Within minutes, your clients receive a calm, clear reply that reassures them, and they leave their details before they have thought to try anyone else.",
-        card: "Businesses that reply within an hour are almost seven times likelier to get a proper conversation with the enquirer than those that wait just one hour more.",
-        mention: "recommend",
-        photoLabel: "Photo",
-        badge: "HBR",
-        sourceId: "hbr-2011",
+        id: "presence",
+        subheader: "Custom built, SRA compliant client journey",
+        heading: "An online presence that reflects your best work",
+        body: "When prospects search for legal advice, your firm should be the one they find and remember. We create fast, focused digital experiences that speak to their needs, demonstrate your expertise and make taking the next step effortless. Searches that once went to competitors turn into opportunities for your firm.",
       },
       {
-        id: "matters",
-        heading: "Spend your time on matters worth taking",
-        body: "Enquiries that aren't a fit are obvious from the beginning",
-        card: "Your intake form has already asked the right questions. Your team sends a clear next step without chasing.",
-        mention: "Select high value work & healthy margins",
-        photoLabel: "Photo",
+        id: "profitable",
+        subheader: "Working as an extension of your team",
+        heading: "A more profitable firm, not just a busier one",
+        body: "Together, we focus on attracting the right clients, prioritising high-value work and building sustainable margins — not simply generating more enquiries.",
       },
     ],
     ctaIntro: "Get started for free",
@@ -93,32 +100,15 @@ export const officialCopy = {
     caption: "Free enquiry report within 5 days. No obligation to continue",
   },
   security: {
-    heading: "Privacy & security built on your SRA obligations",
-    linkLabel: "Learn more about our security practices",
+    heading: "Privacy and security built on your SRA obligations",
+    linkLabel: "Learn more about our security and data protection practices →",
     /** Destination page is built later. This href will 404 until then. */
     linkHref: "/security",
+    /** Artwork deferred — components render labelled grey placeholders. */
     badges: [
-      {
-        id: "cyber-essentials",
-        src: "/images/security/cyber-essentials.svg",
-        alt: "Cyber Essentials",
-        width: 300,
-        height: 72,
-      },
-      {
-        id: "ico",
-        src: "/images/security/ico.png",
-        alt: "Information Commissioner's Office",
-        width: 1056,
-        height: 498,
-      },
-      {
-        id: "google-partner",
-        src: "/images/security/google-certified-partner.svg",
-        alt: "Google Certified Partner",
-        width: 106,
-        height: 76,
-      },
+      { id: "ico", label: "ICO" },
+      { id: "gdpr", label: "GDPR" },
+      { id: "ssl", label: "SSL 256-bit" },
     ],
   },
   nav: {
@@ -160,7 +150,7 @@ export const officialCopy = {
       {
         kind: "menu",
         id: "stories",
-        label: "Customer stories",
+        label: "Client stories",
         children: [
           {
             id: "founder",

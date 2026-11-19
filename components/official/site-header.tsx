@@ -204,10 +204,10 @@ export function SiteHeader() {
         className="site-nav mx-auto w-full max-w-[1280px] rounded-2xl border border-line bg-surface shadow-[0_1px_2px_rgba(17,23,41,0.04),0_8px_24px_rgba(17,23,41,0.06)]"
         aria-label="Page"
       >
-        <div className="grid min-h-[57px] grid-cols-[auto_1fr_auto] items-center gap-2 px-3 lg:min-h-[62px] lg:gap-3 lg:px-4 xl:px-6">
+        <div className="grid min-h-[57px] grid-cols-[auto_1fr_auto] items-center gap-2.5 px-3.5 sm:gap-3 sm:px-4 lg:min-h-[62px] lg:gap-3 lg:px-4 xl:px-6">
           <Link
             href="/"
-            className="brand-mark site-nav-mark text-[1.125rem] leading-none no-underline lg:text-[1.25rem] xl:text-[1.375rem]"
+            className="brand-mark site-nav-mark text-[1.1875rem] leading-none no-underline lg:text-[1.25rem] xl:text-[1.375rem]"
             onClick={closeMenus}
           >
             <span className="brand-mark-name whitespace-nowrap">
@@ -265,7 +265,7 @@ export function SiteHeader() {
             })}
           </div>
 
-          <div className="col-start-3 flex shrink-0 items-center justify-end gap-1.5 lg:gap-2">
+          <div className="col-start-3 flex shrink-0 items-center justify-end gap-2 lg:gap-2">
             <Link
               href={ENQUIRY_CHECK_HREF}
               className={navPrimaryClass}
@@ -284,7 +284,7 @@ export function SiteHeader() {
             <button
               ref={menuButtonRef}
               type="button"
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-ink lg:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-ink lg:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"

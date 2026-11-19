@@ -39,6 +39,14 @@ Set in `.env.local` / Vercel:
 
 `widget.js` loads only after the CTA is clicked. If the widget fails, the modal offers a new-tab link to the same Calendly URL.
 
+## Enquiry demo reCAPTCHA
+
+The annotated Standout Legal enquiry form demo shows a real reCAPTCHA v2 checkbox on the final step only. Set:
+
+- `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` — Google reCAPTCHA v2 site key
+
+For local demos, Google’s always-passing test key works: `6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKnI`. The demo does not verify tokens server-side; it only gates the fictional submit.
+
 ## Review request workflow
 
 - Browser posts to `POST /api/review-request` (same-origin only).

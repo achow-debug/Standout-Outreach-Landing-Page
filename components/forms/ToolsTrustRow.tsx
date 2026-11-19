@@ -1,4 +1,3 @@
-import { credentials } from "@/content/landing";
 import { officialCopy } from "@/lib/official-copy";
 
 const copy = officialCopy.noDisruption;
@@ -6,60 +5,66 @@ const copy = officialCopy.noDisruption;
 type ToolsTrustRowProps = {
   /** Tighter spacing when nested under a form card. */
   compact?: boolean;
+  /** Landing uses larger pills; form pages stay modest. */
+  size?: "sm" | "lg";
   className?: string;
 };
 
 /**
- * "Delivers into the tools…" label, six tool logos, and the ICO line.
- * Shared by the landing "No complicated software" section and form pages.
+ * Connected-tools strip: name pills with logo slots.
+ * Official artwork drops in later via optional `src` on each tool.
  */
 export function ToolsTrustRow({
   compact = false,
+  size = "sm",
   className = "",
 }: ToolsTrustRowProps) {
+  const large = size === "lg";
+
   return (
     <div
       className={`flex flex-col items-center text-center ${compact ? "gap-0" : ""} ${className}`}
     >
-      <p
-        className={`text-small font-semibold text-ink-muted ${compact ? "" : "mt-8 md:mt-10"}`}
-      >
-        {copy.label}
-      </p>
       <ul
-        className={`m-0 mx-auto flex w-full max-w-xl list-none flex-nowrap items-center justify-evenly gap-3 p-0 md:max-w-2xl md:gap-6 ${compact ? "mt-3 md:mt-4" : "mt-3 md:mt-4"}`}
+        className={`m-0 mx-auto flex w-full list-none flex-wrap items-center justify-center p-0 ${
+          large
+            ? "mt-8 max-w-5xl gap-3 md:mt-10 md:gap-3.5"
+            : `max-w-3xl gap-2 md:gap-2.5 ${compact ? "mt-3 md:mt-4" : "mt-6 md:mt-8"}`
+        }`}
       >
-        {copy.tools.map((tool) => (
-          <li
-            key={tool.id}
-            className="flex min-w-0 flex-1 items-center justify-center"
-          >
-            <span className="flex size-7 items-center justify-center sm:size-8 md:size-10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={tool.src}
-                alt={tool.name}
-                className="max-h-full max-w-full object-contain"
-              />
-            </span>
-          </li>
-        ))}
+        {copy.tools.map((tool) => {
+          const src =
+            "src" in tool && typeof tool.src === "string" ? tool.src : undefined;
+          return (
+            <li key={tool.id}>
+              <span
+                className={`inline-flex items-center gap-2 rounded-xl border border-line bg-white text-ink ${
+                  large
+                    ? "min-h-12 px-3.5 py-2.5 text-small md:min-h-14 md:px-4 md:text-[0.9375rem]"
+                    : "min-h-10 px-2.5 py-1.5 text-[0.8125rem] md:min-h-11 md:px-3 md:text-small"
+                }`}
+              >
+                <span
+                  className={`shrink-0 overflow-hidden rounded-md bg-[color-mix(in_oklab,var(--color-ink)_8%,white)] ${
+                    large ? "size-7 md:size-8" : "size-5 md:size-6"
+                  }`}
+                  aria-hidden={src ? undefined : true}
+                >
+                  {src ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={src}
+                      alt=""
+                      className="size-full object-contain p-1"
+                    />
+                  ) : null}
+                </span>
+                <span className="font-semibold whitespace-nowrap">{tool.name}</span>
+              </span>
+            </li>
+          );
+        })}
       </ul>
-      <p
-        className={`max-w-[60ch] text-small text-ink-muted ${compact ? "mt-6 md:mt-8" : "mt-10 md:mt-12"}`}
-      >
-        {copy.privacy}
-        <a
-          href={credentials.icoRegisterUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-        >
-          {copy.icoNumber}
-          <span className="sr-only"> (opens the ICO register in a new tab)</span>
-        </a>
-        {copy.icoTail}
-      </p>
     </div>
   );
 }

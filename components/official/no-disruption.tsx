@@ -5,8 +5,7 @@ const copy = officialCopy.noDisruption;
 
 /**
  * Quiet proof under the three showcase cards.
- * Fyxer's connected-tools strip: white panel, centred heading, logo row.
- * The heading stays near-black. Purple is only the verifiable ICO number.
+ * White panel, centred heading, connected-tools pill row.
  */
 export function NoDisruption() {
   return (
@@ -18,15 +17,11 @@ export function NoDisruption() {
       <div className="page-shell flex flex-col items-center px-6 pt-10 pb-[4.5rem] text-center md:px-8 md:pt-14 md:pb-28 lg:pt-16 lg:pb-32">
         <h2
           id="no-disruption-heading"
-          className="text-h2 text-ink mx-auto text-center"
+          className="text-h2 text-ink mx-auto max-w-[22ch] text-center"
         >
-          No complicated software. <br className="hidden sm:inline" />
-          No change to how your team works.
+          {copy.heading}
         </h2>
-        <p className="mt-3 max-w-[60ch] mx-auto text-center text-lead text-ink md:mt-4">
-          {copy.body}
-        </p>
-        <ToolsTrustRow />
+        <ToolsTrustRow size="lg" />
       </div>
     </section>
   );

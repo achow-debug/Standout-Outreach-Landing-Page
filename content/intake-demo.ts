@@ -7,8 +7,6 @@ export type IntakeNoteId =
   | 1
   | 2
   | 3
-  | 4
-  | 5
   | 6
   | 7
   | 8
@@ -22,10 +20,11 @@ export type IntakeNoteId =
   | 16
   | 17
   | 18
-  | 19;
+  | 19
+  | 20
+  | 21;
 
 export type IntakeScreenId =
-  | "welcome"
   | "help"
   | "urgency"
   | "stage"
@@ -117,7 +116,7 @@ export type ChoiceOption<Id extends string> = {
 
 /** Fixed step numbers — skipped steps keep their number. */
 export const intakeStepNumber: Record<
-  Exclude<IntakeScreenId, "welcome" | "success" | "exit">,
+  Exclude<IntakeScreenId, "success" | "exit">,
   number
 > = {
   help: 1,
@@ -144,7 +143,7 @@ export const intakeDemoChrome = {
     team: "What your team receives",
   },
   caption:
-    "Standout Legal is a fictional firm. Rankings, accreditations and registration numbers are placeholders.",
+    "Demo only — fictional firm; rankings and registration numbers are placeholders.",
   chooseHint: "Choose an option to continue",
   backLabel: "Back",
   continueLabel: "Continue",
@@ -154,31 +153,24 @@ export const intakeDemoChrome = {
 
 export const intakeFirmChrome = {
   firmName: "Standout Legal",
-  accreditations: "Legal 500 · Chambers · Resolution",
+  introHeading: "Talk to our family solicitor, in confidence.",
+  trustLines: [
+    "No.1 ranked for family law 2026",
+    "100+ five-star Google reviews",
+    "Legal 500 firm",
+  ] as const,
+  callFallback: "Prefer to call? 01XXX XXXXXX",
+  callFallbackHref: "tel:01XXXXXXXXX",
   exitLabel: "Quick exit",
-  trustFooter:
-    "Standout Legal LLP is authorised and regulated by the Solicitors Regulation Authority (SRA no. 000000). Everything you share is confidential.",
-} as const;
-
-// ── Welcome ─────────────────────────────────────────────────────────────────
-
-export const intakeWelcome = {
-  eyebrow: "Private enquiry",
-  heading: "Let’s talk, in confidence.",
-  reassurances: [
-    {
-      id: "privacy" as const,
-      icon: "shield-lock" as const,
-      text: "Your information remains private",
-    },
-    {
-      id: "no-commitment" as const,
-      icon: "speech" as const,
-      text: "Conversation about options, no commitment",
-    },
-  ],
-  beginLabel: "Begin",
-  effortHint: "Takes about 2 minutes",
+  /** Confidentiality line only — SRA number lives on the demo badge. */
+  trustFooter: "Everything you share is confidential.",
+  sraBadge: {
+    number: "847291",
+    /** Fixed for SSR/client parity in the demo badge. */
+    dateLabel: "8 Nov 2026",
+    firmLine: "Standout Legal LLP is authorised and regulated by the Solicitors Regulation Authority",
+    demoLabel: "Demo SRA badge — non-functional",
+  },
 } as const;
 
 // ── Step 1: Help ────────────────────────────────────────────────────────────
@@ -412,6 +404,11 @@ export const intakeBeforeCall = {
     label: "Anything you’d like us to know before we call?",
     hint: "(optional)",
   },
+  privacyNotice:
+    "By continuing you confirm you’ve read our privacy notice. We use your details only to arrange your callback.",
+  captchaError: "Confirm you’re not a robot before requesting your callback.",
+  captchaMissingKey:
+    "Add NEXT_PUBLIC_RECAPTCHA_SITE_KEY to enable the live reCAPTCHA widget in this demo.",
   lockLine: "Encrypted and seen only by our family team.",
   submitUrgent: "Request my priority callback",
   submitNonUrgent: "Request my callback",
@@ -510,10 +507,9 @@ export function nextIntakeScreen(
   current: IntakeScreenId,
   input: { route: IntakeRoute | null; help: readonly HelpOptionId[] },
 ): IntakeScreenId {
-  if (current === "welcome") return "help";
   if (!input.route) {
     if (current === "help") return "urgency";
-    return "welcome";
+    return "help";
   }
   const steps = intakeStepsForAnswers({
     route: input.route,
@@ -529,7 +525,7 @@ export function prevIntakeScreen(
   current: IntakeScreenId,
   input: { route: IntakeRoute | null; help: readonly HelpOptionId[] },
 ): IntakeScreenId {
-  if (current === "help") return "welcome";
+  if (current === "help") return "help";
   if (!input.route) return "help";
   const steps = intakeStepsForAnswers({
     route: input.route,
@@ -551,11 +547,11 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
     sections: [
       {
         label: L.helpsConvert,
-        body: "Family clients compare firms more than most, so the proof belongs on the form, not three clicks away on an About page.",
+        body: "Family clients compare firms more than most, so the proof belongs on the form, not three clicks away on an About page. Plain lines they recognise — ranking, Google reviews, Legal 500 — beat directory names most people have never heard of.",
       },
       {
         label: L.clientBelieves,
-        body: "“People who would know rate this firm.” Independent rankings sit right under the firm’s name, so they are visible on every step of the form.",
+        body: "“This firm is ranked, reviewed, and established.” Three short trust lines sit under the invitation on every step, so the proof travels with the form.",
       },
     ],
     citation: {
@@ -586,54 +582,13 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
     sections: [
       {
         label: L.helpsConvert,
-        body: "Replaces “whether we may be able to assist”, which made enquirers feel screened out before they had started.",
+        body: "Names the situation in the header — talking to a family solicitor, in confidence — so the first question feels like a conversation, not a gate.",
       },
       {
         label: L.clientBelieves,
-        body: "“They want to hear from me.” The first line promises a confidential conversation, with no hint that they might be turned away.",
+        body: "“They want to hear from me.” The header promises a confidential conversation with a family solicitor, with no hint that they might be turned away.",
       },
     ],
-  },
-  4: {
-    id: 4,
-    title: "Privacy and no commitment, up front",
-    sections: [
-      {
-        label: L.helpsConvert,
-        body: "Trust is built before the first question, so fewer people leave at the start.",
-      },
-      {
-        label: L.clientBelieves,
-        body: "“This stays private, and I’m not signing up to anything.” It answers the two worries people have before typing anything sensitive: who will see it, and whether they are committing to anything.",
-      },
-    ],
-    citation: {
-      figure: "82%",
-      text: "of consumers said reputation was the most important factor when choosing a legal provider.",
-      sourceLabel: "Legal Services Consumer Panel, 2022",
-      sourceUrl:
-        "https://legalfutures.co.uk/latest-news/consumers-increasingly-shopping-around-for-lawyers-panel-finds",
-    },
-  },
-  5: {
-    id: 5,
-    title: "The effort, stated up front",
-    sections: [
-      {
-        label: L.helpsConvert,
-        body: "A short, known task is easier to start and easier to finish.",
-      },
-      {
-        label: L.clientBelieves,
-        body: "“This won’t take long.” They know how much time it takes before they commit to starting.",
-      },
-    ],
-    citation: {
-      figure: "17%",
-      text: "of US online shoppers have abandoned an order because checkout was too long or complicated. This is an ecommerce benchmark, used here as a guide.",
-      sourceLabel: "Baymard Institute, 2025",
-      sourceUrl: "https://baymard.com/lists/cart-abandonment-rate",
-    },
   },
   6: {
     id: 6,
@@ -880,15 +835,19 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
   },
   18: {
     id: 18,
-    title: "Regulation, at the start and the end",
+    title: "The SRA digital badge",
     sections: [
       {
         label: L.helpsConvert,
-        body: "It shows the standards behind the name, on the first and last screens, while the steps in between stay focused on the questions. On a live site, show only rankings the firm actually holds, with its real SRA number.",
+        body: "Regulated firms must display the SRA digital badge prominently. On a live firm site that is the official Yoshki badge tied to the firm’s mySRA domain. This demo shows a non-functional stand-in so COLPs can see where the badge belongs — on the final screens, with the firm’s SRA number on the badge itself.",
       },
       {
         label: L.clientBelieves,
-        body: "“This is a properly regulated firm.” SRA regulation and confidentiality are confirmed before they start and after they finish.",
+        body: "“This is a properly regulated firm.” The badge and confidentiality line sit where people submit sensitive details, not buried in a footer three scrolls away.",
+      },
+      {
+        label: L.protectsFirm,
+        body: "A text line with a placeholder SRA number is not the badge. Live sites use the official embed; never invent a number that could be mistaken for a real firm.",
       },
     ],
   },
@@ -911,22 +870,57 @@ export const intakeNotes: Record<IntakeNoteId, IntakeNote> = {
     ],
     showRoutingTables: true,
   },
+  20: {
+    id: 20,
+    title: "Privacy notice at the point of collection",
+    sections: [
+      {
+        label: L.protectsFirm,
+        body: "UK GDPR expects a privacy notice where personal data is collected. Family enquiries often include sensitive details, so the notice belongs on the last step before submit — not only in a site footer.",
+      },
+      {
+        label: L.clientBelieves,
+        body: "“I can see how my details will be used.” The line confirms the firm only uses what they shared to arrange the callback.",
+      },
+      {
+        label: L.whyHere,
+        body: "It sits after contact details and just before submit, when the person has already invested and is deciding whether to send.",
+      },
+    ],
+  },
+  21: {
+    id: 21,
+    title: "reCAPTCHA before submit",
+    sections: [
+      {
+        label: L.protectsFirm,
+        body: "A checkbox captcha on the final step stops bulk bot submissions from filling the inbox with fake enquiries, without adding friction to every earlier question.",
+      },
+      {
+        label: L.helpsConvert,
+        body: "Bots rarely complete a multi-step form and a captcha. Real clients meet it once, at the moment of send.",
+      },
+      {
+        label: L.whyHere,
+        body: "Placing reCAPTCHA only on the submit step keeps earlier screens calm, and still blocks automated abuse where it matters.",
+      },
+    ],
+  },
 };
 
 export const intakeNotesByScreen: Record<
   Exclude<IntakeScreenId, "exit">,
   readonly IntakeNoteId[]
 > = {
-  welcome: [1, 2, 3, 4, 5, 18],
-  help: [1, 2, 6],
-  urgency: [1, 2, 7],
-  stage: [1, 2, 8],
-  signals: [1, 2, 9, 10],
-  value: [1, 2, 11],
-  callback: [1, 2, 12, 13],
-  contact: [1, 2, 14],
-  beforeCall: [1, 2, 15, 16],
-  success: [1, 2, 17, 18],
+  help: [1, 2, 3, 6],
+  urgency: [1, 2, 3, 7],
+  stage: [1, 2, 3, 8],
+  signals: [1, 2, 3, 9, 10],
+  value: [1, 2, 3, 11],
+  callback: [1, 2, 3, 12, 13],
+  contact: [1, 2, 3, 14],
+  beforeCall: [1, 2, 3, 15, 16, 18, 20, 21],
+  success: [1, 2, 3, 17, 18],
 };
 
 /** Tab 2: What your team receives */

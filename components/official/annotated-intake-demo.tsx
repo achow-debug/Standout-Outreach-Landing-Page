@@ -13,8 +13,9 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
+import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
-import { Lock, MessagesSquare, Shield } from "lucide-react";
+import { Lock } from "lucide-react";
 import {
   buildIntakeTeamRecord,
   formatCallTimeWording,
@@ -35,7 +36,6 @@ import {
   intakeTotalSteps,
   intakeUrgency,
   intakeValue,
-  intakeWelcome,
   isUrgentSelection,
   nextIntakeScreen,
   prevIntakeScreen,
@@ -52,6 +52,12 @@ import {
   type UrgencyOptionId,
   type ValueOptionId,
 } from "@/content/intake-demo";
+import { getRecaptchaSiteKey } from "@/lib/recaptcha-config";
+
+const ReCAPTCHA = dynamic(() => import("react-google-recaptcha"), {
+  ssr: false,
+  loading: () => <p className="sl-captcha-loading m-0">Loading verification…</p>,
+});
 
 type ContactErrors = {
   name?: string;
@@ -99,7 +105,6 @@ const initialAnswers: DemoAnswers = {
 };
 
 const STEP_SCREENS: IntakeScreenId[] = [
-  "welcome",
   "help",
   "urgency",
   "stage",
@@ -163,20 +168,31 @@ function useIsPhone() {
   return phone;
 }
 
+type AnnotatedIntakeDemoProps = {
+  /**
+   * Homepage Card 1: dark form only — no title/lead/tabs/annotations toggle.
+   * Client view only; numbered annotation dots stay on.
+   */
+  hideChrome?: boolean;
+};
+
 /**
  * Interactive annotated Standout Legal enquiry demo.
  * Demo-only state — nothing is submitted to a backend.
  */
-export function AnnotatedIntakeDemo() {
-  const [screen, setScreen] = useState<IntakeScreenId>("welcome");
-  const [returnScreen, setReturnScreen] = useState<IntakeScreenId>("welcome");
+export function AnnotatedIntakeDemo({ hideChrome = false }: AnnotatedIntakeDemoProps) {
+  const [screen, setScreen] = useState<IntakeScreenId>("help");
+  const [returnScreen, setReturnScreen] = useState<IntakeScreenId>("help");
   const [tab, setTab] = useState<IntakeDemoTab>("client");
   const [answers, setAnswers] = useState<DemoAnswers>(initialAnswers);
   const [annotationsOn, setAnnotationsOn] = useState(false);
   const [openNote, setOpenNote] = useState<IntakeNoteId | null>(null);
   const [noteAnchor, setNoteAnchor] = useState<NoteAnchor | null>(null);
   const [contactErrors, setContactErrors] = useState<ContactErrors>({});
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const recaptchaSiteKey = getRecaptchaSiteKey();
   const [recordArriving, setRecordArriving] = useState(false);
   const [conflictCleared, setConflictCleared] = useState(false);
   const pinRef = useRef<HTMLButtonElement | null>(null);
@@ -242,6 +258,10 @@ export function AnnotatedIntakeDemo() {
   const goTo = (next: IntakeScreenId) => {
     setOpenNote(null);
     setContactErrors({});
+    if (next !== "beforeCall") {
+      setCaptchaToken(null);
+      setCaptchaError(null);
+    }
     setScreen(next);
   };
 
@@ -253,6 +273,8 @@ export function AnnotatedIntakeDemo() {
     setSubmitted(false);
     setRecordArriving(false);
     setConflictCleared(false);
+    setCaptchaToken(null);
+    setCaptchaError(null);
     setTab("client");
     goTo("urgency");
   };
@@ -319,16 +341,17 @@ export function AnnotatedIntakeDemo() {
 
   const continueFrom = (id: IntakeScreenId) => {
     if (id !== screen) return;
-    if (id === "welcome") {
-      goTo("help");
-      return;
-    }
     if (id === "contact") {
       if (!validateContact()) return;
       goTo(nextIntakeScreen(id, flowInput));
       return;
     }
     if (id === "beforeCall") {
+      if (recaptchaSiteKey && !captchaToken) {
+        setCaptchaError(intakeBeforeCall.captchaError);
+        return;
+      }
+      setCaptchaError(null);
       setConflictCleared(false);
       setRecordArriving(true);
       setSubmitted(true);
@@ -359,86 +382,100 @@ export function AnnotatedIntakeDemo() {
     setTab(next);
   };
 
-  return (
-    <div className="sl-demo mx-auto flex w-full max-w-[40rem] flex-col gap-4">
-      <div className="sl-demo-heading flex flex-col items-center gap-4 px-1 text-center lg:flex-row lg:items-end lg:justify-between lg:gap-6 lg:px-0 lg:text-left">
-        <div className="min-w-0 w-full">
-          <h3 className="m-0 text-h2 text-ink lg:max-w-[18ch]">
-            {intakeDemoChrome.title}
-          </h3>
-          <p className="m-0 mt-3 text-body text-ink lg:max-w-[42ch]">
-            {intakeDemoChrome.leadLine}
-          </p>
-        </div>
-        <label className="inline-flex shrink-0 items-center gap-2 text-small font-semibold text-ink">
-          <span>{intakeDemoChrome.annotationsLabel}</span>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={annotationsOn}
-            className={`relative h-7 w-12 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-              annotationsOn ? "bg-brand" : "bg-ink/20"
-            }`}
-            onClick={() => {
-              setAnnotationsOn((on) => !on);
-              if (annotationsOn) setOpenNote(null);
-            }}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 size-6 rounded-full bg-white transition-transform ${
-                annotationsOn ? "translate-x-5" : ""
-              }`}
-            />
-          </button>
-        </label>
-      </div>
+  const showChrome = !hideChrome;
+  /** Homepage peek has no toggle — dots stay available; full demo uses the switch. */
+  const annotationsEnabled = hideChrome || annotationsOn;
+  const activeTab: IntakeDemoTab = hideChrome ? "client" : tab;
 
-      <div
-        role="tablist"
-        aria-label="Enquiry demo views"
-        className="sl-demo-tabs flex gap-1 border-b border-line"
-      >
-        {(
-          [
-            ["client", intakeDemoChrome.tabs.client],
-            ["team", intakeDemoChrome.tabs.team],
-          ] as const
-        ).map(([id, label]) => {
-          const selected = tab === id;
-          return (
-            <button
-              key={id}
-              type="button"
-              role="tab"
-              id={`${baseId}-tab-${id}`}
-              aria-selected={selected}
-              aria-controls={`${baseId}-panel-${id}`}
-              tabIndex={selected ? 0 : -1}
-              className={`min-h-11 px-3 text-small font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                selected
-                  ? "border-b-2 border-ink text-ink"
-                  : "border-b-2 border-transparent text-ink-muted hover:text-ink"
-              }`}
-              onClick={() => selectTab(id)}
-            >
-              {label}
-            </button>
-          );
-        })}
-      </div>
+  return (
+    <div
+      className={`sl-demo mx-auto flex w-full max-w-[40rem] flex-col lg:max-w-none ${
+        hideChrome
+          ? "sl-demo--peek gap-0 p-0"
+          : "gap-4 lg:gap-3 lg:p-6 xl:p-8"
+      }`}
+    >
+      {showChrome ? (
+        <>
+          <div className="sl-demo-heading relative flex flex-col items-center gap-3 px-1 text-center lg:items-stretch lg:gap-2 lg:px-0 lg:text-left">
+            <h3 className="m-0 min-w-0 text-h2 text-ink lg:pr-[9.5rem] lg:text-[1.75rem] lg:leading-tight">
+              {intakeDemoChrome.title}
+            </h3>
+            <p className="m-0 w-full min-w-0 text-body text-ink lg:max-w-[54ch]">
+              {intakeDemoChrome.leadLine}
+            </p>
+            <label className="inline-flex shrink-0 items-center gap-2 text-small font-semibold text-ink lg:absolute lg:top-0 lg:right-0">
+              <span>{intakeDemoChrome.annotationsLabel}</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={annotationsOn}
+                className={`relative h-7 w-12 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                  annotationsOn ? "bg-brand" : "bg-ink/20"
+                }`}
+                onClick={() => {
+                  setAnnotationsOn((on) => !on);
+                  if (annotationsOn) setOpenNote(null);
+                }}
+              >
+                <span
+                  className={`absolute top-0.5 left-0.5 size-6 rounded-full bg-white transition-transform ${
+                    annotationsOn ? "translate-x-5" : ""
+                  }`}
+                />
+              </button>
+            </label>
+          </div>
+
+          <div
+            role="tablist"
+            aria-label="Enquiry demo views"
+            className="sl-demo-tabs flex gap-1 border-b border-line"
+          >
+            {(
+              [
+                ["client", intakeDemoChrome.tabs.client],
+                ["team", intakeDemoChrome.tabs.team],
+              ] as const
+            ).map(([id, label]) => {
+              const selected = tab === id;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  id={`${baseId}-tab-${id}`}
+                  aria-selected={selected}
+                  aria-controls={`${baseId}-panel-${id}`}
+                  tabIndex={selected ? 0 : -1}
+                  className={`min-h-11 px-3 text-small font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                    selected
+                      ? "border-b-2 border-ink text-ink"
+                      : "border-b-2 border-transparent text-ink-muted hover:text-ink"
+                  }`}
+                  onClick={() => selectTab(id)}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      ) : null}
 
       <div className="sl-tab-panels" ref={panelsRef}>
         <div
-          role="tabpanel"
+          role={showChrome ? "tabpanel" : "region"}
           id={`${baseId}-panel-client`}
-          aria-labelledby={`${baseId}-tab-client`}
-          className={`sl-tab-panel ${tab === "client" ? "is-active" : ""}`}
-          aria-hidden={tab !== "client"}
-          inert={tab !== "client"}
+          aria-labelledby={showChrome ? `${baseId}-tab-client` : undefined}
+          aria-label={showChrome ? undefined : intakeDemoChrome.title}
+          className={`sl-tab-panel ${activeTab === "client" ? "is-active" : ""}`}
+          aria-hidden={activeTab !== "client"}
+          inert={activeTab !== "client"}
         >
           <div className="sl-card">
             <CardHeader
-              annotationsOn={annotationsOn}
+              annotationsOn={annotationsEnabled}
               onExit={() => {
                 setOpenNote(null);
                 setReturnScreen(screen === "exit" ? returnScreen : screen);
@@ -467,7 +504,7 @@ export function AnnotatedIntakeDemo() {
                         id={id}
                         answers={answers}
                         contactErrors={contactErrors}
-                        annotationsOn={annotationsOn}
+                        annotationsOn={annotationsEnabled}
                         onOpenNote={openNoteFrom}
                         setAnswers={setAnswers}
                         toggleHelp={toggleHelp}
@@ -479,8 +516,14 @@ export function AnnotatedIntakeDemo() {
                       screen={id}
                       route={answers.route}
                       ready={screenIsReady(id, answers)}
-                      annotationsOn={annotationsOn}
+                      annotationsOn={annotationsEnabled}
                       onOpenNote={openNoteFrom}
+                      recaptchaSiteKey={recaptchaSiteKey}
+                      captchaError={captchaError}
+                      onCaptchaChange={(token) => {
+                        setCaptchaToken(token);
+                        if (token) setCaptchaError(null);
+                      }}
                       onBack={() => {
                         if (id === screen) goTo(prevIntakeScreen(id, flowInput));
                       }}
@@ -507,33 +550,37 @@ export function AnnotatedIntakeDemo() {
           </div>
         </div>
 
-        <div
-          role="tabpanel"
-          id={`${baseId}-panel-team`}
-          aria-labelledby={`${baseId}-tab-team`}
-          className={`sl-tab-panel ${tab === "team" ? "is-active" : ""}`}
-          aria-hidden={tab !== "team"}
-          inert={tab !== "team"}
-        >
-          <div className="sl-card sl-card--record">
-            <TeamRecordPanel
-              submitted={submitted}
-              arriving={recordArriving && submitted && tab === "team"}
-              cleared={conflictCleared}
-              onClear={() => setConflictCleared(true)}
-              answers={answers}
-              annotationsOn={annotationsOn}
-              onOpenNote={openNoteFrom}
-            />
+        {showChrome ? (
+          <div
+            role="tabpanel"
+            id={`${baseId}-panel-team`}
+            aria-labelledby={`${baseId}-tab-team`}
+            className={`sl-tab-panel ${activeTab === "team" ? "is-active" : ""}`}
+            aria-hidden={activeTab !== "team"}
+            inert={activeTab !== "team"}
+          >
+            <div className="sl-card sl-card--record">
+              <TeamRecordPanel
+                submitted={submitted}
+                arriving={recordArriving && submitted && activeTab === "team"}
+                cleared={conflictCleared}
+                onClear={() => setConflictCleared(true)}
+                answers={answers}
+                annotationsOn={annotationsEnabled}
+                onOpenNote={openNoteFrom}
+              />
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
 
-      <p className="sl-demo-caption m-0 text-center text-small text-ink-muted">
-        {intakeDemoChrome.caption}
-      </p>
+      {showChrome ? (
+        <p className="sl-demo-caption m-0 text-center text-small text-ink-muted">
+          {intakeDemoChrome.caption}
+        </p>
+      ) : null}
 
-      {openNote !== null ? (
+      {openNote !== null && annotationsEnabled ? (
         <NoteDialog
           noteId={openNote}
           anchor={noteAnchor}
@@ -556,18 +603,10 @@ function CardHeader({
 }) {
   return (
     <div className="sl-header">
-      <div className="min-w-0">
+      <div className="sl-header-main min-w-0">
         <p className="sl-serif sl-firm m-0">{intakeFirmChrome.firmName}</p>
-        <p className="sl-pin-host sl-accreditations m-0">
-          {/* Licensed logo files for a reskinned firm replace this line. */}
-          <span className="sl-logo-slot" data-accreditation-logos="" />
-          {intakeFirmChrome.accreditations}
-          {annotationsOn ? (
-            <NotePin id={1} onOpen={onOpenNote} className="sl-pin-end" />
-          ) : null}
-        </p>
       </div>
-      <div className="sl-pin-host shrink-0">
+      <div className="sl-pin-host shrink-0 self-start">
         <button type="button" className="sl-exit" onClick={onExit}>
           {intakeFirmChrome.exitLabel}
         </button>
@@ -585,6 +624,9 @@ function CardFooter({
   ready,
   annotationsOn,
   onOpenNote,
+  recaptchaSiteKey,
+  captchaError,
+  onCaptchaChange,
   onBack,
   onContinue,
   onTryOther,
@@ -594,44 +636,21 @@ function CardFooter({
   ready: boolean;
   annotationsOn: boolean;
   onOpenNote: (id: IntakeNoteId, button: HTMLButtonElement) => void;
+  recaptchaSiteKey: string | null;
+  captchaError: string | null;
+  onCaptchaChange: (token: string | null) => void;
   onBack: () => void;
   onContinue: () => void;
   onTryOther: () => void;
 }) {
-  if (screen === "welcome") {
-    return (
-      <div className="sl-footer">
-        <button type="button" className="sl-btn sl-btn-primary" onClick={onContinue}>
-          {intakeWelcome.beginLabel}
-        </button>
-        <p className="sl-pin-host sl-effort m-0">
-          {intakeWelcome.effortHint}
-          {annotationsOn ? (
-            <NotePin id={5} onOpen={onOpenNote} className="sl-pin-end" />
-          ) : null}
-        </p>
-        <p className="sl-pin-host sl-trust m-0">
-          {intakeFirmChrome.trustFooter}
-          {annotationsOn ? (
-            <NotePin id={18} onOpen={onOpenNote} className="sl-pin-end" />
-          ) : null}
-        </p>
-      </div>
-    );
-  }
-
   if (screen === "success") {
     return (
       <div className="sl-footer">
         <button type="button" className="sl-text-link" onClick={onTryOther}>
           {intakeSuccess.tryOtherRoute}
         </button>
-        <p className="sl-pin-host sl-trust m-0">
-          {intakeFirmChrome.trustFooter}
-          {annotationsOn ? (
-            <NotePin id={18} onOpen={onOpenNote} className="sl-pin-end" />
-          ) : null}
-        </p>
+        <DemoSraBadge annotationsOn={annotationsOn} onOpenNote={onOpenNote} />
+        <p className="sl-trust m-0">{intakeFirmChrome.trustFooter}</p>
       </div>
     );
   }
@@ -644,6 +663,7 @@ function CardFooter({
     : intakeDemoChrome.continueLabel;
   const waiting = OPTION_STEPS.has(screen) && !ready;
   const showLock = screen === "contact" || screen === "beforeCall";
+  const showBack = screen !== "help";
 
   return (
     <div className="sl-footer">
@@ -653,11 +673,46 @@ function CardFooter({
           {screen === "contact" ? intakeContact.lockLine : intakeBeforeCall.lockLine}
         </p>
       ) : null}
+      {isSubmit ? (
+        <>
+          <p className="sl-pin-host sl-privacy-notice m-0">
+            {intakeBeforeCall.privacyNotice}
+            {annotationsOn ? (
+              <NotePin id={20} onOpen={onOpenNote} className="sl-pin-end" />
+            ) : null}
+          </p>
+          <div className="sl-pin-host sl-captcha">
+            {recaptchaSiteKey ? (
+              <ReCAPTCHA
+                sitekey={recaptchaSiteKey}
+                theme="dark"
+                onChange={onCaptchaChange}
+                onExpired={() => onCaptchaChange(null)}
+              />
+            ) : (
+              <p className="sl-captcha-missing m-0">
+                {intakeBeforeCall.captchaMissingKey}
+              </p>
+            )}
+            {annotationsOn ? (
+              <NotePin id={21} onOpen={onOpenNote} className="sl-pin-end" />
+            ) : null}
+          </div>
+          {captchaError ? (
+            <p className="sl-captcha-error m-0" role="alert">
+              {captchaError}
+            </p>
+          ) : null}
+          <DemoSraBadge annotationsOn={annotationsOn} onOpenNote={onOpenNote} />
+        </>
+      ) : null}
       <p className="sl-footer-hint m-0">{waiting ? intakeDemoChrome.chooseHint : "\u00a0"}</p>
       <div className="sl-footer-actions">
-        <button type="button" className="sl-btn sl-btn-back" onClick={onBack}>
-          {intakeDemoChrome.backLabel}
-        </button>
+        {showBack ? (
+          <button type="button" className="sl-btn sl-btn-back" onClick={onBack}>
+            {intakeDemoChrome.backLabel}
+          </button>
+        ) : null}
         <button
           type="button"
           className={`sl-btn sl-btn-primary ${waiting ? "is-waiting" : "is-ready"}`}
@@ -666,6 +721,43 @@ function CardFooter({
           {continueLabel}
         </button>
       </div>
+    </div>
+  );
+}
+
+function DemoSraBadge({
+  annotationsOn,
+  onOpenNote,
+}: {
+  annotationsOn: boolean;
+  onOpenNote: (id: IntakeNoteId, button: HTMLButtonElement) => void;
+}) {
+  const { sraBadge } = intakeFirmChrome;
+
+  return (
+    <div className="sl-pin-host sl-sra-badge-wrap">
+      <div
+        className="sl-sra-badge"
+        role="img"
+        aria-label={`${sraBadge.demoLabel}. SRA number ${sraBadge.number}.`}
+      >
+        <div className="sl-sra-badge-mark" aria-hidden>
+          <span className="sl-sra-badge-mark-text">SRA</span>
+        </div>
+        <div className="sl-sra-badge-body">
+          <p className="sl-sra-badge-title m-0">Solicitors Regulation Authority</p>
+          <p className="sl-sra-badge-firm m-0">{sraBadge.firmLine}</p>
+          <p className="sl-sra-badge-meta m-0">
+            <span>SRA no. {sraBadge.number}</span>
+            <span aria-hidden>·</span>
+            <span>{sraBadge.dateLabel}</span>
+          </p>
+          <p className="sl-sra-badge-demo m-0">{sraBadge.demoLabel}</p>
+        </div>
+      </div>
+      {annotationsOn ? (
+        <NotePin id={18} onOpen={onOpenNote} className="sl-pin-end" />
+      ) : null}
     </div>
   );
 }
@@ -691,9 +783,6 @@ function ScreenBody({
   toggleUrgency: (id: UrgencyOptionId) => void;
   toggleSignal: (id: SignalOptionId) => void;
 }) {
-  if (id === "welcome") {
-    return <WelcomeScreen annotationsOn={annotationsOn} onOpenNote={onOpenNote} />;
-  }
   if (id === "help") {
     return (
       <OptionFieldset
@@ -906,37 +995,6 @@ function ScreenBody({
   return null;
 }
 
-function WelcomeScreen({
-  annotationsOn,
-  onOpenNote,
-}: {
-  annotationsOn: boolean;
-  onOpenNote: (id: IntakeNoteId, button: HTMLButtonElement) => void;
-}) {
-  return (
-    <div className="sl-stack">
-      <p className="sl-eyebrow m-0">{intakeWelcome.eyebrow}</p>
-      <h4 className="sl-pin-host sl-serif sl-display m-0">
-        {intakeWelcome.heading}
-        {annotationsOn ? (
-          <NotePin id={3} onOpen={onOpenNote} className="sl-pin-end" />
-        ) : null}
-      </h4>
-      <ul className="sl-pin-host sl-reassure m-0">
-        {annotationsOn ? (
-          <NotePin id={4} onOpen={onOpenNote} className="sl-pin-end" />
-        ) : null}
-        {intakeWelcome.reassurances.map((item) => (
-          <li key={item.id}>
-            {item.icon === "shield-lock" ? <ShieldLockIcon /> : <SpeechIcon />}
-            <span>{item.text}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
 function ContactScreen({
   answers,
   errors,
@@ -954,29 +1012,31 @@ function ContactScreen({
     <div className="sl-stack">
       <h4 className="sl-serif sl-question m-0">{intakeContact.heading}</h4>
       <p className="sl-hint m-0">{intakeContact.subtext}</p>
-      <Field
-        label={intakeContact.fields.name.label}
-        value={answers.name}
-        error={errors.name}
-        autoComplete="name"
-        onChange={(value) => setAnswers((prev) => ({ ...prev, name: value }))}
-      />
-      <Field
-        label={intakeContact.fields.phone.label}
-        value={answers.phone}
-        error={errors.phone}
-        autoComplete="tel"
-        inputMode="tel"
-        onChange={(value) => setAnswers((prev) => ({ ...prev, phone: value }))}
-      />
-      <Field
-        label={intakeContact.fields.email.label}
-        value={answers.email}
-        error={errors.email}
-        autoComplete="email"
-        inputMode="email"
-        onChange={(value) => setAnswers((prev) => ({ ...prev, email: value }))}
-      />
+      <div className="sl-fields-grid">
+        <Field
+          label={intakeContact.fields.name.label}
+          value={answers.name}
+          error={errors.name}
+          autoComplete="name"
+          onChange={(value) => setAnswers((prev) => ({ ...prev, name: value }))}
+        />
+        <Field
+          label={intakeContact.fields.phone.label}
+          value={answers.phone}
+          error={errors.phone}
+          autoComplete="tel"
+          inputMode="tel"
+          onChange={(value) => setAnswers((prev) => ({ ...prev, phone: value }))}
+        />
+        <Field
+          label={intakeContact.fields.email.label}
+          value={answers.email}
+          error={errors.email}
+          autoComplete="email"
+          inputMode="email"
+          onChange={(value) => setAnswers((prev) => ({ ...prev, email: value }))}
+        />
+      </div>
       <div className="sl-pin-host">
         <ChoiceRow
           multi
@@ -1007,7 +1067,7 @@ function BeforeCallScreen({
   setAnswers: Dispatch<SetStateAction<DemoAnswers>>;
 }) {
   return (
-    <div className="sl-stack">
+    <div className="sl-stack sl-fields-grid sl-fields-grid--before-call">
       <div className="sl-pin-host sl-field">
         <label className="sl-field-label" htmlFor="sl-other-person">
           {intakeBeforeCall.otherPerson.label}{" "}
@@ -1557,23 +1617,6 @@ function RoutingTables() {
         </ul>
       </div>
     </div>
-  );
-}
-
-function ShieldLockIcon() {
-  return (
-    <span className="sl-icon" aria-hidden>
-      <Shield className="size-5" strokeWidth={1.75} />
-      <Lock className="sl-icon-lock size-2.5" strokeWidth={2.25} />
-    </span>
-  );
-}
-
-function SpeechIcon() {
-  return (
-    <span className="sl-icon" aria-hidden>
-      <MessagesSquare className="size-5" strokeWidth={1.75} />
-    </span>
   );
 }
 

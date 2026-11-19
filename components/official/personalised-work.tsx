@@ -1,23 +1,12 @@
-"use client";
-
-import { SourceButton } from "@/components/official/source-button";
 import { officialCopy } from "@/lib/official-copy";
 
 const copy = officialCopy.personalised;
 
-const badgeClass =
-  "absolute -top-3.5 -right-2 z-20 inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-xl border-0 bg-surface px-2 text-small font-semibold text-ink-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:-top-5 lg:-left-5 lg:right-auto";
-
 type Row = (typeof copy.rows)[number];
 
-function hasBadge(row: Row): row is Extract<Row, { badge: string }> {
-  return "badge" in row;
-}
-
 /**
- * Two feature rows after the tools strip.
- * Paper canvas, purple only on each card’s mention.
- * Photos stay labelled placeholders until the real crops are dropped in.
+ * Two alternating feature rows after the tools strip.
+ * Empty grey media boxes are reserved for later HTML embeds.
  */
 export function PersonalisedWork() {
   return (
@@ -26,7 +15,7 @@ export function PersonalisedWork() {
       className="relative z-10 -mt-10 scroll-mt-24 rounded-t-[2rem] bg-canvas lg:-mt-16 lg:rounded-t-[3.75rem]"
       aria-labelledby="personalised-heading"
     >
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-12 px-6 py-20 md:gap-16 md:px-8 md:py-32">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-16 px-6 py-20 md:gap-20 md:px-8 md:py-28 lg:gap-24 lg:py-32">
         {copy.rows.map((row, index) => (
           <FeatureRow key={row.id} row={row} index={index} />
         ))}
@@ -39,16 +28,19 @@ function FeatureRow({ row, index }: { row: Row; index: number }) {
   const textFirst = index % 2 === 0;
 
   return (
-    <div className="grid w-full grid-cols-1 items-center gap-8 md:gap-12 lg:grid-cols-2">
+    <div className="grid w-full grid-cols-1 items-center gap-8 md:gap-12 lg:grid-cols-2 lg:gap-16">
       <div
-        className={`flex items-center justify-center lg:px-8 lg:py-16 ${
-          textFirst ? "lg:justify-end" : "lg:justify-start"
+        className={`flex items-center justify-center ${
+          textFirst ? "lg:justify-end" : "lg:order-last lg:justify-start"
         }`}
       >
-        <div className="flex w-full max-w-[480px] flex-col text-center lg:text-left">
+        <div className="flex w-full max-w-[34rem] flex-col items-center text-center lg:items-start lg:text-left">
+          <p className="m-0 text-small font-semibold tracking-[0.01em] text-ink-muted">
+            {row.subheader}
+          </p>
           <h2
             id={index === 0 ? "personalised-heading" : undefined}
-            className="m-0 text-h2 text-ink max-w-[22ch]"
+            className="m-0 mt-3 text-h2 text-ink max-w-[20ch] md:mt-4"
           >
             {row.heading}
           </h2>
@@ -58,40 +50,15 @@ function FeatureRow({ row, index }: { row: Row; index: number }) {
         </div>
       </div>
       <div
-        className={`relative flex items-center justify-center lg:min-h-[420px] ${
+        className={`relative flex items-center justify-center ${
           textFirst ? "lg:justify-start" : "lg:order-first lg:justify-end"
         }`}
       >
-        <div className="relative w-full max-w-[500px]">
-          <div className="aspect-[5/4] overflow-hidden rounded-2xl">
-            <div
-              className="flex h-full items-center justify-center bg-surface"
-              role="img"
-              aria-label={row.photoLabel}
-            >
-              <p className="m-0 text-small font-semibold text-ink-muted">{row.photoLabel}</p>
-            </div>
-          </div>
-          <div
-            className={`absolute z-10 w-[min(17.5rem,86%)] rounded-2xl border border-line bg-surface px-4 py-3 lg:w-72 ${
-              textFirst
-                ? "top-[8%] right-4 pr-10 pl-3 lg:right-6 lg:pr-4 lg:pl-10"
-                : "bottom-[8%] left-4 px-3 lg:left-6 lg:px-4"
-            }`}
-          >
-            {hasBadge(row) ? (
-              <SourceButton
-                sourceId={row.sourceId}
-                label="Harvard Business Review"
-                className={badgeClass}
-              >
-                {row.badge}
-              </SourceButton>
-            ) : null}
-            <p className="m-0 text-lead text-ink">{row.card}</p>
-            <p className="m-0 mt-6 text-small font-semibold text-ink-muted md:mt-8">{row.mention}</p>
-          </div>
-        </div>
+        <div
+          className="aspect-[5/4] w-full max-w-[520px] rounded-2xl bg-[color-mix(in_oklab,var(--color-ink)_10%,var(--color-canvas))]"
+          aria-hidden
+          data-embed-slot={row.id}
+        />
       </div>
     </div>
   );

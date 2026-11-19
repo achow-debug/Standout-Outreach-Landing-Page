@@ -71,16 +71,23 @@ export function OfficialFinalCta() {
                   </p>
                   {isLast ? (
                     <ul className="m-0 flex list-none flex-wrap items-center gap-3 p-0 pt-2">
-                      {tools.map((tool) => (
-                        <li key={tool.id}>
-                          <img
-                            src={tool.src}
-                            alt=""
-                            className="h-8 w-auto max-w-full object-contain"
-                          />
-                          <span className="sr-only">{tool.name}</span>
-                        </li>
-                      ))}
+                      {tools.map((tool) => {
+                        const src =
+                          "src" in tool && typeof tool.src === "string"
+                            ? tool.src
+                            : undefined;
+                        if (!src) return null;
+                        return (
+                          <li key={tool.id}>
+                            <img
+                              src={src}
+                              alt=""
+                              className="h-8 w-auto max-w-full object-contain"
+                            />
+                            <span className="sr-only">{tool.name}</span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   ) : null}
                 </div>
