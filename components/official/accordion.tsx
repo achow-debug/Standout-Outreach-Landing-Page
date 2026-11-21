@@ -16,10 +16,14 @@ type AccordionProps = {
   onValueChange?: (value: string) => void;
 };
 
+function cx(...parts: Array<string | false | null | undefined>) {
+  return parts.filter(Boolean).join(" ");
+}
+
 function Chevron() {
   return (
     <svg
-      className="accordion-chevron"
+      className="size-5 shrink-0 text-ink-muted transition-transform duration-(--dur-micro) ease-(--ease-out) group-data-[state=open]:rotate-180"
       width="20"
       height="20"
       viewBox="0 0 24 24"
@@ -85,26 +89,32 @@ export function Accordion({ items, className, onValueChange }: AccordionProps) {
       collapsible
       value={value}
       onValueChange={select}
-      className={className ? `accordion ${className}` : "accordion"}
+      className={cx("m-0 flex list-none flex-col border-t border-line p-0", className)}
     >
       {items.map((item) => (
         <AccordionPrimitive.Item
           key={item.id}
           value={item.id}
           id={item.id}
-          className="accordion-item"
+          className="border-b border-line"
         >
-          <AccordionPrimitive.Header className="accordion-header">
+          <AccordionPrimitive.Header className="m-0">
             <AccordionPrimitive.Trigger
-              className="accordion-trigger"
+              className="group flex w-full items-center justify-between gap-4 py-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               aria-controls={`${item.id}-panel`}
             >
-              <span>{item.title}</span>
+              <span className="font-display text-h3 text-ink">{item.title}</span>
               <Chevron />
             </AccordionPrimitive.Trigger>
           </AccordionPrimitive.Header>
-          <AccordionPrimitive.Content forceMount className="accordion-content">
-            <div className="accordion-panel" id={`${item.id}-panel`}>
+          <AccordionPrimitive.Content
+            forceMount
+            className="overflow-hidden data-[state=closed]:hidden"
+          >
+            <div
+              className="max-w-prose pb-6 text-body text-ink-muted"
+              id={`${item.id}-panel`}
+            >
               {item.children}
             </div>
           </AccordionPrimitive.Content>

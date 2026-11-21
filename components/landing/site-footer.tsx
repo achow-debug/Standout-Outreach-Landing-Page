@@ -8,11 +8,14 @@ import {
   useDpaRequestOptional,
 } from "@/components/official/dpa-request";
 import { openSourcesSection } from "@/components/official/source-button";
+import { Button } from "@/components/ui/Button";
+import { Container } from "@/components/ui/Container";
 import { credentials } from "@/content/landing";
 import { ENQUIRY_CHECK_HREF, SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { siteConfig } from "@/lib/site-config";
 
-const ASK_AI_PROMPT = "How can Standout Group, the law firm growth partner, help me?";
+const ASK_AI_PROMPT =
+  "How can Standout Group, the law firm growth partner, help me?";
 const askAiQuery = encodeURIComponent(ASK_AI_PROMPT);
 const LINKEDIN_URL = "https://uk.linkedin.com/showcase/standoutgroup/";
 
@@ -28,21 +31,27 @@ const askAiLinks = [
     href: `https://chatgpt.com/?q=${askAiQuery}`,
     label: "Ask ChatGPT about Standout Group (opens in new tab)",
     tooltip: "Ask ChatGPT",
-    icon: "chatgpt",
+    icon: "chatgpt" as const,
   },
   {
     href: `https://claude.ai/new?q=${askAiQuery}`,
     label: "Ask Claude about Standout Group (opens in new tab)",
     tooltip: "Ask Claude",
-    icon: "claude",
+    icon: "claude" as const,
   },
   {
     href: `https://www.perplexity.ai/search?q=${askAiQuery}`,
     label: "Ask Perplexity about Standout Group (opens in new tab)",
     tooltip: "Ask Perplexity",
-    icon: "perplexity",
+    icon: "perplexity" as const,
   },
 ] as const;
+
+const footerLinkClass =
+  "inline-flex min-h-11 items-center text-body text-night-text no-underline decoration-night-accent underline-offset-4 hover:underline focus-visible:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-accent";
+
+const footerMetaLinkClass =
+  "inline-flex min-h-11 items-center text-small text-night-muted no-underline decoration-night-accent underline-offset-4 hover:underline focus-visible:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-accent";
 
 function FooterDpaBoundary({ children }: { children: ReactNode }) {
   const existing = useDpaRequestOptional();
@@ -50,26 +59,10 @@ function FooterDpaBoundary({ children }: { children: ReactNode }) {
   return <DpaRequestProvider>{children}</DpaRequestProvider>;
 }
 
-function FooterBookingControl({
-  label,
-  href,
-  className,
-}: {
-  label: string;
-  href: string;
-  className: string;
-}) {
-  return (
-    <Link className={className} href={href} data-cta={href}>
-      {label}
-    </Link>
-  );
-}
-
 function FooterSourcesLink() {
   return (
     <Link
-      className="site-footer-link"
+      className={footerLinkClass}
       href="/#sources"
       onClick={(event) => {
         const section = document.getElementById("sources");
@@ -84,8 +77,7 @@ function FooterSourcesLink() {
 }
 
 /**
- * Dark site footer. Mission and primary action, Site and Contact columns,
- * and a single legal bar.
+ * Site footer (§6.9). Night aubergine, shared inverse button, one link style.
  */
 export function SiteFooter() {
   return (
@@ -105,26 +97,29 @@ function SiteFooterContent() {
   }, []);
 
   return (
-    <footer className="site-footer" id="site-footer">
-      <div className="page-shell site-footer-inner">
-        <div className="site-footer-top">
-          <div className="site-footer-brand">
-            <p className="site-footer-mission">
-              Established firms shouldn’t have to choose between the expertise that
-              built them and the technology to compete.
+    <footer
+      id="site-footer"
+      className="theme-night bg-night pt-(--section-y) pb-8 text-night-text"
+    >
+      <Container>
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+          <div className="flex flex-col items-start gap-6 sm:col-span-2 lg:col-span-5">
+            <p className="m-0 max-w-lead text-lead text-night-muted">
+              Established firms shouldn’t have to choose between the expertise
+              that built them and the technology to compete.
             </p>
-            <FooterBookingControl
-              label="Free enquiry check"
-              href={ENQUIRY_CHECK_HREF}
-              className="btn btn-primary site-footer-cta"
-            />
+            <Button variant="inverse" size="md" href={ENQUIRY_CHECK_HREF}>
+              Free enquiry check
+            </Button>
           </div>
 
-          <nav className="site-footer-group" aria-label="Site">
-            <p className="site-footer-group-title">Site</p>
-            <div className="site-footer-group-list">
+          <nav className="lg:col-span-3 lg:col-start-7" aria-label="Site">
+            <p className="m-0 font-sans text-eyebrow uppercase text-night-muted">
+              Site
+            </p>
+            <div className="mt-4 flex flex-col">
               {siteLinks.map((item) => (
-                <a key={item.href} className="site-footer-link" href={item.href}>
+                <a key={item.href} className={footerLinkClass} href={item.href}>
                   {item.label}
                 </a>
               ))}
@@ -132,74 +127,89 @@ function SiteFooterContent() {
             </div>
           </nav>
 
-          <div className="site-footer-contact">
-            <nav className="site-footer-group site-footer-group--contact" aria-label="Contact">
-              <p className="site-footer-group-title">Contact</p>
-              <div className="site-footer-group-list">
+          <div className="lg:col-span-3">
+            <nav aria-label="Contact">
+              <p className="m-0 font-sans text-eyebrow uppercase text-night-muted">
+                Contact
+              </p>
+              <div className="mt-4 flex flex-col">
                 <a
-                  className="site-footer-link site-footer-link--nowrap"
+                  className={`${footerLinkClass} [overflow-wrap:anywhere]`}
                   href={`mailto:${siteConfig.contactEmail}`}
                 >
                   {siteConfig.contactEmail}
                 </a>
                 <a
-                  className="site-footer-link site-footer-link--nowrap"
+                  className={footerLinkClass}
                   href={siteConfig.contactWhatsAppHref}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   WhatsApp {siteConfig.contactPhone}
                 </a>
-                <FooterBookingControl
-                  label="Speak to Alex"
-                  href={SPEAK_TO_ALEX_HREF}
-                  className="site-footer-link"
-                />
+                <Link className={footerLinkClass} href={SPEAK_TO_ALEX_HREF}>
+                  Speak to Alex
+                </Link>
               </div>
             </nav>
 
-            <div className="site-footer-social">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <FooterIconLink
                 href={LINKEDIN_URL}
                 label="Standout Group on LinkedIn (opens in new tab)"
-                tooltip="LinkedIn"
               >
                 <LinkedInMark />
               </FooterIconLink>
-              <span className="site-footer-social-rule" aria-hidden="true" />
-              <span className="site-footer-social-caption">Ask AI about us</span>
-              <span className="site-footer-ask-icons">
-                {askAiLinks.map((item) => {
-                  const Icon = askAiIcons[item.icon];
-                  return (
-                    <FooterIconLink
-                      key={item.icon}
-                      href={item.href}
-                      label={item.label}
-                      tooltip={item.tooltip}
-                    >
-                      <Icon />
-                    </FooterIconLink>
-                  );
-                })}
+              <span className="h-6 w-px bg-night-line" aria-hidden="true" />
+              <span className="text-small font-semibold text-night-muted">
+                Ask AI about us
               </span>
+              {askAiLinks.map((item) => {
+                const Icon = askAiIcons[item.icon];
+                return (
+                  <FooterIconLink
+                    key={item.icon}
+                    href={item.href}
+                    label={item.label}
+                  >
+                    <Icon />
+                  </FooterIconLink>
+                );
+              })}
             </div>
           </div>
         </div>
 
-        <div className="site-footer-bar">
-          <p className="site-footer-copy t-small">
-            © {year} Standout Group · Sheffield ·{" "}
-            <span className="site-footer-nowrap">ICO {icoNumber}</span>
+        <div className="mt-12 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-night-line pt-6 text-small text-night-muted">
+          <p className="m-0">
+            © {year} Standout Group
+            <span aria-hidden="true"> · </span>
+            Sheffield
+            <span aria-hidden="true"> · </span>
+            <span className="whitespace-nowrap">ICO {icoNumber}</span>
           </p>
-          <nav className="site-footer-legal" aria-label="Legal">
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
-            <Link href="/compliance">Compliance</Link>
-            <DpaRequestTrigger>Request DPA</DpaRequestTrigger>
+          <nav
+            className="flex flex-wrap items-center gap-x-4 gap-y-2"
+            aria-label="Legal"
+          >
+            <Link className={footerMetaLinkClass} href="/privacy">
+              Privacy
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link className={footerMetaLinkClass} href="/terms">
+              Terms
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link className={footerMetaLinkClass} href="/compliance">
+              Compliance
+            </Link>
+            <span aria-hidden="true">·</span>
+            <DpaRequestTrigger className={footerMetaLinkClass}>
+              Request DPA
+            </DpaRequestTrigger>
           </nav>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }
@@ -207,29 +217,34 @@ function SiteFooterContent() {
 function FooterIconLink({
   href,
   label,
-  tooltip,
   children,
 }: {
   href: string;
   label: string;
-  tooltip: string;
   children: ReactNode;
 }) {
   return (
     <a
-      className="site-footer-icon"
+      className="inline-flex size-11 items-center justify-center rounded-full bg-night-raised text-night-muted transition-colors duration-(--dur-micro) ease-(--ease-out) hover:text-night-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-accent"
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      data-tooltip={tooltip}
     >
-      {children}
+      <span className="inline-flex size-5 items-center justify-center [&>svg]:size-5">
+        {children}
+      </span>
     </a>
   );
 }
 
-function BrandMark({ children, viewBox }: { children: ReactNode; viewBox: string }) {
+function BrandMark({
+  children,
+  viewBox,
+}: {
+  children: ReactNode;
+  viewBox: string;
+}) {
   return (
     <svg viewBox={viewBox} aria-hidden="true" focusable="false">
       {children}
@@ -237,7 +252,6 @@ function BrandMark({ children, viewBox }: { children: ReactNode; viewBox: string
   );
 }
 
-/** Official LinkedIn [in] bug, traced from the brand-kit InBug and drawn in one colour. */
 function LinkedInMark() {
   return (
     <BrandMark viewBox="0 0 260 260">
@@ -250,7 +264,6 @@ function LinkedInMark() {
   );
 }
 
-/** OpenAI Blossom from the 2025 brand kit — the ChatGPT product mark. */
 function ChatGptMark() {
   return (
     <BrandMark viewBox="118.557 119.958 484.139 479.818">
@@ -262,7 +275,6 @@ function ChatGptMark() {
   );
 }
 
-/** Claude starburst from Anthropic's symbol. */
 function ClaudeMark() {
   return (
     <BrandMark viewBox="0 0 100 100">
@@ -274,7 +286,6 @@ function ClaudeMark() {
   );
 }
 
-/** Perplexity asterisk mark. */
 function PerplexityMark() {
   return (
     <BrandMark viewBox="0 0 24 24">

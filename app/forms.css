@@ -1,0 +1,530 @@
+/**
+ * Temporary form + DPA sheet styles, extracted so form UX stays intact while
+ * marketing CSS is rewritten against the §9 style system.
+ * Remove this file once forms and the DPA sheet use shared components/tokens only.
+ */
+
+:root {
+  --control-min-height: 3rem;
+  --shadow-soft: var(--shadow-md);
+  --shadow-cta: var(--shadow-sm);
+  /* Compat aliases used by existing form markup */
+  --color-muted: var(--color-ink-muted);
+  --color-accent: var(--color-brand);
+  --color-accent-hover: var(--color-brand-hover);
+  --color-focus: var(--color-brand);
+  --color-ink-deep: var(--color-ink);
+  --color-error: #9b1c1c;
+  --color-error-bg: #fef2f2;
+}
+
+/* —— Shared button primitives still used by form ActionBar + DPA —— */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 3.25rem;
+  padding: 0 1.5rem;
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-ui) var(--ease-out),
+    color var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui) var(--ease-out),
+    box-shadow var(--dur-ui) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
+}
+
+.btn-primary {
+  background-color: var(--color-brand);
+  background-image: none;
+  color: #fff;
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--color-brand-hover);
+    background-image: none;
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.btn-primary:active {
+  background-color: var(--color-brand-hover);
+  background-image: none;
+  color: #fff;
+  transform: none;
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  background-image: none;
+  transform: none;
+}
+
+/* —— Field controls —— */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.field label {
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.field input,
+.field textarea {
+  min-height: var(--control-min-height);
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.field textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+  width: 100%;
+}
+
+.field select {
+  min-height: var(--control-min-height);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231F1A17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  background-size: 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+  max-width: 100%;
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.field select:invalid,
+.field select:has(option[value=""]:checked) {
+  color: var(--color-ink-muted);
+}
+
+.field select option {
+  color: var(--color-ink);
+}
+
+.field input::placeholder {
+  color: var(--color-ink-muted);
+}
+
+.field input:disabled,
+.field select:disabled,
+.field textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.field input:focus,
+.field input:focus-visible,
+.field select:focus,
+.field select:focus-visible,
+.field textarea:focus,
+.field textarea:focus-visible {
+  background-color: var(--color-surface);
+  border-color: var(--color-brand);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(79 49 146 / 22%);
+}
+
+.field--error input,
+.field--error select,
+.field--error textarea {
+  border-color: var(--color-error);
+  background-color: var(--color-error-bg);
+}
+
+.field--error input:focus,
+.field--error input:focus-visible,
+.field--error select:focus,
+.field--error select:focus-visible,
+.field--error textarea:focus,
+.field--error textarea:focus-visible {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 22%, transparent);
+}
+
+.field-hint {
+  margin: 0.375rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--color-ink-muted);
+}
+
+.field-error {
+  margin: 0.375rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-error);
+}
+
+@media (forced-colors: active) {
+  .field input,
+  .field select {
+    border: 1px solid CanvasText;
+  }
+
+  .field--error input,
+  .field--error select {
+    border: 2px solid Mark;
+  }
+
+  .field-error {
+    color: Mark;
+  }
+}
+
+/* Multi-step form pages: step fade + sticky action bar clearance */
+.form-step-fade {
+  animation: form-step-fade-in 150ms var(--ease-out);
+}
+
+@keyframes form-step-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-step-fade {
+    animation: none;
+  }
+}
+
+.form-page-main {
+  scroll-padding-bottom: 7rem;
+  padding-bottom: 7rem;
+}
+
+@media (min-width: 1024px) {
+  .form-page-main {
+    scroll-padding-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.form-error-summary {
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-md);
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.form-error-summary a {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Form page wordmark (logo colours unchanged per §0.4) */
+.brand-mark {
+  margin: 0;
+}
+
+.brand-mark-name {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.125rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.brand-mark-accent {
+  color: var(--color-brand);
+}
+
+@media (forced-colors: active) {
+  .brand-mark-name,
+  .brand-mark-accent {
+    color: CanvasText;
+  }
+}
+
+/* —— DPA request form —— */
+
+.dpa-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.dpa-intro,
+.dpa-privacy,
+.dpa-success {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.dpa-privacy {
+  font-size: 0.875rem;
+}
+
+.dpa-privacy-link,
+.dpa-mail {
+  color: var(--color-brand);
+  font-weight: 600;
+  text-underline-offset: 0.15em;
+}
+
+.dpa-privacy-link:focus-visible,
+.dpa-mail:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.dpa-form-error {
+  margin: 0;
+  color: var(--color-error);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.dpa-submit {
+  width: 100%;
+}
+
+.dpa-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgb(255 255 255 / 45%);
+  border-top-color: #fff;
+  border-radius: 50%;
+  flex: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dpa-spinner {
+    animation: dpa-spin 0.7s linear infinite;
+  }
+}
+
+@keyframes dpa-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* —— DPA sheet (Radix dialog) —— */
+
+html.sheet-open,
+html.sheet-open body {
+  overflow: hidden !important;
+}
+
+html.sheet-open body {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+}
+
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgb(31 26 23 / 55%);
+}
+
+.sheet-content {
+  position: fixed;
+  z-index: 71;
+  display: flex;
+  flex-direction: column;
+  max-height: 85svh;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-md);
+}
+
+.sheet-content:focus {
+  outline: none;
+}
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.sheet-title {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.sheet-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sheet-close:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.sheet-body {
+  min-height: 0;
+  overflow: auto;
+  padding: 1.25rem;
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+}
+
+@media (max-width: 767px) {
+  .sheet-content {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .sheet-overlay[data-state="open"],
+  .sheet-content[data-state="open"] {
+    animation: sheet-fade 200ms ease;
+  }
+
+  .sheet-content[data-state="open"] {
+    animation: sheet-up 200ms ease;
+  }
+
+  .sheet-overlay[data-state="closed"] {
+    animation: sheet-fade 200ms ease reverse;
+  }
+
+  .sheet-content[data-state="closed"] {
+    animation: sheet-up 200ms ease reverse;
+  }
+}
+
+@media (min-width: 768px) {
+  .sheet-content {
+    top: 50%;
+    left: 50%;
+    width: min(32rem, calc(100vw - 2rem));
+    translate: -50% -50%;
+    border-radius: 0.75rem;
+  }
+
+  .sheet-overlay[data-state="open"],
+  .sheet-content[data-state="open"] {
+    animation: sheet-fade 200ms ease;
+  }
+
+  .sheet-overlay[data-state="closed"],
+  .sheet-content[data-state="closed"] {
+    animation: sheet-fade 200ms ease reverse;
+  }
+}
+
+@keyframes sheet-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    translate: 0 100%;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-overlay,
+  .sheet-content {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .sheet-content,
+  .sheet-close {
+    background: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+  }
+}

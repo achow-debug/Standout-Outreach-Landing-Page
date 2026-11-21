@@ -5,20 +5,28 @@ import { ctaMicrocopy } from "@/content/landing";
 import { IcoExplainer } from "@/components/official/ico-explainer";
 
 type CtaMicrocopyProps = {
-  /** Light sections use ink. Dark sections use the on-navy text colours. */
+  /** Light sections use ink. Night footer can pass dark later if needed. */
   tone?: "light" | "dark";
 };
 
+/**
+ * Trust microcopy under CTAs. Copy unchanged.
+ */
 export function CtaMicrocopy({ tone = "light" }: CtaMicrocopyProps) {
   const [open, setOpen] = useState(false);
+  const muted = tone === "dark" ? "text-night-muted" : "text-ink-subtle";
+  const link =
+    tone === "dark"
+      ? "text-night-accent underline-offset-4 hover:underline"
+      : "text-brand underline-offset-4 hover:underline";
 
   return (
-    <div className={`cta-microcopy cta-microcopy--${tone}`}>
-      <p className="cta-microcopy-line">{ctaMicrocopy.line1}</p>
-      <p className="cta-microcopy-legal">
+    <div className={`flex max-w-prose flex-col gap-1 text-left text-small ${muted}`}>
+      <p className="m-0">{ctaMicrocopy.line1}</p>
+      <p className="m-0">
         <button
           type="button"
-          className="cta-microcopy-ico"
+          className={`font-semibold ${link}`}
           onClick={() => setOpen(true)}
         >
           {ctaMicrocopy.icoLink}

@@ -1,83 +1,35 @@
-"use client";
-
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useBooking } from "@/components/official/booking-provider";
+import type { ReactNode } from "react";
 import { CtaMicrocopy } from "@/components/official/cta-microcopy";
-import { SectionLabel } from "@/components/official/section-label";
 import { SourceButton } from "@/components/official/source-button";
+import { Button } from "@/components/ui/Button";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+import { SectionShell } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
+import { StepList } from "@/components/ui/StepList";
 import { howItWorks as howCopy, sectionLabels } from "@/content/landing";
-import { keepTogether } from "@/components/official/no-break";
-import { useInView } from "@/hooks/use-in-view";
+import { SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 
-function ShieldIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 3 4.5 6.8v5.4c0 4.4 3.1 8.4 7.5 9.3 4.4-.9 7.5-4.9 7.5-9.3V6.8z" />
-      <path d="m9 12 2 2 4-4" />
-    </svg>
-  );
-}
-
-function HowStep({
-  index,
-  title,
-  body,
-  youGet,
-  proofLink,
-  nextReached,
-  onReach,
-}: {
-  index: number;
-  title: string;
-  body: string;
-  youGet: string;
-  proofLink?: { href: string; label: string };
-  nextReached: boolean;
-  onReach: (index: number) => void;
-}) {
-  const ref = useRef<HTMLLIElement>(null);
-  const inView = useInView(ref, { once: true, threshold: 0.3 });
-
-  useEffect(() => {
-    if (inView) onReach(index);
-  }, [inView, index, onReach]);
-
-  return (
-    <li
-      ref={ref}
-      className={inView ? "official-how-step is-reached" : "official-how-step"}
-      data-fill={nextReached ? "true" : "false"}
-    >
-      <span className="official-how-dot" aria-hidden="true" />
-      <p className="official-how-step-label t-small">Step {index + 1}</p>
-      <h3 className="official-how-step-title t-h3">{title}</h3>
-      <p className="official-how-step-body t-body">{body}</p>
-      <p className="official-how-you-get t-body">
-        <strong>You get:</strong> {youGet}
-      </p>
-      {proofLink ? (
-        <a className="official-how-proof-link" href={proofLink.href}>
-          {keepTogether(proofLink.label)}
-        </a>
-      ) : null}
-    </li>
-  );
+/** Wrap hyphenated compounds so they never break (§3.3). Copy unchanged. */
+function keepCompound(text: string, compound: string): ReactNode {
+  const parts = text.split(compound);
+  if (parts.length === 1) return text;
+  return parts.reduce<ReactNode[]>((acc, part, index) => {
+    if (index > 0) {
+      acc.push(
+        <span key={`c-${index}`} className="whitespace-nowrap">
+          {compound}
+        </span>,
+      );
+    }
+    if (part) acc.push(part);
+    return acc;
+  }, []);
 }
 
 /**
- * Merged process section: pilot steps, timeline, paid add-on, compliance.
- * The progress line fills as each step enters view.
+ * How it works (§10.7). Step circles sit on the enquiry path on lg+.
+ * Path wiring lands in the motion phase; circles already align to the path line.
  */
 export function HowItWorks() {
   const {
@@ -89,124 +41,132 @@ export function HowItWorks() {
     compliance,
     ctaLabel,
   } = officialCopy.howItWorks;
-  const { openBooking } = useBooking();
-  const [reached, setReached] = useState<boolean[]>(() => steps.map(() => false));
 
-  const onReach = useCallback((index: number) => {
-    setReached((prev) => {
-      if (prev[index]) return prev;
-      const next = [...prev];
-      next[index] = true;
-      return next;
-    });
-  }, []);
+  const stepItems = steps.map((step) => ({
+    title: step.title,
+    body: (
+      <>
+        <p className="m-0">{keepCompound(step.body, "follow-up")}</p>
+        <p className="m-0 mt-3">
+          <strong>You get:</strong>{" "}
+          {keepCompound(step.youGet, "follow-up")}
+        </p>
+        {step.id === "handle-what-happens-next" ? (
+          <a
+            className="mt-3 inline-flex min-h-11 items-center font-semibold text-brand underline-offset-4 hover:underline"
+            href={howCopy.proofHref}
+          >
+            {howCopy.proofLink}
+          </a>
+        ) : null}
+      </>
+    ),
+  }));
 
   return (
-    <section
-      className="official-how"
+    <SectionShell
       id="how-it-works"
-      aria-labelledby="official-how-heading"
-      tabIndex={-1}
+      tone="paper"
+      pathAlign
+      className="scroll-mt-(--nav-offset)"
     >
-      <div className="page-shell official-how-inner">
-        <div className="official-how-stage">
-          <div className="official-how-sticky">
-          <div className="official-how-intro">
-            <SectionLabel>{sectionLabels.how}</SectionLabel>
-            <h2 id="official-how-heading" className="official-how-heading t-h2">
-              <span className="official-how-heading-line">{heading}</span>
-              <span className="official-how-heading-line">{headingSecond}</span>
-            </h2>
-            <p className="official-how-intro-body t-lead">{howCopy.intro}</p>
-            <div className="official-how-callout">
-              <p className="official-how-callout-figure">{howCopy.calloutFigure}</p>
-              <p className="official-how-callout-body t-body">{howCopy.calloutBody}</p>
-              <p className="official-how-callout-credit">
-                {howCopy.calloutCredit}
-                <SourceButton sourceId={howCopy.calloutSourceId} />
-              </p>
-            </div>
-            <p className="official-how-after t-lead">{howCopy.afterCallout}</p>
-          </div>
-          <div className="official-how-cta">
-            <button
-              type="button"
-              className="btn btn-primary btn-cta"
-              data-booking-cta=""
-              onClick={() => openBooking("how-it-works")}
-            >
-              {keepTogether(ctaLabel)}
-            </button>
-            <CtaMicrocopy tone="light" />
-          </div>
-          </div>
-
-          <div className="official-how-main">
-          <div className="official-how-panel">
-            <p className="official-how-pill t-small">{keepTogether(pill)}</p>
-            <ol className="official-how-steps">
-              {steps.map((step, index) => (
-                <HowStep
-                  key={step.id}
-                  index={index}
-                  title={step.title}
-                  body={step.body}
-                  youGet={step.youGet}
-                  proofLink={
-                    step.id === "handle-what-happens-next"
-                      ? { href: howCopy.proofHref, label: howCopy.proofLink }
-                      : undefined
-                  }
-                  nextReached={Boolean(reached[index + 1])}
-                  onReach={onReach}
-                />
-              ))}
-            </ol>
-          </div>
-
-          <ol className="official-how-timeline">
-            {howCopy.timeline.map((stage) => {
-              const after = "afterHref" in stage ? stage : null;
-              return (
-                <li key={stage.title} className="official-how-timeline-item">
-                  <span className="official-how-timeline-dot" aria-hidden="true" />
-                  <p className="official-how-timeline-label">{keepTogether(stage.title)}</p>
-                  <p className="official-how-timeline-caption t-small">{stage.description}</p>
-                  {after ? (
-                    <a className="official-how-proof-link" href={after.afterHref}>
-                      {after.afterLink}
-                    </a>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ol>
-
-          <div className="official-how-addon">
-            <p className="official-how-addon-pill t-small">{addOn.kicker}</p>
-            <h3 className="official-how-step-title t-h3">{addOn.title}</h3>
-            <p className="official-how-step-body t-body">{addOn.body}</p>
-          </div>
-          </div>
-        </div>
-
-        <div
-          className="official-how-compliance"
-          role="note"
-          aria-labelledby="official-how-compliance-heading"
+      <Reveal>
+        <Eyebrow>{sectionLabels.how}</Eyebrow>
+        <h2
+          id="official-how-heading"
+          className="mt-4 max-w-heading font-display text-h2 text-ink"
         >
-          <div className="official-how-compliance-lead">
-            <p className="official-how-compliance-label t-kicker">
-              <ShieldIcon />
-              {howCopy.legalLabel}
-            </p>
-            <h3 id="official-how-compliance-heading" className="official-how-step-title t-h3">
-              {compliance.title}
-            </h3>
-          </div>
-          <p className="official-how-step-body t-body">{howCopy.legalBody}</p>
+          <span className="block">{heading}</span>
+          <span className="block">{headingSecond}</span>
+        </h2>
+      </Reveal>
+
+      <p className="mt-5 max-w-lead text-lead text-ink-muted lg:mt-6">
+        {howCopy.intro}
+      </p>
+
+      <aside className="mt-10 max-w-prose border-l-2 border-brand pl-6">
+        <p className="m-0 font-display text-h2 text-ink tabular-nums">
+          {howCopy.calloutFigure}
+        </p>
+        <p className="m-0 mt-3 text-body text-ink-muted">{howCopy.calloutBody}</p>
+        <p className="m-0 mt-3 text-small text-ink-subtle">
+          {howCopy.calloutCredit}
+          <SourceButton sourceId={howCopy.calloutSourceId} />
+        </p>
+      </aside>
+
+      <p className="mt-8 max-w-lead text-lead text-ink-muted">
+        {howCopy.afterCallout}
+      </p>
+
+      <p className="mt-12 text-small font-semibold text-ink-muted lg:mt-16">
+        {pill}
+      </p>
+
+      <StepList className="mt-12" steps={stepItems} />
+
+      <div className="mt-12 max-w-prose border-t border-line pt-12">
+        <p className="m-0 font-sans text-eyebrow uppercase text-ink-muted">
+          {addOn.kicker}
+        </p>
+        <h3 className="mt-3 font-display text-h3 text-ink">{addOn.title}</h3>
+        <p className="mt-3 text-body text-ink-muted">{addOn.body}</p>
+      </div>
+
+      <ol className="mt-12 m-0 flex list-none flex-col gap-8 border-t border-line p-0 pt-12">
+        {howCopy.timeline.map((stage) => {
+          const after = "afterHref" in stage ? stage : null;
+          return (
+            <li key={stage.title}>
+              <p className="m-0 font-display text-h3 text-ink">{stage.title}</p>
+              <p className="m-0 mt-3 max-w-prose text-body text-ink-muted">
+                {stage.description}
+              </p>
+              {after ? (
+                <a
+                  className="mt-3 inline-flex min-h-11 items-center font-semibold text-brand underline-offset-4 hover:underline"
+                  href={after.afterHref}
+                >
+                  {after.afterLink}
+                </a>
+              ) : null}
+            </li>
+          );
+        })}
+      </ol>
+
+      <div
+        className="mt-12 max-w-prose border-t border-line pt-12"
+        role="note"
+        aria-labelledby="official-how-compliance-heading"
+      >
+        <p className="m-0 text-small font-semibold text-ink-muted">
+          {howCopy.legalLabel}
+        </p>
+        <h3
+          id="official-how-compliance-heading"
+          className="mt-3 font-display text-h3 text-ink"
+        >
+          {compliance.title}
+        </h3>
+        <p className="mt-3 text-body text-ink-muted">{howCopy.legalBody}</p>
+      </div>
+
+      <div className="mt-12">
+        <Button
+          variant="primary"
+          size="lg"
+          href={SPEAK_TO_ALEX_HREF}
+          className="w-full sm:w-auto"
+          data-booking-cta=""
+        >
+          {ctaLabel}
+        </Button>
+        <div className="mt-4">
+          <CtaMicrocopy tone="light" />
         </div>
       </div>
-    </section>
+    </SectionShell>
   );
 }

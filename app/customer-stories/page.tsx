@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { BookingProvider } from "@/components/official/booking-provider";
 import { DpaRequestProvider } from "@/components/official/dpa-request";
@@ -27,9 +26,10 @@ export default function CustomerStoriesPage() {
           <main
             id="main-content"
             tabIndex={-1}
-            className="pt-[calc(env(safe-area-inset-top)+5.5rem)] md:pt-[calc(env(safe-area-inset-top)+6rem)]"
+            style={{
+              paddingTop: "calc(var(--nav-offset) + clamp(2.5rem, 6vw, 5rem))",
+            }}
           >
-            <MotionBootstrap />
             <SiteHeader />
             <MeetTheFounder />
             <Faq />

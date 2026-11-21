@@ -300,7 +300,7 @@ export function MultiStepForm({ config }: MultiStepFormProps) {
     return (
       <div
         ref={cardRef}
-        className="form-card rounded-2xl border border-line bg-surface p-6 shadow-[var(--shadow-soft)] sm:p-8"
+        className="form-card rounded-lg border border-line bg-surface p-6 shadow-md sm:p-8"
       >
         <div className="form-step-fade" key={state.fadeKey}>
           <h2
@@ -355,7 +355,7 @@ export function MultiStepForm({ config }: MultiStepFormProps) {
   return (
     <div
       ref={cardRef}
-      className="form-card rounded-2xl border border-line bg-surface p-6 shadow-[var(--shadow-soft)] sm:p-8"
+      className="form-card rounded-lg border border-line bg-surface p-6 shadow-md sm:p-8"
     >
       <h2 className="text-center text-lg font-bold text-ink sm:text-xl">
         {config.cardHeading}

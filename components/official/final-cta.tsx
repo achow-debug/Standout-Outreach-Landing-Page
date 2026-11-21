@@ -1,162 +1,138 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useBooking } from "@/components/official/booking-provider";
+import { Button } from "@/components/ui/Button";
+import { SectionShell } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
+import { StepList } from "@/components/ui/StepList";
 import { ENQUIRY_CHECK_HREF, SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
+import type { ReactNode } from "react";
 
-const focusRing =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
-
-const closePrimaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl bg-brand text-white text-button no-underline hover:bg-brand-hover sm:w-auto ${focusRing}`;
-
-const closeSecondaryClass = `inline-flex w-full items-center justify-center min-h-[52px] px-6 rounded-xl border-[1.5px] border-ink text-ink text-button no-underline bg-transparent hover:bg-ink/5 sm:w-auto ${focusRing}`;
+/** Wrap hyphenated compounds so they never break (§3.3). Copy unchanged. */
+function keepCompound(text: string, compound: string): ReactNode {
+  const parts = text.split(compound);
+  if (parts.length === 1) return text;
+  return parts.reduce<ReactNode[]>((acc, part, index) => {
+    if (index > 0) {
+      acc.push(
+        <span key={`c-${index}`} className="whitespace-nowrap">
+          {compound}
+        </span>,
+      );
+    }
+    if (part) acc.push(part);
+    return acc;
+  }, []);
+}
 
 /**
- * Cream close before the footer. Two-line headline, three numbered steps,
- * then the enquiry check and Speak to Alex links. A booking adds the thank-you
- * underneath and leaves this close in place.
+ * Final CTA (§10.8). Paper background. Left-aligned on the content line on lg+
+ * (terminal PathNode wired in motion phase). Centred on mobile.
  */
 export function OfficialFinalCta() {
   const { headingLines, steps, primaryCta, secondaryCta, trust, microcopy } =
     officialCopy.finalCta;
-  const tools = officialCopy.noDisruption.tools;
   const thankYou = officialCopy.thankYou;
   const { portraitSrc, portraitAlt } = officialCopy.founder;
   const { booked } = useBooking();
 
+  const stepItems = steps.map((step) => ({
+    title: step.title,
+    body: <p className="m-0">{keepCompound(step.body, "follow-up")}</p>,
+  }));
+
   return (
-    <section
-      className="official-closing scroll-mt-28 bg-surface"
+    <SectionShell
       id="book"
-      aria-labelledby="official-closing-heading"
-      tabIndex={-1}
+      tone="paper"
+      pathAlign
+      className="scroll-mt-(--nav-offset)"
+      contentClassName="relative max-lg:text-center"
     >
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center px-6 py-20 md:px-8 md:py-32">
+      {/*
+        Terminal PathNode sits on the path line here in the motion phase
+        (<PathNode terminal />). Keep this wrapper relative for alignment.
+      */}
+      <Reveal>
         <h2
           id="official-closing-heading"
-          className="m-0 flex flex-col items-center text-center text-h2 text-ink max-w-[22ch]"
+          className="font-display text-h2 text-ink max-lg:mx-auto"
         >
           {headingLines.map((line) => (
-            <span key={line}>{line}</span>
+            <span key={line} className="block">
+              {line}
+            </span>
           ))}
         </h2>
+      </Reveal>
 
-        <ol className="m-0 mt-10 grid w-full max-w-[896px] list-none gap-0 p-0 text-left lg:mt-12 lg:grid-cols-3 lg:gap-14">
-          {steps.map((step, index) => {
-            const isLast = index === steps.length - 1;
-            return (
-              <li
-                key={step.title}
-                className="relative flex gap-5 pb-9 last:pb-0 lg:flex-col lg:gap-4 lg:pb-0"
-              >
-                {isLast ? null : (
-                  <span
-                    aria-hidden
-                    className="absolute top-9 bottom-0 left-[17.5px] w-px bg-line lg:top-[17.5px] lg:-right-3 lg:bottom-auto lg:left-12 lg:h-px lg:w-auto"
-                  />
-                )}
-                <span
-                  aria-hidden
-                  className="official-closing-step-num relative z-10 flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-small leading-none text-ink"
-                >
-                  {index + 1}
-                </span>
-                <div className="flex min-w-0 flex-col gap-2 pt-1.5 lg:pt-0">
-                  <h3 className="m-0 text-h3 text-ink">{step.title}</h3>
-                  <p className="m-0 mt-4 text-body text-ink max-w-[62ch]">
-                    {step.body}
-                  </p>
-                  {isLast ? (
-                    <ul className="m-0 flex list-none flex-wrap items-center gap-3 p-0 pt-2">
-                      {tools.map((tool) => {
-                        const src =
-                          "src" in tool && typeof tool.src === "string"
-                            ? tool.src
-                            : undefined;
-                        if (!src) return null;
-                        return (
-                          <li key={tool.id}>
-                            <img
-                              src={src}
-                              alt=""
-                              className="h-8 w-auto max-w-full object-contain"
-                            />
-                            <span className="sr-only">{tool.name}</span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  ) : null}
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+      <StepList
+        className="mt-12 text-left lg:mt-16"
+        steps={stepItems}
+      />
 
-        <div className="mt-8 flex w-full flex-col items-center text-center">
-          <div
-            id="final-cta"
-            className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center"
-          >
-            <Link
-              href={ENQUIRY_CHECK_HREF}
-              data-cta="measure-enquiries"
-              className={closePrimaryClass}
-            >
-              {primaryCta}
-            </Link>
-            <Link
-              href={SPEAK_TO_ALEX_HREF}
-              data-booking-cta=""
-              className={closeSecondaryClass}
-            >
-              {secondaryCta}
-            </Link>
-          </div>
-          <p className="mt-6 text-small text-ink-muted md:mt-8">{trust}</p>
-          <p className="mt-2 text-small text-ink-muted md:mt-3">{microcopy}</p>
-        </div>
-
-        {booked ? (
-          <div className="official-closing-thanks mt-12 flex w-full max-w-xl flex-col items-center gap-4 border-t border-line pt-10 text-center lg:mt-16">
-            <div className="relative size-[4.5rem] overflow-hidden rounded-full">
-              <Image
-                src={portraitSrc}
-                alt={portraitAlt}
-                width={144}
-                height={144}
-                className="absolute inset-0 size-full origin-[50%_8%] scale-[2] object-cover object-[50%_8%]"
-              />
-            </div>
-            <h3 className="m-0 text-h2 text-ink max-w-[22ch]">{thankYou.heading}</h3>
-            <ul className="m-0 mt-5 flex list-none flex-col gap-4 p-0 text-lead text-ink-muted">
-              {thankYou.steps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ul>
-            <div className="flex flex-col items-center">
-              <a
-                className="inline-flex min-h-11 items-center gap-3 text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                href={`mailto:${siteConfig.contactEmail}`}
-              >
-                Email
-                <span className="font-normal">{siteConfig.contactEmail}</span>
-              </a>
-              <a
-                className="inline-flex min-h-11 items-center text-brand underline underline-offset-4 hover:text-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                href={siteConfig.contactWhatsAppHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                WhatsApp
-              </a>
-            </div>
-          </div>
-        ) : null}
+      <div className="mt-12 flex w-full flex-col gap-3 sm:flex-row max-lg:items-stretch sm:max-lg:justify-center lg:justify-start">
+        <Button
+          variant="primary"
+          size="lg"
+          href={ENQUIRY_CHECK_HREF}
+          data-cta="measure-enquiries"
+          className="w-full sm:w-auto"
+        >
+          {primaryCta}
+        </Button>
+        <Button
+          variant="secondary"
+          size="lg"
+          href={SPEAK_TO_ALEX_HREF}
+          className="w-full sm:w-auto"
+        >
+          {secondaryCta}
+        </Button>
       </div>
-    </section>
+
+      <p className="mt-4 text-small text-ink-subtle text-pretty">{trust}</p>
+      <p className="mt-2 text-small text-ink-subtle text-pretty">{microcopy}</p>
+
+      {booked ? (
+        <div className="mt-12 flex w-full max-w-lead flex-col gap-4 border-t border-line pt-10 max-lg:mx-auto max-lg:items-center">
+          <div className="relative size-16 overflow-hidden rounded-full">
+            <Image
+              src={portraitSrc}
+              alt={portraitAlt}
+              width={128}
+              height={128}
+              className="absolute inset-0 size-full origin-[50%_8%] scale-[2] object-cover object-[50%_8%]"
+            />
+          </div>
+          <h3 className="m-0 font-display text-h2 text-ink">{thankYou.heading}</h3>
+          <ul className="m-0 mt-2 flex list-none flex-col gap-3 p-0 text-lead text-ink-muted">
+            {thankYou.steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ul>
+          <div className="flex flex-col gap-1">
+            <a
+              className="inline-flex min-h-11 items-center gap-3 text-brand underline-offset-4 hover:underline"
+              href={`mailto:${siteConfig.contactEmail}`}
+            >
+              Email
+              <span className="font-normal">{siteConfig.contactEmail}</span>
+            </a>
+            <a
+              className="inline-flex min-h-11 items-center text-brand underline-offset-4 hover:underline"
+              href={siteConfig.contactWhatsAppHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      ) : null}
+    </SectionShell>
   );
 }

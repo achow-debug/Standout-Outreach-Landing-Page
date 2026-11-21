@@ -12,8 +12,10 @@ export const officialCopy = {
   header: {
     /** Same enquiry form as the hero. Shown alone on the closed mobile bar. */
     ctaLabel: "Free enquiry check",
-    /** Speak to Alex form. Desktop bar, and the open mobile menu. */
-    askLabel: "Speak to Alex",
+    /** Shorter label so the floating mobile bar doesn’t clip the CTA. */
+    ctaLabelMobile: "Enquiry check",
+    /** Speak-to-us form. Desktop bar secondary, and the open mobile menu. */
+    askLabel: "Speak to us",
   },
   hero: {
     /** Near-black lead. Brand accent name sits after it. */
@@ -64,20 +66,27 @@ export const officialCopy = {
   },
   noDisruption: {
     heading: "Delivers into the tools your firm already uses",
-    /** Logo artwork deferred — components render grey placeholders until `src` is added. */
     tools: [
-      { id: "gmail", name: "Gmail" },
-      { id: "outlook", name: "Outlook" },
-      { id: "teams", name: "Teams" },
-      { id: "google-calendar", name: "Google Calendar" },
-      { id: "zoom", name: "Zoom" },
-      { id: "hubspot", name: "HubSpot" },
-      { id: "claude", name: "Claude" },
-      { id: "chatgpt", name: "ChatGPT" },
-      { id: "monday", name: "Monday" },
-      { id: "clio", name: "Clio" },
-      { id: "mimecast", name: "Mimecast" },
-      { id: "microsoft-365", name: "Microsoft 365" },
+      { id: "gmail", name: "Gmail", src: "/images/tools/gmail.svg" },
+      { id: "outlook", name: "Outlook", src: "/images/tools/outlook.png" },
+      { id: "teams", name: "Teams", src: "/images/tools/teams.png" },
+      {
+        id: "google-calendar",
+        name: "Google Calendar",
+        src: "/images/tools/google-calendar.svg",
+      },
+      { id: "zoom", name: "Zoom", src: "/images/tools/zoom.webp" },
+      { id: "hubspot", name: "HubSpot", src: "/images/tools/hubspot.png" },
+      { id: "claude", name: "Claude", src: "/images/tools/claude.webp" },
+      { id: "chatgpt", name: "ChatGPT", src: "/images/tools/chatgpt.png" },
+      { id: "monday", name: "Monday", src: "/images/tools/monday.webp" },
+      { id: "clio", name: "Clio", src: "/images/tools/clio.png" },
+      { id: "mimecast", name: "Mimecast", src: "/images/tools/mimecast.png" },
+      {
+        id: "microsoft-365",
+        name: "Microsoft 365",
+        src: "/images/tools/microsoft-365.webp",
+      },
     ],
   },
   personalised: {
@@ -104,11 +113,10 @@ export const officialCopy = {
     linkLabel: "Learn more about our security and data protection practices →",
     /** Destination page is built later. This href will 404 until then. */
     linkHref: "/security",
-    /** Artwork deferred — components render labelled grey placeholders. */
     badges: [
-      { id: "ico", label: "ICO" },
-      { id: "gdpr", label: "GDPR" },
-      { id: "ssl", label: "SSL 256-bit" },
+      { id: "ico", label: "ICO", src: "/images/security/ico.png" },
+      { id: "gdpr", label: "GDPR", src: "/images/security/gdpr.webp" },
+      { id: "ssl", label: "SSL 256-bit", src: "/images/security/ssl.webp" },
     ],
   },
   nav: {

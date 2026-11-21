@@ -1,3 +1,4 @@
+import { Container } from "@/components/ui/Container";
 import { sources } from "@/content/sources";
 
 function Citation({
@@ -20,24 +21,28 @@ function Citation({
 }
 
 /**
- * Closed by default. "See all sources & methodology" sets `open` and scrolls here.
+ * Sources band after the footer. Closed by default.
  */
 export function SourcesSection() {
   return (
-    <div className="official-sources-band">
-      <div className="page-shell official-sources-inner">
-        <details id={sources.sectionId} className="official-sources">
-          <summary className="official-sources-summary">{sources.summaryLabel}</summary>
-          <div className="official-sources-list">
+    <div className="border-t border-line bg-paper">
+      <Container className="py-8">
+        <details id={sources.sectionId} className="group">
+          <summary className="cursor-pointer list-none font-sans text-small font-semibold text-ink-muted underline-offset-4 hover:text-ink hover:underline [&::-webkit-details-marker]:hidden">
+            {sources.summaryLabel}
+          </summary>
+          <div className="mt-8 flex flex-col gap-10">
             {sources.items.map((item) => (
-              <article key={item.id} className="official-sources-item">
-                <h3 className="official-sources-heading t-h3">{item.credit}</h3>
-                <p className="official-sources-copy t-body">
+              <article key={item.id}>
+                <h3 className="m-0 font-display text-h3 text-ink">{item.credit}</h3>
+                <p className="m-0 mt-3 max-w-prose text-body text-ink-muted">
                   <Citation citation={item.citation} italicise={item.italicise} />
                 </p>
-                <p className="official-sources-copy t-body">{item.summary}</p>
+                <p className="m-0 mt-3 max-w-prose text-body text-ink-muted">
+                  {item.summary}
+                </p>
                 <a
-                  className="official-sources-link"
+                  className="mt-3 inline-flex min-h-11 items-center font-semibold text-brand underline-offset-4 hover:underline"
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -47,26 +52,37 @@ export function SourcesSection() {
               </article>
             ))}
 
-            <article className="official-sources-item">
-              <h3 className="official-sources-heading t-h3">{sources.mysteryShop.title}</h3>
-              <p className="official-sources-copy t-body">
+            <article>
+              <h3 className="m-0 font-display text-h3 text-ink">
+                {sources.mysteryShop.title}
+              </h3>
+              <p className="m-0 mt-3 max-w-prose text-body text-ink-muted">
                 <strong>{sources.mysteryShop.leadBold}</strong>
               </p>
               {sources.mysteryShop.paragraphs.map((paragraph) => (
-                <p key={paragraph} className="official-sources-copy t-body">
+                <p
+                  key={paragraph}
+                  className="m-0 mt-3 max-w-prose text-body text-ink-muted"
+                >
                   {paragraph}
                 </p>
               ))}
             </article>
 
-            <article className="official-sources-item">
-              <h3 className="official-sources-heading t-h3">{sources.firstContactTitle}</h3>
-              <p className="official-sources-copy t-body">{sources.firstContact}</p>
+            <article>
+              <h3 className="m-0 font-display text-h3 text-ink">
+                {sources.firstContactTitle}
+              </h3>
+              <p className="m-0 mt-3 max-w-prose text-body text-ink-muted">
+                {sources.firstContact}
+              </p>
             </article>
 
-            <article className="official-sources-item">
-              <h3 className="official-sources-heading t-h3">{sources.nineWeekTitle}</h3>
-              <p className="official-sources-copy t-body">
+            <article>
+              <h3 className="m-0 font-display text-h3 text-ink">
+                {sources.nineWeekTitle}
+              </h3>
+              <p className="m-0 mt-3 max-w-prose text-body text-ink-muted">
                 {sources.nineWeek.map((part) =>
                   "strong" in part && part.strong ? (
                     <strong key={part.text}>{part.text}</strong>
@@ -78,7 +94,7 @@ export function SourcesSection() {
             </article>
           </div>
         </details>
-      </div>
+      </Container>
     </div>
   );
 }

@@ -1,31 +1,44 @@
+import localFont from "next/font/local";
 import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsProviderScript } from "@/components/landing/analytics-provider-script";
+import { Providers } from "@/app/providers";
 import { officialCopy } from "@/lib/official-copy";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
+import "./forms.css";
+import "./demo.css";
+
+const generalSans = localFont({
+  src: [
+    { path: "./fonts/GeneralSans-Medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/GeneralSans-Semibold.woff2", weight: "600", style: "normal" },
+  ],
+  variable: "--font-general-sans",
+  display: "swap",
+});
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: ["400", "600"],
   display: "swap",
   variable: "--font-source-sans",
 });
 
 const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: "600",
   display: "swap",
   variable: "--font-source-serif",
+  preload: false,
 });
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: "#F7F4EE",
 };
 
 export const metadata: Metadata = {
@@ -66,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-GB"
-      className={`${sourceSans.variable} ${sourceSerif.variable}`}
+      className={`${generalSans.variable} ${sourceSans.variable} ${sourceSerif.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -74,24 +87,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://calendly.com" />
       </head>
       <body className="font-sans antialiased bg-paper text-ink">
-        {/*
-          Enables CSS load/scroll motion only when JS runs and the visitor
-          has not requested reduced motion. Without this class, content stays
-          fully visible — no-JS never hides the value prop.
-          Runs before paint; suppressHydrationWarning on <html> allows the
-          early `motion-ok` class without a React hydration mismatch.
-        */}
-        <Script
-          id="motion-ok"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("motion-ok")}}catch(e){}})();`,
-          }}
-        />
         <a className="skip-link" href="#main-content">
           Skip to main content
         </a>
-        {children}
+        <Providers>{children}</Providers>
         <AnalyticsProviderScript />
         <Analytics />
         <SpeedInsights />

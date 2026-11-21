@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { AgencyComparison } from "@/components/official/agency-comparison";
 import { BookingProvider } from "@/components/official/booking-provider";
@@ -10,6 +9,7 @@ import { HowItWorks } from "@/components/official/how-it-works";
 import { PracticeAreaProvider } from "@/components/official/practice-area";
 import { SiteHeader } from "@/components/official/site-header";
 import { SourcesSection } from "@/components/official/sources-section";
+import { EnquiryPath } from "@/components/path/EnquiryPath";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -29,14 +29,18 @@ export default function HowItWorksPage() {
           <main
             id="main-content"
             tabIndex={-1}
-            className="pt-[calc(env(safe-area-inset-top)+5.5rem)] md:pt-[calc(env(safe-area-inset-top)+6rem)]"
+            style={{
+              paddingTop: "calc(var(--nav-offset) + clamp(2.5rem, 6vw, 5rem))",
+            }}
           >
-            <MotionBootstrap />
             <SiteHeader />
-            <HowItWorks />
-            <FirmDay />
-            <AgencyComparison />
-            <ColpPeaceOfMind />
+            {/* Enquiry path is limited to this page for now (§7 + product decision). */}
+            <EnquiryPath>
+              <HowItWorks />
+              <FirmDay />
+              <AgencyComparison />
+              <ColpPeaceOfMind />
+            </EnquiryPath>
           </main>
           <SiteFooter />
           <SourcesSection />

@@ -25,7 +25,7 @@ export function StepIndicator({
         return (
           <li key={step} className="flex items-center">
             <span
-              className={`flex size-10 items-center justify-center rounded-full text-sm font-semibold ${
+              className={`flex size-10 items-center justify-center rounded-full text-small font-semibold ${
                 completed || current
                   ? "bg-brand text-white"
                   : "bg-line text-ink-muted"

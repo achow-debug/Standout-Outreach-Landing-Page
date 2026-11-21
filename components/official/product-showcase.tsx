@@ -5,436 +5,272 @@ import {
   useEffect,
   useRef,
   useState,
-  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
 } from "react";
-import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
+import * as m from "motion/react-m";
+import { useReducedMotion } from "motion/react";
 import { AnnotatedIntakeDemo } from "@/components/official/annotated-intake-demo";
+import { BrowserFrame } from "@/components/ui/BrowserFrame";
+import { Container } from "@/components/ui/Container";
+import { Placeholder } from "@/components/ui/Placeholder";
+import { intakeDemoChrome } from "@/content/intake-demo";
 import { officialCopy } from "@/lib/official-copy";
+
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+const DEMO_ENTRANCE_S = 0.7; /* --dur-large */
+const DEMO_DELAY_S = 0.15;
 
 const SCENES = officialCopy.showcase.scenes;
 const SCENE_COUNT = SCENES.length;
-const INTAKE_INDEX = SCENES.findIndex((scene) => scene.id === "intake");
-const AUTOPLAY_MS = 5000;
-/** Focused card ~60–70vw across desktop widths (viewport is ≤1280). */
-const CARD_WIDTH_RATIO = 0.72;
-const CARD_GAP_PX = 28;
-const SWIPE_THRESHOLD_PX = 56;
+const INTAKE_INDEX = Math.max(
+  0,
+  SCENES.findIndex((scene) => scene.id === "intake"),
+);
 
 /**
- * Product showcase: annotated intake demo by default, then the remaining
- * scene cards. Desktop autoplay never runs while the interactive demo is active.
+ * Full-bleed demo carousel (§6.8, §10.4).
+ * Shared fixed-height frames; scroll-snap with desktop side peeks; dots-only nav.
  */
+function centerScrollLeft(
+  scroller: HTMLElement,
+  slide: HTMLElement,
+): number {
+  const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+  const target = slideCenter - scroller.clientWidth / 2;
+  const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+  return Math.max(0, Math.min(target, max));
+}
+
 export function ProductShowcase() {
-  return (
-    <section id="ui-showcase" className="bg-canvas" aria-label="What changes">
-      <MobileShowcase />
-      <DesktopShowcase />
-    </section>
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(INTAKE_INDEX);
+  const [annotationsOn, setAnnotationsOn] = useState(false);
+  const reduce = useReducedMotion();
+  const programmaticScrollRef = useRef(false);
+  const scrollSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
   );
-}
 
-function MobileShowcase() {
-  const [active, setActive] = useState(Math.max(0, INTAKE_INDEX));
-  const [dragOffset, setDragOffset] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const [viewportWidth, setViewportWidth] = useState(0);
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{
-    pointerId: number;
-    startX: number;
-    moved: boolean;
-  } | null>(null);
+  const scrollToIndex = useCallback(
+    (index: number, behavior: ScrollBehavior = "smooth") => {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+      const slide = scroller.querySelector<HTMLElement>(
+        `[data-slide-index="${index}"]`,
+      );
+      if (!slide) return;
+
+      programmaticScrollRef.current = true;
+      setActive(index);
+      scroller.scrollTo({
+        left: centerScrollLeft(scroller, slide),
+        behavior,
+      });
+
+      if (scrollSettleTimerRef.current) {
+        clearTimeout(scrollSettleTimerRef.current);
+      }
+      scrollSettleTimerRef.current = setTimeout(
+        () => {
+          programmaticScrollRef.current = false;
+          scrollSettleTimerRef.current = null;
+        },
+        behavior === "smooth" ? 500 : 0,
+      );
+    },
+    [],
+  );
 
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduceMotion(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
 
-  useEffect(() => {
-    const node = viewportRef.current;
-    if (!node) return;
-    const update = () => setViewportWidth(node.clientWidth);
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+    const slides = Array.from(
+      scroller.querySelectorAll<HTMLElement>("[data-slide-index]"),
+    );
 
-  const selectScene = useCallback((index: number) => {
-    setActive(((index % SCENE_COUNT) + SCENE_COUNT) % SCENE_COUNT);
-    setDragOffset(0);
-  }, []);
-
-  function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (event.button !== 0) return;
-    const target = event.target as HTMLElement | null;
-    if (
-      target?.closest(
-        "button, a, input, textarea, select, label, [role='tab'], .sl-pin",
-      )
-    ) {
-      return;
-    }
-    dragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      moved: false,
-    };
-    setDragging(true);
-    event.currentTarget.setPointerCapture(event.pointerId);
-  }
-
-  function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    const delta = event.clientX - drag.startX;
-    if (Math.abs(delta) > 6) drag.moved = true;
-    setDragOffset(delta);
-  }
-
-  function endDrag(event: ReactPointerEvent<HTMLDivElement>) {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    const delta = event.clientX - drag.startX;
-    dragRef.current = null;
-    setDragging(false);
-    setDragOffset(0);
-    if (Math.abs(delta) >= SWIPE_THRESHOLD_PX) {
-      selectScene(active + (delta < 0 ? 1 : -1));
-    }
-  }
-
-  const trackOffset =
-    viewportWidth > 0 ? -active * viewportWidth + dragOffset : dragOffset;
-
-  return (
-    <div className="mobile-showcase lg:hidden">
-      <div
-        ref={viewportRef}
-        className="mobile-showcase-viewport"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-      >
-        <div
-          className={`mobile-showcase-track${dragging ? " is-dragging" : ""}${
-            reduceMotion ? " motion-reduce" : ""
-          }`}
-          style={{ transform: `translate3d(${trackOffset}px, 0, 0)` }}
-        >
-          {SCENES.map((scene) => (
-            <article
-              key={scene.id}
-              className={`mobile-showcase-card${
-                scene.id === "intake" ? " mobile-showcase-card--intake" : ""
-              }`}
-              style={{ width: viewportWidth > 0 ? `${viewportWidth}px` : "100%" }}
-              data-scene={scene.id}
-            >
-              <div className="mobile-showcase-card-inner">
-                {scene.id === "intake" ? (
-                  <AnnotatedIntakeDemo hideChrome />
-                ) : (
-                  <div className="mobile-showcase-scene">
-                    <div className="mobile-showcase-scene-copy">
-                      <h3 className="m-0 text-h2 text-ink">{scene.title}</h3>
-                      <p className="m-0 text-body text-ink-muted">{scene.detail}</p>
-                    </div>
-                    <div
-                      className="mobile-showcase-scene-media"
-                      aria-hidden
-                    />
-                  </div>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-
-      <div
-        className="mobile-showcase-dots"
-        role="tablist"
-        aria-label="Feature cards"
-      >
-        {SCENES.map((scene, index) => {
-          const selected = index === active;
-          return (
-            <button
-              key={scene.id}
-              type="button"
-              role="tab"
-              aria-selected={selected}
-              aria-label={scene.title}
-              className="rounded-full p-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              onClick={() => selectScene(index)}
-            >
-              <span
-                className={`block size-2 rounded-full transition-[background-color,transform] duration-200 ${
-                  selected
-                    ? "scale-110 bg-[color-mix(in_oklab,var(--color-ink)_75%,transparent)]"
-                    : "bg-[color-mix(in_oklab,var(--color-ink)_18%,transparent)]"
-                }`}
-              />
-            </button>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (programmaticScrollRef.current) return;
+        let best: { index: number; ratio: number } | null = null;
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const index = Number(
+            (entry.target as HTMLElement).dataset.slideIndex,
           );
-        })}
-      </div>
-    </div>
-  );
-}
+          if (Number.isNaN(index)) continue;
+          if (!best || entry.intersectionRatio > best.ratio) {
+            best = { index, ratio: entry.intersectionRatio };
+          }
+        }
+        if (best) setActive(best.index);
+      },
+      { root: scroller, threshold: [0.4, 0.55, 0.7] },
+    );
 
-function DesktopShowcase() {
-  const [active, setActive] = useState(Math.max(0, INTAKE_INDEX));
-  const [hovering, setHovering] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const [viewportWidth, setViewportWidth] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{
-    pointerId: number;
-    startX: number;
-    lastX: number;
-    moved: boolean;
-  } | null>(null);
-  const onDemo = SCENES[active]?.id === "intake";
-  const pauseAutoplay = hovering || focused || dragging;
-  const autoplayActive = !onDemo && !reduceMotion;
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduceMotion(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
-  useEffect(() => {
-    const node = viewportRef.current;
-    if (!node) return;
-    const update = () => setViewportWidth(node.clientWidth);
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!autoplayActive || pauseAutoplay) return;
-    const id = window.setInterval(() => {
-      setActive((current) => nextNonIntakeIndex(current));
-    }, AUTOPLAY_MS);
-    return () => window.clearInterval(id);
-  }, [autoplayActive, pauseAutoplay, active]);
-
-  const cardWidth =
-    viewportWidth > 0
-      ? Math.min(viewportWidth * CARD_WIDTH_RATIO, window.innerWidth * 0.7)
-      : 0;
-  const trackOffset =
-    viewportWidth > 0
-      ? (viewportWidth - cardWidth) / 2 -
-        active * (cardWidth + CARD_GAP_PX) +
-        dragOffset
-      : 0;
-
-  const selectScene = useCallback((index: number) => {
-    setActive(((index % SCENE_COUNT) + SCENE_COUNT) % SCENE_COUNT);
-    setDragOffset(0);
-  }, []);
-
-  function step(delta: number) {
-    selectScene(active + delta);
-  }
-
-  function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (event.button !== 0) return;
-    // Let interactive form controls keep their own pointer handling.
-    const target = event.target as HTMLElement | null;
-    if (target?.closest("button, a, input, textarea, select, label, [role='tab']")) {
-      return;
-    }
-    dragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      lastX: event.clientX,
-      moved: false,
+    for (const slide of slides) observer.observe(slide);
+    return () => {
+      observer.disconnect();
+      if (scrollSettleTimerRef.current) {
+        clearTimeout(scrollSettleTimerRef.current);
+      }
     };
-    setDragging(true);
-    event.currentTarget.setPointerCapture(event.pointerId);
-  }
+  }, []);
 
-  function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    const delta = event.clientX - drag.startX;
-    if (Math.abs(delta) > 6) drag.moved = true;
-    drag.lastX = event.clientX;
-    setDragOffset(delta);
-  }
-
-  function endDrag(event: ReactPointerEvent<HTMLDivElement>) {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    const delta = event.clientX - drag.startX;
-    dragRef.current = null;
-    setDragging(false);
-    setDragOffset(0);
-    if (Math.abs(delta) >= SWIPE_THRESHOLD_PX) {
-      selectScene(active + (delta < 0 ? 1 : -1));
-    }
-  }
+  useEffect(() => {
+    /* Start on the intake demo */
+    scrollToIndex(INTAKE_INDEX, "auto");
+  }, [scrollToIndex]);
 
   return (
-    <div
-      className="relative hidden bg-canvas lg:block"
-      onPointerEnter={() => setHovering(true)}
-      onPointerLeave={() => setHovering(false)}
+    <section
+      id="ui-showcase"
+      className="bg-surface-alt pb-10 pt-2 lg:pb-12"
+      aria-label="What changes"
     >
       <div
-        className="relative z-20 mx-auto flex w-full max-w-[1280px] flex-col gap-5 px-0 pb-14 pt-2 xl:gap-6 xl:pb-16 xl:pt-3"
-        onFocusCapture={() => setFocused(true)}
-        onBlurCapture={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-            setFocused(false);
-          }
-        }}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Product demos"
+        className="relative"
       >
-        <div className="relative">
+        {/*
+          Hero pattern (§8.3): only the demo frame enters on load —
+          opacity 0→1, y 24→0, --dur-large, delay 150ms. H1/CTAs stay static.
+        */}
+        <m.div
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: DEMO_ENTRANCE_S,
+            ease: EASE_OUT,
+            delay: reduce ? 0 : DEMO_DELAY_S,
+          }}
+        >
           <div
-            ref={viewportRef}
-            className="showcase-carousel-viewport"
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={endDrag}
-            onPointerCancel={endDrag}
-          >
-            <div
-              className={`showcase-carousel-track${dragging ? " is-dragging" : ""}${reduceMotion ? " motion-reduce" : ""}`}
-              style={{ transform: `translate3d(${trackOffset}px, 0, 0)` }}
-            >
-              {SCENES.map((scene, index) => {
-                const selected = index === active;
-                return (
-                  <article
-                    key={scene.id}
-                    className={`showcase-carousel-card${selected ? " is-active" : ""}`}
-                    style={{
-                      width: cardWidth > 0 ? `${cardWidth}px` : `${CARD_WIDTH_RATIO * 100}%`,
-                      marginRight: index < SCENE_COUNT - 1 ? CARD_GAP_PX : 0,
-                    }}
-                    aria-hidden={!selected}
-                    data-scene={scene.id}
-                  >
-                    {selected ? null : (
-                      <button
-                        type="button"
-                        className="showcase-carousel-hit"
-                        aria-label={`Show ${scene.title}`}
-                        onClick={() => selectScene(index)}
-                      />
-                    )}
-                    <div className="showcase-carousel-card-inner">
-                      {scene.id === "intake" ? (
-                        <AnnotatedIntakeDemo hideChrome />
-                      ) : (
-                        <div className="showcase-scene-stack">
-                          <div className="showcase-scene-stack-copy">
-                            <h3 className="m-0 text-h2 text-ink">{scene.title}</h3>
-                            <p className="m-0 text-lead text-ink-muted">
-                              {scene.detail}
-                            </p>
-                          </div>
-                          <EmptySceneCard sceneId={scene.id} />
-                        </div>
-                      )}
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="showcase-carousel-arrow showcase-carousel-arrow--prev"
-            aria-label="Previous feature"
-            onClick={() => step(-1)}
-          >
-            <ChevronLeft aria-hidden className="size-5" strokeWidth={1.75} />
-          </button>
-          <button
-            type="button"
-            className="showcase-carousel-arrow showcase-carousel-arrow--next"
-            aria-label="Next feature"
-            onClick={() => step(1)}
-          >
-            <ChevronRight aria-hidden className="size-5" strokeWidth={1.75} />
-          </button>
-        </div>
-
-        <div className="mx-auto flex w-full max-w-[42rem] flex-col items-center gap-3 px-8 text-center">
-          <div
-            className="flex items-center justify-center gap-2"
-            role="tablist"
-            aria-label="Feature cards"
+            ref={scrollerRef}
+            tabIndex={0}
+            className="showcase-scroller"
+            aria-live="polite"
           >
             {SCENES.map((scene, index) => {
               const selected = index === active;
               return (
-                <button
+                <article
                   key={scene.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={selected}
-                  aria-label={scene.title}
-                  className="rounded-full p-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                  onClick={() => selectScene(index)}
+                  data-slide-index={index}
+                  data-scene={scene.id}
+                  aria-hidden={!selected}
+                  aria-label={`${scene.title} (${index + 1} of ${SCENE_COUNT})`}
+                  className="showcase-slide"
                 >
-                  <span
-                    className={`block size-2 rounded-full transition-[background-color,transform] duration-200 ${
-                      selected
-                        ? "scale-110 bg-[color-mix(in_oklab,var(--color-ink)_75%,transparent)]"
-                        : "bg-[color-mix(in_oklab,var(--color-ink)_18%,transparent)] hover:bg-[color-mix(in_oklab,var(--color-ink)_35%,transparent)]"
-                    }`}
-                  />
-                </button>
+                  <BrowserFrame
+                    fill
+                    demoTheme={scene.id === "intake"}
+                  >
+                    {scene.id === "intake" ? (
+                      <div className="demo-frame-body">
+                        <AnnotatedIntakeDemo
+                          hideChrome
+                          annotationsOn={annotationsOn}
+                          onAnnotationsOnChange={setAnnotationsOn}
+                        />
+                      </div>
+                    ) : (
+                      <SceneSlide title={scene.title} detail={scene.detail}>
+                        <Placeholder
+                          slot={scene.id}
+                          aspectClassName="aspect-4/3"
+                          className="max-h-full"
+                        />
+                      </SceneSlide>
+                    )}
+                  </BrowserFrame>
+                </article>
               );
             })}
           </div>
+        </m.div>
 
-          <p className="m-0 flex items-center justify-center gap-1.5 text-small text-ink-muted">
-            <Lock aria-hidden className="size-3.5 shrink-0 opacity-70" strokeWidth={1.75} />
-            <span>{officialCopy.showcase.lockLine}</span>
-          </p>
-        </div>
+        <Container className="mt-5">
+          <div className="flex flex-col items-center gap-4">
+            {active === INTAKE_INDEX ? (
+              <label className="flex items-center justify-center gap-2 text-small text-ink-muted">
+                <span>{intakeDemoChrome.annotationsLabel}</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={annotationsOn}
+                  className={`relative h-6 w-10 shrink-0 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                    annotationsOn ? "bg-brand" : "bg-ink/20"
+                  }`}
+                  onClick={() => setAnnotationsOn((on) => !on)}
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white transition-transform ${
+                      annotationsOn ? "translate-x-4" : ""
+                    }`}
+                  />
+                </button>
+              </label>
+            ) : null}
+            <div
+              role="tablist"
+              aria-label="Choose a product demo"
+              className="flex items-center justify-center gap-2"
+            >
+              {SCENES.map((scene, index) => {
+                const selected = index === active;
+                return (
+                  <button
+                    key={scene.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    aria-label={`Show ${scene.title}`}
+                    className={`size-2.5 rounded-full transition-[background-color,transform] duration-(--dur-micro) ease-(--ease-out) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                      selected
+                        ? "scale-110 bg-ink"
+                        : "bg-line-strong hover:bg-ink-subtle"
+                    }`}
+                    onClick={() => scrollToIndex(index)}
+                  />
+                );
+              })}
+            </div>
+
+            <p className="m-0 flex items-center gap-2 text-small text-ink-muted">
+              <Lock
+                aria-hidden
+                className="size-3.5 shrink-0 opacity-70"
+                strokeWidth={1.75}
+              />
+              <span>{officialCopy.showcase.lockLine}</span>
+            </p>
+          </div>
+        </Container>
       </div>
-    </div>
+    </section>
   );
 }
 
-/** Skip the interactive demo when autoplaying secondary scenes (desktop). */
-function nextNonIntakeIndex(current: number): number {
-  for (let step = 1; step <= SCENE_COUNT; step += 1) {
-    const next = (current + step) % SCENE_COUNT;
-    if (SCENES[next]?.id !== "intake") return next;
-  }
-  return current;
-}
-
-function EmptySceneCard({ sceneId }: { sceneId: string }) {
+function SceneSlide({
+  title,
+  detail,
+  children,
+}: {
+  title: string;
+  detail: string;
+  children: ReactNode;
+}) {
   return (
-    <div
-      className="showcase-scene-media"
-      data-scene={sceneId}
-      aria-hidden
-    />
+    <div className="showcase-scene">
+      <div className="showcase-scene-copy text-left">
+        <h3 className="font-display text-h3 text-ink lg:text-h2">{title}</h3>
+        <p className="text-small text-ink-muted lg:text-body">{detail}</p>
+      </div>
+      <div className="showcase-scene-media">{children}</div>
+    </div>
   );
 }

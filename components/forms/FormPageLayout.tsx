@@ -22,7 +22,7 @@ export function FormPageLayout({ config }: FormPageLayoutProps) {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link
             href="/"
-            className="brand-mark text-[1.125rem] leading-none no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:text-[1.25rem]"
+            className="brand-mark text-lead leading-none no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:text-h3"
           >
             <span className="brand-mark-name whitespace-nowrap">
               {standout} <span className="brand-mark-accent">{group}</span>
@@ -31,7 +31,7 @@ export function FormPageLayout({ config }: FormPageLayoutProps) {
 
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-base font-semibold text-ink no-underline hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="inline-flex items-center gap-1.5 text-body font-semibold text-ink no-underline hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             <svg
               width="18"

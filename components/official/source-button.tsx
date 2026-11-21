@@ -58,20 +58,23 @@ export function SourceButton({
     <>
       <button
         type="button"
-        className={className ?? "source-button"}
+        className={
+          className ??
+          "ml-2 inline-flex min-h-11 items-center text-small font-semibold text-brand underline-offset-4 hover:underline"
+        }
         aria-label={label}
         onClick={() => setOpen(true)}
       >
         {children ?? sources.buttonLabel}
       </button>
       <Sheet open={open} onOpenChange={setOpen} title={source.credit}>
-        <p className="source-sheet-citation">
+        <p className="m-0 text-body text-ink-muted">
           <Citation citation={source.citation} italicise={source.italicise} />
         </p>
-        <p className="source-sheet-summary">{source.summary}</p>
-        <div className="source-sheet-actions">
+        <p className="m-0 mt-3 text-body text-ink-muted">{source.summary}</p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <a
-            className="source-sheet-link"
+            className="inline-flex min-h-11 items-center font-semibold text-brand underline-offset-4 hover:underline"
             href={source.url}
             target="_blank"
             rel="noopener noreferrer"
@@ -80,7 +83,7 @@ export function SourceButton({
           </a>
           <button
             type="button"
-            className="source-sheet-see-all"
+            className="inline-flex min-h-11 items-center font-semibold text-ink underline-offset-4 hover:underline"
             onClick={() => {
               seeAllRef.current = true;
               setOpen(false);

@@ -1,4 +1,3 @@
-import { MotionBootstrap } from "@/components/landing/motion-bootstrap";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { BookingProvider } from "@/components/official/booking-provider";
 import { DpaRequestProvider } from "@/components/official/dpa-request";
@@ -25,7 +24,6 @@ export default function HomePage() {
       <BookingProvider>
         <DpaRequestProvider>
           <main id="main-content" tabIndex={-1}>
-            <MotionBootstrap />
             <SiteHeader />
             <OfficialHero />
             <ProductShowcase />

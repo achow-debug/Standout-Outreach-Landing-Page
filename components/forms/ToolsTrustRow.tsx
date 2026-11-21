@@ -11,8 +11,7 @@ type ToolsTrustRowProps = {
 };
 
 /**
- * Connected-tools strip: name pills with logo slots.
- * Official artwork drops in later via optional `src` on each tool.
+ * Connected-tools strip: name pills with logos beside labels.
  */
 export function ToolsTrustRow({
   compact = false,
@@ -38,27 +37,22 @@ export function ToolsTrustRow({
           return (
             <li key={tool.id}>
               <span
-                className={`inline-flex items-center gap-2 rounded-xl border border-line bg-white text-ink ${
+                className={`inline-flex items-center gap-2 rounded-md border border-line bg-white text-ink ${
                   large
-                    ? "min-h-12 px-3.5 py-2.5 text-small md:min-h-14 md:px-4 md:text-[0.9375rem]"
-                    : "min-h-10 px-2.5 py-1.5 text-[0.8125rem] md:min-h-11 md:px-3 md:text-small"
+                    ? "min-h-12 px-3.5 py-2.5 text-small md:min-h-14 md:px-4"
+                    : "min-h-10 px-2.5 py-1.5 text-eyebrow md:min-h-11 md:px-3 md:text-small"
                 }`}
               >
-                <span
-                  className={`shrink-0 overflow-hidden rounded-md bg-[color-mix(in_oklab,var(--color-ink)_8%,white)] ${
-                    large ? "size-7 md:size-8" : "size-5 md:size-6"
-                  }`}
-                  aria-hidden={src ? undefined : true}
-                >
-                  {src ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={src}
-                      alt=""
-                      className="size-full object-contain p-1"
-                    />
-                  ) : null}
-                </span>
+                {src ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={src}
+                    alt=""
+                    className={`shrink-0 object-contain ${
+                      large ? "size-10" : "size-7 md:size-8"
+                    }`}
+                  />
+                ) : null}
                 <span className="font-semibold whitespace-nowrap">{tool.name}</span>
               </span>
             </li>

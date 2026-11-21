@@ -16,6 +16,7 @@ import {
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
 import { Lock } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import {
   buildIntakeTeamRecord,
   formatCallTimeWording,
@@ -170,22 +171,39 @@ function useIsPhone() {
 
 type AnnotatedIntakeDemoProps = {
   /**
-   * Homepage Card 1: dark form only — no title/lead/tabs/annotations toggle.
-   * Client view only; numbered annotation dots stay on.
+   * Homepage Card 1: dark form only — no title/lead/tabs.
+   * Client view only; annotations follow the external switch when controlled.
    */
   hideChrome?: boolean;
+  /** Controlled annotations visibility (homepage switch under the card). */
+  annotationsOn?: boolean;
+  onAnnotationsOnChange?: (next: boolean) => void;
 };
 
 /**
  * Interactive annotated Standout Legal enquiry demo.
  * Demo-only state — nothing is submitted to a backend.
  */
-export function AnnotatedIntakeDemo({ hideChrome = false }: AnnotatedIntakeDemoProps) {
+export function AnnotatedIntakeDemo({
+  hideChrome = false,
+  annotationsOn: annotationsOnProp,
+  onAnnotationsOnChange,
+}: AnnotatedIntakeDemoProps) {
   const [screen, setScreen] = useState<IntakeScreenId>("help");
   const [returnScreen, setReturnScreen] = useState<IntakeScreenId>("help");
   const [tab, setTab] = useState<IntakeDemoTab>("client");
   const [answers, setAnswers] = useState<DemoAnswers>(initialAnswers);
-  const [annotationsOn, setAnnotationsOn] = useState(false);
+  const [annotationsOnInternal, setAnnotationsOnInternal] = useState(false);
+  const annotationsControlled = onAnnotationsOnChange !== undefined;
+  const annotationsOn = annotationsControlled
+    ? Boolean(annotationsOnProp)
+    : annotationsOnInternal;
+  const setAnnotationsOn = (next: boolean | ((prev: boolean) => boolean)) => {
+    const resolved =
+      typeof next === "function" ? next(annotationsOn) : next;
+    if (annotationsControlled) onAnnotationsOnChange(resolved);
+    else setAnnotationsOnInternal(resolved);
+  };
   const [openNote, setOpenNote] = useState<IntakeNoteId | null>(null);
   const [noteAnchor, setNoteAnchor] = useState<NoteAnchor | null>(null);
   const [contactErrors, setContactErrors] = useState<ContactErrors>({});
@@ -200,9 +218,20 @@ export function AnnotatedIntakeDemo({ hideChrome = false }: AnnotatedIntakeDemoP
   const baseId = useId();
   const isPhone = useIsPhone();
 
+  const scaleShellRef = useRef<HTMLDivElement>(null);
+  const [peekScale, setPeekScale] = useState(1);
+  /** Pins follow the switch on homepage peek and full demo alike. */
+  const annotationsEnabled = annotationsOn;
+
   useLayoutEffect(() => {
     const panels = panelsRef.current;
     if (!panels) return;
+
+    /* Peek mode lives in a fixed showcase frame — never grow past it. */
+    if (hideChrome) {
+      panels.style.minHeight = "";
+      return;
+    }
 
     let frame = 0;
     const measure = () => {
@@ -231,7 +260,76 @@ export function AnnotatedIntakeDemo({ hideChrome = false }: AnnotatedIntakeDemoP
       cancelAnimationFrame(frame);
       observer.disconnect();
     };
-  }, []);
+  }, [hideChrome]);
+
+  /*
+    Mild scale fallback (R3): measure the tallest step once so scale stays
+    stable across step changes and the shared frame never needs inner scroll.
+  */
+  useLayoutEffect(() => {
+    if (!hideChrome) {
+      setPeekScale(1);
+      return;
+    }
+    const shell = scaleShellRef.current;
+    const panels = panelsRef.current;
+    if (!shell || !panels) return;
+
+    let frame = 0;
+
+    const fit = () => {
+      const card = panels.querySelector<HTMLElement>(".sl-card");
+      if (!card) return;
+
+      const steps = Array.from(
+        card.querySelectorAll<HTMLElement>(".sl-step"),
+      );
+      const previousDisplay = steps.map((step) => step.style.display);
+
+      shell.style.setProperty("--peek-scale", "1");
+      const available = shell.clientHeight;
+      let tallest = 0;
+
+      /* Measure each step alone — grid stacking otherwise shares one cell. */
+      for (const step of steps) {
+        for (const other of steps) {
+          other.style.display = other === step ? "" : "none";
+        }
+        card.style.height = "auto";
+        tallest = Math.max(tallest, card.scrollHeight);
+      }
+
+      card.style.height = "";
+      steps.forEach((step, index) => {
+        step.style.display = previousDisplay[index] ?? "";
+      });
+
+      if (available <= 0 || tallest <= 0) {
+        setPeekScale(1);
+        return;
+      }
+      /*
+        Mild scale to fit the shared frame. Floor keeps controls readable;
+        step-body scroll + pinned footer cover any leftover overflow.
+      */
+      const next = Math.min(1, Math.max(0.72, available / tallest));
+      setPeekScale(next);
+      shell.style.setProperty("--peek-scale", String(next));
+    };
+
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(fit);
+    };
+
+    schedule();
+    const observer = new ResizeObserver(schedule);
+    observer.observe(shell);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [hideChrome, annotationsEnabled]);
 
   const flowInput = {
     route: answers.route,
@@ -383,202 +481,217 @@ export function AnnotatedIntakeDemo({ hideChrome = false }: AnnotatedIntakeDemoP
   };
 
   const showChrome = !hideChrome;
-  /** Homepage peek has no toggle — dots stay available; full demo uses the switch. */
-  const annotationsEnabled = hideChrome || annotationsOn;
   const activeTab: IntakeDemoTab = hideChrome ? "client" : tab;
 
-  return (
+  const clientPanel = (
     <div
-      className={`sl-demo mx-auto flex w-full max-w-[40rem] flex-col lg:max-w-none ${
-        hideChrome
-          ? "sl-demo--peek gap-0 p-0"
-          : "gap-4 lg:gap-3 lg:p-6 xl:p-8"
-      }`}
+      role={showChrome ? "tabpanel" : "region"}
+      id={`${baseId}-panel-client`}
+      aria-labelledby={showChrome ? `${baseId}-tab-client` : undefined}
+      aria-label={showChrome ? undefined : intakeDemoChrome.title}
+      className={`sl-tab-panel ${activeTab === "client" ? "is-active" : ""}`}
+      aria-hidden={activeTab !== "client"}
+      inert={activeTab !== "client"}
     >
-      {showChrome ? (
-        <>
-          <div className="sl-demo-heading relative flex flex-col items-center gap-3 px-1 text-center lg:items-stretch lg:gap-2 lg:px-0 lg:text-left">
-            <h3 className="m-0 min-w-0 text-h2 text-ink lg:pr-[9.5rem] lg:text-[1.75rem] lg:leading-tight">
-              {intakeDemoChrome.title}
-            </h3>
-            <p className="m-0 w-full min-w-0 text-body text-ink lg:max-w-[54ch]">
-              {intakeDemoChrome.leadLine}
-            </p>
-            <label className="inline-flex shrink-0 items-center gap-2 text-small font-semibold text-ink lg:absolute lg:top-0 lg:right-0">
-              <span>{intakeDemoChrome.annotationsLabel}</span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={annotationsOn}
-                className={`relative h-7 w-12 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                  annotationsOn ? "bg-brand" : "bg-ink/20"
-                }`}
-                onClick={() => {
-                  setAnnotationsOn((on) => !on);
-                  if (annotationsOn) setOpenNote(null);
-                }}
+      <div className="sl-card">
+        <CardHeader
+          annotationsOn={annotationsEnabled}
+          onExit={() => {
+            setOpenNote(null);
+            setReturnScreen(screen === "exit" ? returnScreen : screen);
+            setScreen("exit");
+          }}
+          onOpenNote={openNoteFrom}
+        />
+        <div className="sl-steps">
+          {STEP_SCREENS.map((id) => {
+            const active = screen === id;
+            return (
+              <div
+                key={id}
+                className={`sl-step ${active ? "is-active" : ""}`}
+                aria-hidden={!active}
+                inert={!active}
               >
-                <span
-                  className={`absolute top-0.5 left-0.5 size-6 rounded-full bg-white transition-transform ${
-                    annotationsOn ? "translate-x-5" : ""
-                  }`}
+                <div className="sl-step-body">
+                  {id in intakeStepNumber ? (
+                    <p className="sl-count">
+                      {intakeStepNumber[id as keyof typeof intakeStepNumber]}{" "}
+                      / {intakeTotalSteps}
+                    </p>
+                  ) : null}
+                  <ScreenBody
+                    id={id}
+                    answers={answers}
+                    contactErrors={contactErrors}
+                    annotationsOn={annotationsEnabled}
+                    onOpenNote={openNoteFrom}
+                    setAnswers={setAnswers}
+                    toggleHelp={toggleHelp}
+                    toggleUrgency={toggleUrgency}
+                    toggleSignal={toggleSignal}
+                  />
+                </div>
+                <CardFooter
+                  screen={id}
+                  route={answers.route}
+                  ready={screenIsReady(id, answers)}
+                  annotationsOn={annotationsEnabled}
+                  onOpenNote={openNoteFrom}
+                  recaptchaSiteKey={recaptchaSiteKey}
+                  captchaError={captchaError}
+                  onCaptchaChange={(token) => {
+                    setCaptchaToken(token);
+                    if (token) setCaptchaError(null);
+                  }}
+                  onBack={() => {
+                    if (id === screen) goTo(prevIntakeScreen(id, flowInput));
+                  }}
+                  onContinue={() => continueFrom(id)}
+                  onTryOther={resetToUrgency}
                 />
-              </button>
-            </label>
-          </div>
-
-          <div
-            role="tablist"
-            aria-label="Enquiry demo views"
-            className="sl-demo-tabs flex gap-1 border-b border-line"
-          >
-            {(
-              [
-                ["client", intakeDemoChrome.tabs.client],
-                ["team", intakeDemoChrome.tabs.team],
-              ] as const
-            ).map(([id, label]) => {
-              const selected = tab === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  role="tab"
-                  id={`${baseId}-tab-${id}`}
-                  aria-selected={selected}
-                  aria-controls={`${baseId}-panel-${id}`}
-                  tabIndex={selected ? 0 : -1}
-                  className={`min-h-11 px-3 text-small font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                    selected
-                      ? "border-b-2 border-ink text-ink"
-                      : "border-b-2 border-transparent text-ink-muted hover:text-ink"
-                  }`}
-                  onClick={() => selectTab(id)}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-        </>
-      ) : null}
-
-      <div className="sl-tab-panels" ref={panelsRef}>
-        <div
-          role={showChrome ? "tabpanel" : "region"}
-          id={`${baseId}-panel-client`}
-          aria-labelledby={showChrome ? `${baseId}-tab-client` : undefined}
-          aria-label={showChrome ? undefined : intakeDemoChrome.title}
-          className={`sl-tab-panel ${activeTab === "client" ? "is-active" : ""}`}
-          aria-hidden={activeTab !== "client"}
-          inert={activeTab !== "client"}
-        >
-          <div className="sl-card">
-            <CardHeader
-              annotationsOn={annotationsEnabled}
-              onExit={() => {
-                setOpenNote(null);
-                setReturnScreen(screen === "exit" ? returnScreen : screen);
-                setScreen("exit");
-              }}
-              onOpenNote={openNoteFrom}
-            />
-            <div className="sl-steps">
-              {STEP_SCREENS.map((id) => {
-                const active = screen === id;
-                return (
-                  <div
-                    key={id}
-                    className={`sl-step ${active ? "is-active" : ""}`}
-                    aria-hidden={!active}
-                    inert={!active}
-                  >
-                    <div className="sl-step-body">
-                      {id in intakeStepNumber ? (
-                        <p className="sl-count">
-                          {intakeStepNumber[id as keyof typeof intakeStepNumber]}{" "}
-                          / {intakeTotalSteps}
-                        </p>
-                      ) : null}
-                      <ScreenBody
-                        id={id}
-                        answers={answers}
-                        contactErrors={contactErrors}
-                        annotationsOn={annotationsEnabled}
-                        onOpenNote={openNoteFrom}
-                        setAnswers={setAnswers}
-                        toggleHelp={toggleHelp}
-                        toggleUrgency={toggleUrgency}
-                        toggleSignal={toggleSignal}
-                      />
-                    </div>
-                    <CardFooter
-                      screen={id}
-                      route={answers.route}
-                      ready={screenIsReady(id, answers)}
-                      annotationsOn={annotationsEnabled}
-                      onOpenNote={openNoteFrom}
-                      recaptchaSiteKey={recaptchaSiteKey}
-                      captchaError={captchaError}
-                      onCaptchaChange={(token) => {
-                        setCaptchaToken(token);
-                        if (token) setCaptchaError(null);
-                      }}
-                      onBack={() => {
-                        if (id === screen) goTo(prevIntakeScreen(id, flowInput));
-                      }}
-                      onContinue={() => continueFrom(id)}
-                      onTryOther={resetToUrgency}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            {screen === "exit" ? (
-              <div className="sl-exit-overlay">
-                <h4 className="sl-serif sl-question m-0">{intakeExit.heading}</h4>
-                <p className="sl-body m-0">{intakeExit.body}</p>
-                <button
-                  type="button"
-                  className="sl-btn sl-btn-primary"
-                  onClick={() => goTo(returnScreen)}
-                >
-                  {intakeExit.backLabel}
-                </button>
               </div>
-            ) : null}
-          </div>
+            );
+          })}
         </div>
-
-        {showChrome ? (
-          <div
-            role="tabpanel"
-            id={`${baseId}-panel-team`}
-            aria-labelledby={`${baseId}-tab-team`}
-            className={`sl-tab-panel ${activeTab === "team" ? "is-active" : ""}`}
-            aria-hidden={activeTab !== "team"}
-            inert={activeTab !== "team"}
-          >
-            <div className="sl-card sl-card--record">
-              <TeamRecordPanel
-                submitted={submitted}
-                arriving={recordArriving && submitted && activeTab === "team"}
-                cleared={conflictCleared}
-                onClear={() => setConflictCleared(true)}
-                answers={answers}
-                annotationsOn={annotationsEnabled}
-                onOpenNote={openNoteFrom}
-              />
-            </div>
+        {screen === "exit" ? (
+          <div className="sl-exit-overlay">
+            <h4 className="sl-serif sl-question m-0">{intakeExit.heading}</h4>
+            <p className="sl-body m-0">{intakeExit.body}</p>
+            <button
+              type="button"
+              className="sl-btn sl-btn-primary"
+              onClick={() => goTo(returnScreen)}
+            >
+              {intakeExit.backLabel}
+            </button>
           </div>
         ) : null}
       </div>
+    </div>
+  );
 
-      {showChrome ? (
-        <p className="sl-demo-caption m-0 text-center text-small text-ink-muted">
-          {intakeDemoChrome.caption}
+  if (hideChrome) {
+    return (
+      <div
+        ref={scaleShellRef}
+        className="sl-demo sl-demo--peek mx-auto flex h-full w-full flex-col gap-0 p-0"
+        style={
+          {
+            "--peek-scale": peekScale,
+          } as CSSProperties
+        }
+      >
+        <div className="sl-tab-panels" ref={panelsRef}>
+          {clientPanel}
+        </div>
+        {openNote !== null && annotationsEnabled ? (
+          <NoteDialog
+            noteId={openNote}
+            anchor={noteAnchor}
+            isPhone={isPhone}
+            onClose={closeNote}
+          />
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <div className="sl-demo mx-auto flex w-full max-w-[40rem] flex-col gap-4 lg:max-w-none lg:gap-3 lg:p-6 xl:p-8">
+      <div className="sl-demo-heading relative flex flex-col items-center gap-3 px-1 text-center lg:items-stretch lg:gap-2 lg:px-0 lg:text-left">
+        {/* EXCEPTION: pr reserves space for the annotation toggle on lg. */}
+        <h3 className="m-0 min-w-0 text-h2 text-ink lg:pr-40">
+          {intakeDemoChrome.title}
+        </h3>
+        <p className="m-0 w-full min-w-0 text-body text-ink lg:max-w-[54ch]">
+          {intakeDemoChrome.leadLine}
         </p>
-      ) : null}
+        <label className="inline-flex shrink-0 items-center gap-2 text-small font-semibold text-ink lg:absolute lg:top-0 lg:right-0">
+          <span>{intakeDemoChrome.annotationsLabel}</span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={annotationsOn}
+            className={`relative h-7 w-12 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+              annotationsOn ? "bg-brand" : "bg-ink/20"
+            }`}
+            onClick={() => {
+              setAnnotationsOn((on) => !on);
+              if (annotationsOn) setOpenNote(null);
+            }}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 size-6 rounded-full bg-white transition-transform ${
+                annotationsOn ? "translate-x-5" : ""
+              }`}
+            />
+          </button>
+        </label>
+      </div>
+
+      <div
+        role="tablist"
+        aria-label="Enquiry demo views"
+        className="sl-demo-tabs flex gap-1 border-b border-line"
+      >
+        {(
+          [
+            ["client", intakeDemoChrome.tabs.client],
+            ["team", intakeDemoChrome.tabs.team],
+          ] as const
+        ).map(([id, label]) => {
+          const selected = tab === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              id={`${baseId}-tab-${id}`}
+              aria-selected={selected}
+              aria-controls={`${baseId}-panel-${id}`}
+              tabIndex={selected ? 0 : -1}
+              className={`min-h-11 px-3 text-small font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                selected
+                  ? "border-b-2 border-ink text-ink"
+                  : "border-b-2 border-transparent text-ink-muted hover:text-ink"
+              }`}
+              onClick={() => selectTab(id)}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="sl-tab-panels" ref={panelsRef}>
+        {clientPanel}
+
+        <div
+          role="tabpanel"
+          id={`${baseId}-panel-team`}
+          aria-labelledby={`${baseId}-tab-team`}
+          className={`sl-tab-panel ${activeTab === "team" ? "is-active" : ""}`}
+          aria-hidden={activeTab !== "team"}
+          inert={activeTab !== "team"}
+        >
+          <div className="sl-card sl-card--record">
+            <TeamRecordPanel
+              submitted={submitted}
+              arriving={recordArriving && submitted && activeTab === "team"}
+              cleared={conflictCleared}
+              onClear={() => setConflictCleared(true)}
+              answers={answers}
+              annotationsOn={annotationsEnabled}
+              onOpenNote={openNoteFrom}
+            />
+          </div>
+        </div>
+      </div>
+
+      <p className="sl-demo-caption m-0 text-center text-small text-ink-muted">
+        {intakeDemoChrome.caption}
+      </p>
 
       {openNote !== null && annotationsEnabled ? (
         <NoteDialog
@@ -606,14 +719,15 @@ function CardHeader({
       <div className="sl-header-main min-w-0">
         <p className="sl-serif sl-firm m-0">{intakeFirmChrome.firmName}</p>
       </div>
-      <div className="sl-pin-host shrink-0 self-start">
-        <button type="button" className="sl-exit" onClick={onExit}>
-          {intakeFirmChrome.exitLabel}
-        </button>
+      <button type="button" className="sl-exit shrink-0" onClick={onExit}>
+        {intakeFirmChrome.exitLabel}
+      </button>
+      {/* 48px annotation gutter — marker must not overlap Quick exit (§6.8) */}
+      <span className="demo-annot-gutter">
         {annotationsOn ? (
-          <NotePin id={2} onOpen={onOpenNote} className="sl-pin-corner" />
+          <NotePin id={2} onOpen={onOpenNote} className="sl-pin-static" />
         ) : null}
-      </div>
+      </span>
     </div>
   );
 }
@@ -1579,13 +1693,15 @@ function NoteDialog({
           </blockquote>
         ) : null}
         {note.showRoutingTables ? <RoutingTables /> : null}
-        <button
+        <Button
           type="button"
-          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-brand px-4 text-button text-white hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          variant="primary"
+          size="md"
+          className="mt-5"
           onClick={onClose}
         >
           Close
-        </button>
+        </Button>
       </div>
     </div>,
     document.body,

@@ -146,10 +146,10 @@ export function MultiSelectField({
       {/* Touch: native multi-select over a styled display */}
       <div className="relative hidden [@media(pointer:coarse)]:block">
         <div
-          className="pointer-events-none flex min-h-12 items-center rounded-xl border border-line bg-surface px-4 py-3 text-base text-ink"
+          className="pointer-events-none flex min-h-12 items-center rounded-md border border-line bg-surface px-4 py-3 text-body text-ink"
           aria-hidden="true"
         >
-          <span className={value.length === 0 ? "text-muted" : undefined}>
+          <span className={value.length === 0 ? "text-ink-muted" : undefined}>
             {displayText}
           </span>
         </div>
@@ -189,9 +189,9 @@ export function MultiSelectField({
           aria-describedby={describedBy}
           onClick={handleTriggerClick}
           onKeyDown={handleTriggerKeyDown}
-          className="flex min-h-12 w-full items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3 text-left text-base text-ink transition-[background-color,border-color,box-shadow] duration-200 focus:border-accent focus:outline-none focus:shadow-[0_0_0_3px_rgb(79_49_146_/_22%)] disabled:cursor-not-allowed disabled:opacity-70"
+          className="flex min-h-12 w-full items-center justify-between gap-3 rounded-md border border-line bg-surface px-4 py-3 text-left text-body text-ink transition-[background-color,border-color,box-shadow] duration-(--dur-ui) ease-(--ease-out) focus:border-brand focus:outline-none focus:shadow-[0_0_0_3px_rgb(79_49_146_/_22%)] disabled:cursor-not-allowed disabled:opacity-70"
         >
-          <span className={value.length === 0 ? "text-muted" : undefined}>
+          <span className={value.length === 0 ? "text-ink-muted" : undefined}>
             {displayText}
           </span>
           <svg
@@ -213,7 +213,7 @@ export function MultiSelectField({
         {open ? (
           <fieldset
             id={listboxId}
-            className="absolute z-50 mt-2 max-h-64 w-full overflow-y-auto rounded-xl border border-line bg-surface p-2 shadow-[var(--shadow-soft)]"
+            className="absolute z-50 mt-2 max-h-64 w-full overflow-y-auto rounded-md border border-line bg-surface p-2 shadow-md"
           >
             <legend className="sr-only">{label}</legend>
             <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
@@ -224,7 +224,7 @@ export function MultiSelectField({
                   <li key={option}>
                     <label
                       htmlFor={optionId}
-                      className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-base text-ink hover:bg-brand-tint focus-within:bg-brand-tint"
+                      className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-body text-ink hover:bg-brand-tint focus-within:bg-brand-tint"
                     >
                       <input
                         id={optionId}

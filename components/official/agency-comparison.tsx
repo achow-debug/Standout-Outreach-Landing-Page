@@ -1,6 +1,9 @@
-import { comparison, sectionLabels } from "@/content/landing";
 import { keepTogether } from "@/components/official/no-break";
 import { SectionLabel } from "@/components/official/section-label";
+import { PathNode } from "@/components/path/PathNode";
+import { SectionShell } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
+import { comparison, sectionLabels } from "@/content/landing";
 
 /** Existing row kept with the approved comparison rows. */
 const keptRows = [
@@ -15,7 +18,6 @@ const keptRows = [
 function CrossIcon() {
   return (
     <svg
-      className="official-compare-icon"
       width="16"
       height="16"
       viewBox="0 0 16 16"
@@ -24,6 +26,7 @@ function CrossIcon() {
       strokeWidth="1.75"
       strokeLinecap="round"
       aria-hidden="true"
+      className="mt-1 shrink-0 text-ink-subtle"
     >
       <path d="M4 4l8 8M12 4l-8 8" />
     </svg>
@@ -33,7 +36,6 @@ function CrossIcon() {
 function CheckIcon() {
   return (
     <svg
-      className="official-compare-icon official-compare-icon--check"
       width="16"
       height="16"
       viewBox="0 0 16 16"
@@ -43,6 +45,7 @@ function CheckIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      className="mt-1 shrink-0 text-brand"
     >
       <path d="M3.5 8.5 6.5 11.5 12.5 4.5" />
     </svg>
@@ -50,64 +53,74 @@ function CheckIcon() {
 }
 
 /**
- * Light comparison between a traditional retainer and the 30-day pilot.
- * On a phone, each row is a label with two cells side by side.
- * Columns start at 768px.
+ * Comparison table. Paper after how-it-works steps.
  */
 export function AgencyComparison() {
   const rows = [...comparison.rows, ...keptRows];
 
   return (
-    <section
-      className="official-compare"
-      id="agency-comparison"
-      aria-labelledby="official-compare-heading"
-    >
-      <div className="page-shell official-compare-inner">
-        <div className="official-compare-intro">
-          <SectionLabel>{sectionLabels.compare}</SectionLabel>
-          <h2 id="official-compare-heading" className="official-compare-caption t-h2">
-            {keepTogether(comparison.heading)}
-          </h2>
-        </div>
-        <div className="official-compare-key" aria-hidden="true">
-          <p>
-            <CrossIcon />
-            <span>{comparison.columns.traditional}</span>
-          </p>
-          <p>
-            <CheckIcon />
-            <span>{keepTogether(comparison.columns.pilot)}</span>
-          </p>
-        </div>
-        <table className="official-compare-table">
-          <caption className="official-compare-sr">{comparison.heading}</caption>
+    <SectionShell id="agency-comparison" tone="paper" pathAlign>
+      <SectionLabel node={<PathNode />}>{sectionLabels.compare}</SectionLabel>
+      <Reveal>
+        <h2
+          id="official-compare-heading"
+          className="mt-4 max-w-heading font-display text-h2 text-ink"
+        >
+          {keepTogether(comparison.heading)}
+        </h2>
+      </Reveal>
+
+      <div className="mt-12 overflow-x-auto lg:mt-16">
+        <table className="w-full min-w-[40rem] border-collapse text-left">
+          <caption className="sr-only">{comparison.heading}</caption>
           <thead>
-            <tr>
-              <th scope="col">Feature</th>
-              <th scope="col">{comparison.columns.traditional}</th>
-              <th scope="col">{keepTogether(comparison.columns.pilot)}</th>
+            <tr className="border-b border-line">
+              <th
+                scope="col"
+                className="py-3 pr-4 text-eyebrow uppercase text-ink-muted"
+              >
+                Feature
+              </th>
+              <th
+                scope="col"
+                className="py-3 pr-4 text-eyebrow uppercase text-ink-muted"
+              >
+                {comparison.columns.traditional}
+              </th>
+              <th
+                scope="col"
+                className="py-3 text-eyebrow uppercase text-ink-muted"
+              >
+                {keepTogether(comparison.columns.pilot)}
+              </th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.id}>
-                <th scope="row">{row.label}</th>
-                <td className="official-compare-cell official-compare-cell--agency">
-                  <span className="official-compare-sr">Traditional agencies: </span>
-                  <CrossIcon />
-                  <span>{keepTogether(row.traditional)}</span>
+              <tr key={row.id} className="border-b border-line">
+                <th
+                  scope="row"
+                  className="py-4 pr-4 align-top font-display text-h3 text-ink"
+                >
+                  {row.label}
+                </th>
+                <td className="py-4 pr-4 align-top text-body text-ink-muted">
+                  <span className="flex gap-2">
+                    <CrossIcon />
+                    <span>{keepTogether(row.traditional)}</span>
+                  </span>
                 </td>
-                <td className="official-compare-cell official-compare-cell--pilot">
-                  <span className="official-compare-sr">Standout’s 30-day pilot: </span>
-                  <CheckIcon />
-                  <span>{keepTogether(row.pilot)}</span>
+                <td className="py-4 align-top text-body text-ink-muted">
+                  <span className="flex gap-2">
+                    <CheckIcon />
+                    <span>{keepTogether(row.pilot)}</span>
+                  </span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-    </section>
+    </SectionShell>
   );
 }

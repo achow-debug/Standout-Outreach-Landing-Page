@@ -40,7 +40,7 @@ export function ActionBar({
     >
       {submitError ? (
         <p
-          className="mb-3 text-sm font-semibold text-[var(--color-error)]"
+          className="mb-3 text-small font-semibold text-[var(--color-error)]"
           role="alert"
         >
           We couldn&apos;t send your details. Try again, or email{" "}
@@ -60,7 +60,7 @@ export function ActionBar({
             type="button"
             onClick={onBack}
             aria-label={`Back to step ${step}`}
-            className="inline-flex size-12 shrink-0 items-center justify-center gap-1.5 rounded-xl border border-brand bg-transparent text-brand transition-colors hover:bg-brand-tint focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto sm:min-w-[5.5rem] sm:px-4"
+            className="inline-flex size-12 shrink-0 items-center justify-center gap-1.5 rounded-md border border-brand bg-transparent text-brand transition-colors duration-(--dur-micro) ease-(--ease-out) hover:bg-brand-tint focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-auto sm:min-w-22 sm:px-4"
           >
             <svg
               width="18"
@@ -84,7 +84,7 @@ export function ActionBar({
         <button
           type="submit"
           disabled={submitting}
-          className="btn btn-primary min-h-14 flex-1 rounded-xl px-4 text-button font-semibold leading-tight text-balance disabled:cursor-wait"
+          className="btn btn-primary min-h-14 flex-1 rounded-md px-4 text-button font-semibold leading-tight text-balance disabled:cursor-wait"
         >
           {label}
         </button>

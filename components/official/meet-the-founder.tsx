@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { useEffect, useId, useState } from "react";
 import { keepTogether } from "@/components/official/no-break";
+import { SectionShell } from "@/components/ui/Container";
 import { officialCopy } from "@/lib/official-copy";
 
 /**
- * Full-bleed navy on mobile. The longer bio stays behind "Read Alex's story".
+ * Founder story on night. Longer bio stays behind "Read Alex's story".
  */
 export function MeetTheFounder() {
   const panelId = useId();
@@ -44,69 +45,72 @@ export function MeetTheFounder() {
   }, []);
 
   return (
-    <section
-      className="official-founder"
+    <SectionShell
       id="founder"
+      tone="night"
+      pathAlign
       aria-labelledby="official-founder-heading"
-      tabIndex={-1}
+      className="scroll-mt-(--nav-offset)"
     >
-      <div className="page-shell official-founder-inner">
-        <div className="official-founder-panel">
-          <p className="official-founder-eyebrow text-eyebrow text-on-dark-muted">
-            {eyebrow}
-          </p>
-          <figure className="official-founder-portrait">
-            <div className="official-founder-photo-frame">
-              <Image
-                src={portraitSrc}
-                alt={portraitAlt}
-                fill
-                className="official-founder-photo"
-                sizes="(min-width: 1024px) 40vw, 100vw"
-              />
-            </div>
-          </figure>
-          <div className="official-founder-copy-col">
-            <h2 id="official-founder-heading" className="official-founder-statement text-h2 text-on-dark">
-              {heading}
-            </h2>
-            <p className="official-founder-copy mt-5 text-lead text-on-dark-muted max-w-[60ch]">
-              {lead}
-            </p>
-            {bioLead ? (
-              <p className="official-founder-copy mt-4 text-body text-on-dark-muted max-w-[62ch]">
-                {bioLead}
-              </p>
-            ) : null}
-            {bioRest.length > 0 ? (
-              <>
-                <button
-                  type="button"
-                  className="official-founder-more text-brand-on-dark underline underline-offset-4 focus-visible:outline-brand-on-dark"
-                  aria-expanded={open}
-                  aria-controls={panelId}
-                  onClick={() => setOpen((value) => !value)}
-                >
-                  {readMore}
-                </button>
-                <div
-                  id={panelId}
-                  className="expand"
-                  data-open={open ? "true" : "false"}
-                >
-                  <div className="official-founder-rest">
-                    {bioRest.map((paragraph) => (
-                      <p key={paragraph} className="official-founder-copy mt-4 text-body text-on-dark-muted max-w-[62ch]">
-                        {keepTogether(paragraph)}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </>
-            ) : null}
+      <p className="m-0 font-sans text-eyebrow uppercase text-night-muted">
+        {eyebrow}
+      </p>
+
+      <div className="mt-8 grid grid-cols-1 items-start gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-8">
+        <figure className="m-0 lg:col-span-5">
+          <div className="relative aspect-4/5 overflow-hidden rounded-lg bg-night-raised">
+            <Image
+              src={portraitSrc}
+              alt={portraitAlt}
+              fill
+              className="object-cover object-[50%_8%]"
+              sizes="(min-width: 1024px) 40vw, 100vw"
+            />
           </div>
+        </figure>
+
+        <div className="lg:col-span-7">
+          <h2
+            id="official-founder-heading"
+            className="m-0 max-w-heading font-display text-h2 text-night-text"
+          >
+            {heading}
+          </h2>
+          <p className="mt-5 max-w-lead text-lead text-night-muted lg:mt-6">
+            {lead}
+          </p>
+          {bioLead ? (
+            <p className="mt-4 max-w-prose text-body text-night-muted">
+              {bioLead}
+            </p>
+          ) : null}
+          {bioRest.length > 0 ? (
+            <>
+              <button
+                type="button"
+                className="mt-4 inline-flex min-h-11 items-center font-sans text-button text-night-accent underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night-accent"
+                aria-expanded={open}
+                aria-controls={panelId}
+                onClick={() => setOpen((value) => !value)}
+              >
+                {readMore}
+              </button>
+              {open ? (
+                <div id={panelId} className="mt-4 flex flex-col gap-4">
+                  {bioRest.map((paragraph) => (
+                    <p
+                      key={paragraph}
+                      className="m-0 max-w-prose text-body text-night-muted"
+                    >
+                      {keepTogether(paragraph)}
+                    </p>
+                  ))}
+                </div>
+              ) : null}
+            </>
+          ) : null}
         </div>
       </div>
-    </section>
+    </SectionShell>
   );
 }

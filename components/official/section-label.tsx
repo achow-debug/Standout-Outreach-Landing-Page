@@ -1,19 +1,18 @@
+import type { ReactNode } from "react";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+
 type SectionLabelProps = {
   children: string;
   id?: string;
+  /** Optional PathNode for left-aligned sections on How it works. */
+  node?: ReactNode;
 };
 
 /**
- * Section eyebrow. The heading under it stays the loudest element.
- * Parent stacks should keep a 12–16px gap before the heading.
+ * Section eyebrow. Delegates to the shared Eyebrow (§6.4).
  */
-export function SectionLabel({ children, id }: SectionLabelProps) {
+export function SectionLabel({ children, id, node }: SectionLabelProps) {
   return (
-    <p
-      id={id}
-      className="section-label m-0 inline-flex items-center text-eyebrow text-ink-muted"
-    >
-      {children}
-    </p>
+    <Eyebrow node={node}>{id ? <span id={id}>{children}</span> : children}</Eyebrow>
   );
 }

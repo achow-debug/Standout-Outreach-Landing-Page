@@ -34,8 +34,8 @@ export function PhoneFrame({ src, alt, label }: PhoneFrameProps) {
 
   return (
     <figure className="m-0 mx-auto w-full max-w-60">
-      <div className="rounded-xl border border-line bg-surface p-2">
-        <div className="relative aspect-[9/16] overflow-hidden rounded-xl bg-canvas">
+      <div className="rounded-lg border border-line bg-surface p-2">
+        <div className="relative aspect-9/16 overflow-hidden rounded-md bg-paper">
           {available ? (
             <Image
               src={src}
@@ -46,9 +46,7 @@ export function PhoneFrame({ src, alt, label }: PhoneFrameProps) {
             />
           ) : (
             <div className="flex h-full items-center justify-center px-4 text-center">
-              <p className="m-0 text-small text-ink-muted">
-                {label}
-              </p>
+              <p className="m-0 text-small text-ink-muted">{label}</p>
             </div>
           )}
         </div>

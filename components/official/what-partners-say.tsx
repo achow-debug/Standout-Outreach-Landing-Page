@@ -1,7 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Sheet } from "@/components/official/sheet";
+import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { officialCopy } from "@/lib/official-copy";
 
 type Review = {
@@ -39,7 +42,6 @@ const reviews: Review[] = [
   },
 ];
 
-/** Office session behind the band. The scrim paints because this is set. */
 const backgroundSrc = "/images/partners/office-session.jpg";
 
 function firstName(name: string) {
@@ -61,69 +63,70 @@ function prefersReducedMotion() {
 
 function ReviewCard({
   item,
+  index,
   onReadFull,
 }: {
   item: Review;
+  index: number;
   onReadFull: (id: string) => void;
 }) {
   return (
-    <li id={item.id} className="official-partners-card">
-      <figure className="official-partners-figure">
-        <div className="official-partners-quote-block">
-          <blockquote className="official-partners-quote">
-            <p>
-              <span className="official-partners-quote-mark" aria-hidden="true">
-                “
+    <li
+      id={item.id}
+      className="w-[min(100%,28rem)] shrink-0 snap-center"
+    >
+      <Reveal index={index} className="h-full">
+        <div className="h-full rounded-lg border border-line bg-surface p-6">
+          <figure className="m-0 flex h-full flex-col gap-6">
+            <blockquote className="m-0 flex-1">
+              <p className="m-0 text-body text-ink-muted text-pretty">
+                <span aria-hidden="true">“</span>
+                <span className="lg:hidden">{item.pullQuote}</span>
+                <span className="hidden lg:inline">{item.fullQuote}</span>
+                <span aria-hidden="true">”</span>
+              </p>
+            </blockquote>
+            <button
+              type="button"
+              className="inline-flex min-h-11 items-center self-start text-small font-semibold text-brand underline-offset-4 hover:underline lg:hidden"
+              onClick={() => onReadFull(item.id)}
+            >
+              Read {firstName(item.name)}’s full review
+            </button>
+            <figcaption className="flex items-center gap-4">
+              <span className="relative size-12 shrink-0 overflow-hidden rounded-full bg-surface-alt">
+                {item.portraitSrc ? (
+                  <Image
+                    src={item.portraitSrc}
+                    alt=""
+                    fill
+                    sizes="48px"
+                    className="object-cover"
+                  />
+                ) : (
+                  <span className="flex size-full items-center justify-center text-small font-semibold text-ink-muted">
+                    {initialsFromName(item.name)}
+                  </span>
+                )}
               </span>
-              <span className="lg:hidden">{item.pullQuote}</span>
-              <span className="hidden lg:inline">{item.fullQuote}</span>”
-            </p>
-          </blockquote>
-          <button
-            type="button"
-            className="official-partners-more lg:hidden"
-            onClick={() => onReadFull(item.id)}
-          >
-            Read {firstName(item.name)}’s full review
-          </button>
+              <span className="min-w-0 text-left">
+                <span className="block text-small font-semibold text-ink">
+                  {item.name}
+                </span>
+                <span className="block text-small text-ink-subtle">
+                  {item.specialism} · {item.location}
+                </span>
+              </span>
+            </figcaption>
+          </figure>
         </div>
-        <figcaption className="official-partners-caption">
-          <span className="official-partners-identity">
-            <span className="official-partners-name">{item.name}</span>
-            <span className="official-partners-role">
-              {item.specialism} · {item.location}
-            </span>
-          </span>
-          <span className="official-partners-portrait" aria-hidden="true">
-            {item.portraitSrc ? (
-              <img src={item.portraitSrc} alt="" />
-            ) : (
-              initialsFromName(item.name)
-            )}
-          </span>
-        </figcaption>
-      </figure>
+      </Reveal>
     </li>
   );
 }
 
-function ArrowIcon({ direction }: { direction: "previous" | "next" }) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-      <path
-        d={direction === "previous" ? "M10 3 5 8l5 5" : "M6 3l5 5-5 5"}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /**
- * Partner reviews in a peeking swipe row. Both cards stay in the row at every width.
+ * Partner reviews. Surface-alt after security (paper).
  */
 export function WhatPartnersSay() {
   const rowRef = useRef<HTMLUListElement>(null);
@@ -133,16 +136,11 @@ export function WhatPartnersSay() {
 
   function scrollToReview(next: number) {
     const row = rowRef.current;
-    const card = row?.querySelectorAll<HTMLElement>(".official-partners-card")[next];
+    const card = row?.children[next] as HTMLElement | undefined;
     if (!row || !card) return;
-    const padding = Number.parseFloat(getComputedStyle(row).paddingLeft) || 0;
-    const left =
-      card.getBoundingClientRect().left -
-      row.getBoundingClientRect().left +
-      row.scrollLeft -
-      padding;
-    row.scrollTo({
-      left,
+    card.scrollIntoView({
+      inline: "center",
+      block: "nearest",
       behavior: prefersReducedMotion() ? "auto" : "smooth",
     });
   }
@@ -157,7 +155,7 @@ export function WhatPartnersSay() {
   useEffect(() => {
     const row = rowRef.current;
     if (!row) return;
-    const cards = [...row.querySelectorAll<HTMLElement>(".official-partners-card")];
+    const cards = [...row.children] as HTMLElement[];
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -176,37 +174,64 @@ export function WhatPartnersSay() {
 
   return (
     <section
-      className="official-partners"
+      className="relative section-y bg-surface-alt"
       id="partners"
       aria-labelledby="official-partners-heading"
       tabIndex={-1}
     >
-      <div className="official-partners-photo" data-photo-slot="" aria-hidden="true">
-        {backgroundSrc ? (
-          <img src={backgroundSrc} alt="" className="official-partners-bg" />
-        ) : null}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <Image
+          src={backgroundSrc}
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover opacity-20"
+        />
       </div>
-      {backgroundSrc ? <div className="official-partners-scrim" aria-hidden="true" /> : null}
-      <div className="page-shell official-partners-inner">
-        <div className="official-partners-toolbar">
-          <h2 id="official-partners-heading" className="official-partners-heading t-h2">
+
+      <Container className="relative">
+        <Reveal className="flex items-end justify-between gap-4 lg:pl-(--path-gutter)">
+          <h2
+            id="official-partners-heading"
+            className="m-0 max-w-heading font-display text-h2 text-ink"
+          >
             {officialCopy.partners.heading}
           </h2>
-          <div className="official-partners-nav">
-            <button type="button" aria-label="Previous review" onClick={() => step(-1)}>
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              aria-label="Previous review"
+              className="inline-flex size-11 items-center justify-center rounded-full border border-line bg-surface text-ink hover:border-line-strong"
+              onClick={() => step(-1)}
+            >
               <ArrowIcon direction="previous" />
             </button>
-            <button type="button" aria-label="Next review" onClick={() => step(1)}>
+            <button
+              type="button"
+              aria-label="Next review"
+              className="inline-flex size-11 items-center justify-center rounded-full border border-line bg-surface text-ink hover:border-line-strong"
+              onClick={() => step(1)}
+            >
               <ArrowIcon direction="next" />
             </button>
           </div>
-        </div>
-        <ul ref={rowRef} className="official-partners-grid">
-          {reviews.map((item) => (
-            <ReviewCard key={item.id} item={item} onReadFull={setOpenId} />
+        </Reveal>
+
+        <ul
+          ref={rowRef}
+          className="mt-12 flex list-none snap-x snap-mandatory gap-4 overflow-x-auto p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mt-16 lg:pl-(--path-gutter)"
+        >
+          {reviews.map((item, index) => (
+            <ReviewCard
+              key={item.id}
+              item={item}
+              index={index}
+              onReadFull={setOpenId}
+            />
           ))}
         </ul>
-      </div>
+      </Container>
+
       <Sheet
         open={openReview !== null}
         onOpenChange={(open) => {
@@ -214,8 +239,25 @@ export function WhatPartnersSay() {
         }}
         title={openReview?.name ?? "Review"}
       >
-        {openReview ? <p className="official-partners-full">{openReview.fullQuote}</p> : null}
+        {openReview ? (
+          <p className="m-0 text-body text-ink-muted">{openReview.fullQuote}</p>
+        ) : null}
       </Sheet>
     </section>
+  );
+}
+
+function ArrowIcon({ direction }: { direction: "previous" | "next" }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <path
+        d={direction === "previous" ? "M10 3 5 8l5 5" : "M6 3l5 5-5 5"}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
