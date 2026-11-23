@@ -7,9 +7,15 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Lock } from "lucide-react";
+import {
+  CalendarCheck,
+  LayoutTemplate,
+  Lock,
+  Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 import * as m from "motion/react-m";
-import { useReducedMotion } from "motion/react";
+import { LayoutGroup, useReducedMotion } from "motion/react";
 import { AnnotatedIntakeDemo } from "@/components/official/annotated-intake-demo";
 import { BrowserFrame } from "@/components/ui/BrowserFrame";
 import { Container } from "@/components/ui/Container";
@@ -28,16 +34,23 @@ const INTAKE_INDEX = Math.max(
   SCENES.findIndex((scene) => scene.id === "intake"),
 );
 
+const SCENE_ICONS: Record<(typeof SCENES)[number]["id"], LucideIcon> = {
+  intake: CalendarCheck,
+  geo: Sparkles,
+  settlement: LayoutTemplate,
+};
+
 /**
  * Full-bleed demo carousel (§6.8, §10.4).
- * Shared fixed-height frames; scroll-snap with desktop side peeks; dots-only nav.
+ * Shared fixed-height frames; left-aligned active card with right peeks on
+ * desktop (label-driven); swipe + snap on mobile; labelled controls.
  */
-function centerScrollLeft(
+function startScrollLeft(
   scroller: HTMLElement,
   slide: HTMLElement,
 ): number {
-  const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
-  const target = slideCenter - scroller.clientWidth / 2;
+  const padLeft = Number.parseFloat(getComputedStyle(scroller).paddingLeft) || 0;
+  const target = slide.offsetLeft - padLeft;
   const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
   return Math.max(0, Math.min(target, max));
 }
@@ -64,7 +77,7 @@ export function ProductShowcase() {
       programmaticScrollRef.current = true;
       setActive(index);
       scroller.scrollTo({
-        left: centerScrollLeft(scroller, slide),
+        left: startScrollLeft(scroller, slide),
         behavior,
       });
 
@@ -126,7 +139,7 @@ export function ProductShowcase() {
   return (
     <section
       id="ui-showcase"
-      className="bg-surface-alt pb-10 pt-2 lg:pb-12"
+      className="scroll-mt-(--nav-offset) bg-surface-alt pb-10 pt-6 lg:pb-12 lg:pt-8"
       aria-label="What changes"
     >
       <div
@@ -168,6 +181,7 @@ export function ProductShowcase() {
                   <BrowserFrame
                     fill
                     demoTheme={scene.id === "intake"}
+                    address={scene.addressBar}
                   >
                     {scene.id === "intake" ? (
                       <div className="demo-frame-body">
@@ -195,50 +209,145 @@ export function ProductShowcase() {
 
         <Container className="mt-5">
           <div className="flex flex-col items-center gap-4">
-            {active === INTAKE_INDEX ? (
-              <label className="flex items-center justify-center gap-2 text-small text-ink-muted">
-                <span>{intakeDemoChrome.annotationsLabel}</span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={annotationsOn}
-                  className={`relative h-6 w-10 shrink-0 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                    annotationsOn ? "bg-brand" : "bg-ink/20"
-                  }`}
-                  onClick={() => setAnnotationsOn((on) => !on)}
-                >
-                  <span
-                    className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white transition-transform ${
-                      annotationsOn ? "translate-x-4" : ""
-                    }`}
-                  />
-                </button>
-              </label>
-            ) : null}
-            <div
-              role="tablist"
-              aria-label="Choose a product demo"
-              className="flex items-center justify-center gap-2"
-            >
-              {SCENES.map((scene, index) => {
-                const selected = index === active;
-                return (
+            <div className="flex w-full max-w-3xl flex-col items-center justify-center gap-3 sm:flex-row sm:items-center sm:gap-5">
+              <p
+                key={SCENES[active]?.id}
+                className="m-0 max-w-xl text-center font-demo text-small text-ink-muted sm:flex-1 lg:text-body"
+                aria-live="polite"
+              >
+                {SCENES[active]?.frameCaption}
+              </p>
+              {active === INTAKE_INDEX ? (
+                <label className="flex shrink-0 items-center justify-center gap-2 text-small text-ink-muted">
+                  <span>{intakeDemoChrome.annotationsLabel}</span>
                   <button
-                    key={scene.id}
                     type="button"
-                    role="tab"
-                    aria-selected={selected}
-                    aria-label={`Show ${scene.title}`}
-                    className={`size-2.5 rounded-full transition-[background-color,transform] duration-(--dur-micro) ease-(--ease-out) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                      selected
-                        ? "scale-110 bg-ink"
-                        : "bg-line-strong hover:bg-ink-subtle"
+                    role="switch"
+                    aria-checked={annotationsOn}
+                    className={`relative h-6 w-10 shrink-0 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                      annotationsOn ? "bg-brand" : "bg-ink/20"
                     }`}
-                    onClick={() => scrollToIndex(index)}
-                  />
-                );
-              })}
+                    onClick={() => setAnnotationsOn((on) => !on)}
+                  >
+                    <span
+                      className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white transition-transform ${
+                        annotationsOn ? "translate-x-4" : ""
+                      }`}
+                    />
+                  </button>
+                </label>
+              ) : null}
             </div>
+            {/* Desktop: full labelled controls with large hit targets */}
+            <LayoutGroup id="showcase-tabs-desktop">
+              <div
+                role="tablist"
+                aria-label="Choose a product demo"
+                className="hidden w-full max-w-4xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center md:flex"
+              >
+                {SCENES.map((scene, index) => {
+                  const selected = index === active;
+                  const Icon = SCENE_ICONS[scene.id];
+                  return (
+                    <button
+                      key={scene.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={selected}
+                      className={`relative min-h-11 overflow-hidden rounded-md px-3.5 py-2.5 text-left text-small transition-colors duration-(--dur-micro) ease-(--ease-out) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:max-w-[15.5rem] sm:flex-1 sm:text-center ${
+                        selected
+                          ? "text-paper"
+                          : "bg-surface text-ink-muted ring-1 ring-line hover:bg-surface-alt hover:text-ink"
+                      }`}
+                      onClick={() => scrollToIndex(index)}
+                    >
+                      {selected && !reduce ? (
+                        <m.span
+                          layoutId="showcase-tab-pill-desktop"
+                          className="absolute inset-0 rounded-md bg-ink shadow-sm"
+                          transition={{
+                            type: "spring",
+                            stiffness: 420,
+                            damping: 34,
+                          }}
+                          aria-hidden
+                        />
+                      ) : null}
+                      {selected && reduce ? (
+                        <span
+                          className="absolute inset-0 rounded-md bg-ink shadow-sm"
+                          aria-hidden
+                        />
+                      ) : null}
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        <Icon
+                          aria-hidden
+                          className="size-4 shrink-0"
+                          strokeWidth={selected ? 2.25 : 1.75}
+                        />
+                        <span>{scene.navLabel}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </LayoutGroup>
+
+            {/* Mobile: compact labelled controls — same job, less chrome */}
+            <LayoutGroup id="showcase-tabs-mobile">
+              <div
+                role="tablist"
+                aria-label="Choose a product demo"
+                className="flex w-full max-w-md justify-center gap-1.5 md:hidden"
+              >
+                {SCENES.map((scene, index) => {
+                  const selected = index === active;
+                  const Icon = SCENE_ICONS[scene.id];
+                  return (
+                    <button
+                      key={scene.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={selected}
+                      aria-label={scene.navLabel}
+                      className={`relative min-h-11 flex-1 overflow-hidden rounded-md px-2 py-2 text-center text-[0.6875rem] leading-snug transition-colors duration-(--dur-micro) ease-(--ease-out) focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                        selected
+                          ? "text-paper"
+                          : "bg-surface text-ink-muted ring-1 ring-line"
+                      }`}
+                      onClick={() => scrollToIndex(index)}
+                    >
+                      {selected && !reduce ? (
+                        <m.span
+                          layoutId="showcase-tab-pill-mobile"
+                          className="absolute inset-0 rounded-md bg-ink"
+                          transition={{
+                            type: "spring",
+                            stiffness: 420,
+                            damping: 34,
+                          }}
+                          aria-hidden
+                        />
+                      ) : null}
+                      {selected && reduce ? (
+                        <span
+                          className="absolute inset-0 rounded-md bg-ink"
+                          aria-hidden
+                        />
+                      ) : null}
+                      <span className="relative z-10 flex flex-col items-center justify-center gap-1">
+                        <Icon
+                          aria-hidden
+                          className="size-3.5 shrink-0"
+                          strokeWidth={selected ? 2.25 : 1.75}
+                        />
+                        <span>{scene.navLabelShort}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </LayoutGroup>
 
             <p className="m-0 flex items-center gap-2 text-small text-ink-muted">
               <Lock
@@ -267,7 +376,7 @@ function SceneSlide({
   return (
     <div className="showcase-scene">
       <div className="showcase-scene-copy text-left">
-        <h3 className="font-display text-h3 text-ink lg:text-h2">{title}</h3>
+        <h3 className="font-demo text-h3 text-ink lg:text-h2">{title}</h3>
         <p className="text-small text-ink-muted lg:text-body">{detail}</p>
       </div>
       <div className="showcase-scene-media">{children}</div>

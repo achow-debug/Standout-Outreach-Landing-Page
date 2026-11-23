@@ -519,10 +519,10 @@
     grid-template-columns: 1fr;
   }
 
-  /* Peek demo stays 2-up so the shared frame never needs inner scroll. */
+  /* Peek demo: single-column phone POV (override landscape 2-up). */
   .sl-demo--peek .sl-options,
   .sl-demo--peek .sl-fields-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 }
 
@@ -941,7 +941,15 @@
 }
 
 .sl-btn-primary.is-waiting {
-  opacity: 0.45;
+  opacity: 1;
+  border: 1px solid var(--sl-control);
+  background: transparent;
+  color: var(--sl-control);
+  cursor: not-allowed;
+}
+
+.sl-btn-primary.is-waiting:disabled {
+  opacity: 1;
 }
 
 .sl-btn-back {
@@ -984,6 +992,64 @@
   margin-top: 12px;
   display: flex;
   justify-content: flex-start;
+}
+
+.sl-captcha-mock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--sl-hairline);
+  border-radius: 0.35rem;
+  background: var(--sl-ink-raised);
+  color: var(--sl-ivory);
+  cursor: pointer;
+  user-select: none;
+}
+
+.sl-captcha-mock input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.sl-captcha-mock-box {
+  position: relative;
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  border: 1.5px solid var(--sl-control);
+  border-radius: 0.2rem;
+  background: var(--sl-ink);
+}
+
+.sl-captcha-mock input:checked + .sl-captcha-mock-box {
+  border-color: var(--sl-brass);
+  background: var(--sl-brass);
+}
+
+.sl-captcha-mock input:checked + .sl-captcha-mock-box::after {
+  content: "";
+  position: absolute;
+  inset: 0.15rem 0.28rem 0.28rem;
+  border: solid var(--sl-ink);
+  border-width: 0 0 2px 2px;
+  transform: rotate(-45deg);
+}
+
+.sl-captcha-mock input:focus-visible + .sl-captcha-mock-box {
+  outline: 2px solid var(--color-brand, var(--sl-brass));
+  outline-offset: 2px;
+}
+
+.sl-captcha-mock-label {
+  font-size: 0.875rem;
+  line-height: 1.25;
+  font-weight: 500;
 }
 
 .sl-captcha-loading,
@@ -1452,9 +1518,17 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   min-height: 0;
   overflow: hidden;
+  background: color-mix(in oklab, var(--color-ink) 3%, var(--color-surface));
+}
+
+.demo-frame-body > .sl-demo--peek {
+  width: min(100%, 24.375rem); /* ~390px phone-width column */
+  height: 100%;
 }
 
 /*
@@ -1463,10 +1537,27 @@
  */
 .sl-demo--peek {
   --peek-scale: 1;
-  width: 100%;
+  /*
+    Homepage feature-flow: Standout cream/ink palette (not the dark-green
+    “second brand”). Full demo outside peek keeps the original tokens.
+    Phone-width column (~390px) centred in the shared card height.
+  */
+  --sl-ink: #fffdf9;
+  --sl-ink-raised: #f7f4ee;
+  --sl-selected: #efebe3;
+  --sl-hairline: #e4ded4;
+  --sl-control: #6b625a;
+  --sl-ivory: #1f1a17;
+  --sl-stone: #5e554d;
+  --sl-brass: #8b7355;
+  --sl-signal: #c45c3e;
+  --sl-paper: #f7f4ee;
+  --sl-muted: #5e554d;
+  width: min(100%, 24.375rem);
   height: 100%;
   min-height: 0;
-  max-width: none;
+  max-width: 24.375rem;
+  margin-inline: auto;
   overflow: hidden;
   container-type: size;
 }
@@ -1482,20 +1573,19 @@
 }
 
 .sl-demo--peek .sl-card {
-  /*
-    Fill the shared frame after mild scale. Footer stays pinned; step body
-    may scroll so Back/Continue are never clipped.
-  */
+  display: flex;
   flex: 1 1 auto;
-  width: calc(100% / var(--peek-scale));
-  height: calc(100% / var(--peek-scale));
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
   min-height: 0;
+  margin-inline: auto;
   border-radius: 0;
   box-shadow: none;
   aspect-ratio: auto;
   overflow: hidden;
-  transform: scale(var(--peek-scale));
-  transform-origin: top left;
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
 }
 
 .sl-demo--peek .sl-header {
@@ -1527,13 +1617,18 @@
 
 .sl-demo--peek .sl-step,
 .sl-demo--peek .sl-step.is-active {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   min-height: 0;
   overflow: hidden;
 }
 
 .sl-demo--peek .sl-step-body {
+  /* Fill remaining height so options can grow into the lower third. */
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
@@ -1547,8 +1642,8 @@
 }
 
 .sl-demo--peek .sl-question {
-  font-size: clamp(1rem, 0.92rem + 0.4vw, 1.2rem);
-  line-height: 1.2;
+  font-size: clamp(1rem, 0.92rem + 0.4vw, 1.15rem);
+  line-height: 1.25;
 }
 
 .sl-demo--peek .sl-hint,
@@ -1558,30 +1653,41 @@
   line-height: 1.35;
 }
 
+.sl-demo--peek .sl-fieldset {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .sl-demo--peek .sl-options {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.35rem;
-  margin-top: 0.45rem;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+  min-height: 0;
 }
 
 .sl-demo--peek .sl-option {
-  gap: 0.4rem;
-  min-height: 2.25rem;
-  padding: 0.4rem 0.5rem;
+  flex: 1 1 0;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.65rem;
   border-radius: 0.5rem;
+  align-items: center;
 }
 
 .sl-demo--peek .sl-option-label {
-  font-size: 0.8125rem;
-  line-height: 1.2;
+  font-size: 0.875rem;
+  line-height: 1.25;
 }
 
 /* Keep all form information (R5) — densify descriptions, never hide them. */
 .sl-demo--peek .sl-option-desc {
   display: block;
-  font-size: 0.6875rem;
-  line-height: 1.25;
+  font-size: 0.75rem;
+  line-height: 1.3;
 }
 
 .sl-demo--peek .sl-control {
@@ -1593,6 +1699,8 @@
   flex-shrink: 0;
   position: relative;
   z-index: 2;
+  /* Tight gap under options — override .sl-footer { margin-top: auto }. */
+  margin-top: 0.65rem;
   padding: 0.55rem 0.85rem 0.7rem;
 }
 
@@ -1631,9 +1739,16 @@
 }
 
 .sl-demo--peek .sl-captcha {
-  max-height: 4.25rem;
-  overflow: hidden;
-  margin-block: 0.15rem;
+  margin-block: 0.25rem;
+}
+
+.sl-demo--peek .sl-captcha-mock {
+  min-height: 2.5rem;
+  padding: 0.45rem 0.65rem;
+}
+
+.sl-demo--peek .sl-captcha-mock-label {
+  font-size: 0.8125rem;
 }
 
 .sl-demo--peek .sl-captcha iframe {
@@ -1681,10 +1796,11 @@
     font-size: 0.75rem;
   }
 
+  /* Phone POV: keep fields stacked for readable tap targets. */
   .sl-demo--peek .sl-fields-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.45rem 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .sl-demo--peek .sl-header,
@@ -1699,38 +1815,53 @@
 
 @media (min-width: 1024px) {
   .sl-demo--peek .sl-header {
-    padding: 0.65rem 1.15rem;
+    padding: 0.65rem 1rem;
   }
 
   .sl-demo--peek .sl-step-body {
-    padding: 0.65rem 1.15rem 0;
+    padding: 0.65rem 1rem 0;
   }
 
   .sl-demo--peek .sl-footer {
-    padding: 0.65rem 1.15rem 0.85rem;
+    padding: 0.65rem 1rem 0.85rem;
   }
 
+  /* Keep phone POV single-column even on large viewports. */
   .sl-demo--peek .sl-options {
-    gap: 0.45rem;
-    margin-top: 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.55rem;
   }
 
   .sl-demo--peek .sl-option {
-    min-height: 2.65rem;
-    padding: 0.55rem 0.75rem;
+    min-height: 2.85rem;
+    padding: 0.6rem 0.75rem;
   }
 }
 
 /* Shared equal-weight feature-flow frames (R1+R2, R9). */
 .showcase-scroller {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  padding-inline: max(var(--gutter), calc((100% - var(--showcase-card-w)) / 2));
+  /* Left-aligned active card; room on the right for neighbour peeks. */
+  padding-left: var(--gutter);
+  padding-right: max(
+    var(--gutter),
+    calc(100% - var(--showcase-card-w) - var(--gutter) - 1.25rem)
+  );
   padding-bottom: 0.5rem;
   scrollbar-width: none;
+  /* Soft right-edge fade so peeks read as intentional, not a cut-off shot. */
+  mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
 }
 
 .showcase-scroller::-webkit-scrollbar {
@@ -1741,7 +1872,15 @@
   flex: 0 0 auto;
   width: var(--showcase-card-w);
   height: var(--showcase-card-h);
-  scroll-snap-align: center;
+  scroll-snap-align: start;
+}
+
+/* Desktop: label-driven only — no swipe / drag. */
+@media (min-width: 1024px) {
+  .showcase-scroller {
+    overflow-x: hidden;
+    scroll-snap-type: none;
+  }
 }
 
 /* GEO / Settlement: stacked on mobile, Option A side-by-side on desktop. */

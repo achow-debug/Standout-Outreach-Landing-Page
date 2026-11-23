@@ -13,7 +13,6 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
-import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
 import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -53,12 +52,8 @@ import {
   type UrgencyOptionId,
   type ValueOptionId,
 } from "@/content/intake-demo";
-import { getRecaptchaSiteKey } from "@/lib/recaptcha-config";
 
-const ReCAPTCHA = dynamic(() => import("react-google-recaptcha"), {
-  ssr: false,
-  loading: () => <p className="sl-captcha-loading m-0">Loading verification…</p>,
-});
+const DEMO_CAPTCHA_TOKEN = "demo-verified";
 
 type ContactErrors = {
   name?: string;
@@ -210,7 +205,6 @@ export function AnnotatedIntakeDemo({
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [captchaError, setCaptchaError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const recaptchaSiteKey = getRecaptchaSiteKey();
   const [recordArriving, setRecordArriving] = useState(false);
   const [conflictCleared, setConflictCleared] = useState(false);
   const pinRef = useRef<HTMLButtonElement | null>(null);
@@ -445,7 +439,7 @@ export function AnnotatedIntakeDemo({
       return;
     }
     if (id === "beforeCall") {
-      if (recaptchaSiteKey && !captchaToken) {
+      if (!captchaToken) {
         setCaptchaError(intakeBeforeCall.captchaError);
         return;
       }
@@ -538,11 +532,11 @@ export function AnnotatedIntakeDemo({
                   ready={screenIsReady(id, answers)}
                   annotationsOn={annotationsEnabled}
                   onOpenNote={openNoteFrom}
-                  recaptchaSiteKey={recaptchaSiteKey}
+                  captchaChecked={captchaToken === DEMO_CAPTCHA_TOKEN}
                   captchaError={captchaError}
-                  onCaptchaChange={(token) => {
-                    setCaptchaToken(token);
-                    if (token) setCaptchaError(null);
+                  onCaptchaChange={(checked) => {
+                    setCaptchaToken(checked ? DEMO_CAPTCHA_TOKEN : null);
+                    if (checked) setCaptchaError(null);
                   }}
                   onBack={() => {
                     if (id === screen) goTo(prevIntakeScreen(id, flowInput));
@@ -689,10 +683,6 @@ export function AnnotatedIntakeDemo({
         </div>
       </div>
 
-      <p className="sl-demo-caption m-0 text-center text-small text-ink-muted">
-        {intakeDemoChrome.caption}
-      </p>
-
       {openNote !== null && annotationsEnabled ? (
         <NoteDialog
           noteId={openNote}
@@ -738,7 +728,7 @@ function CardFooter({
   ready,
   annotationsOn,
   onOpenNote,
-  recaptchaSiteKey,
+  captchaChecked,
   captchaError,
   onCaptchaChange,
   onBack,
@@ -750,9 +740,9 @@ function CardFooter({
   ready: boolean;
   annotationsOn: boolean;
   onOpenNote: (id: IntakeNoteId, button: HTMLButtonElement) => void;
-  recaptchaSiteKey: string | null;
+  captchaChecked: boolean;
   captchaError: string | null;
-  onCaptchaChange: (token: string | null) => void;
+  onCaptchaChange: (checked: boolean) => void;
   onBack: () => void;
   onContinue: () => void;
   onTryOther: () => void;
@@ -763,7 +753,6 @@ function CardFooter({
         <button type="button" className="sl-text-link" onClick={onTryOther}>
           {intakeSuccess.tryOtherRoute}
         </button>
-        <DemoSraBadge annotationsOn={annotationsOn} onOpenNote={onOpenNote} />
         <p className="sl-trust m-0">{intakeFirmChrome.trustFooter}</p>
       </div>
     );
@@ -796,18 +785,15 @@ function CardFooter({
             ) : null}
           </p>
           <div className="sl-pin-host sl-captcha">
-            {recaptchaSiteKey ? (
-              <ReCAPTCHA
-                sitekey={recaptchaSiteKey}
-                theme="dark"
-                onChange={onCaptchaChange}
-                onExpired={() => onCaptchaChange(null)}
+            <label className="sl-captcha-mock">
+              <input
+                type="checkbox"
+                checked={captchaChecked}
+                onChange={(event) => onCaptchaChange(event.target.checked)}
               />
-            ) : (
-              <p className="sl-captcha-missing m-0">
-                {intakeBeforeCall.captchaMissingKey}
-              </p>
-            )}
+              <span className="sl-captcha-mock-box" aria-hidden />
+              <span className="sl-captcha-mock-label">I’m not a robot</span>
+            </label>
             {annotationsOn ? (
               <NotePin id={21} onOpen={onOpenNote} className="sl-pin-end" />
             ) : null}
@@ -817,7 +803,6 @@ function CardFooter({
               {captchaError}
             </p>
           ) : null}
-          <DemoSraBadge annotationsOn={annotationsOn} onOpenNote={onOpenNote} />
         </>
       ) : null}
       <p className="sl-footer-hint m-0">{waiting ? intakeDemoChrome.chooseHint : "\u00a0"}</p>
@@ -830,48 +815,13 @@ function CardFooter({
         <button
           type="button"
           className={`sl-btn sl-btn-primary ${waiting ? "is-waiting" : "is-ready"}`}
+          disabled={waiting}
+          aria-disabled={waiting}
           onClick={onContinue}
         >
           {continueLabel}
         </button>
       </div>
-    </div>
-  );
-}
-
-function DemoSraBadge({
-  annotationsOn,
-  onOpenNote,
-}: {
-  annotationsOn: boolean;
-  onOpenNote: (id: IntakeNoteId, button: HTMLButtonElement) => void;
-}) {
-  const { sraBadge } = intakeFirmChrome;
-
-  return (
-    <div className="sl-pin-host sl-sra-badge-wrap">
-      <div
-        className="sl-sra-badge"
-        role="img"
-        aria-label={`${sraBadge.demoLabel}. SRA number ${sraBadge.number}.`}
-      >
-        <div className="sl-sra-badge-mark" aria-hidden>
-          <span className="sl-sra-badge-mark-text">SRA</span>
-        </div>
-        <div className="sl-sra-badge-body">
-          <p className="sl-sra-badge-title m-0">Solicitors Regulation Authority</p>
-          <p className="sl-sra-badge-firm m-0">{sraBadge.firmLine}</p>
-          <p className="sl-sra-badge-meta m-0">
-            <span>SRA no. {sraBadge.number}</span>
-            <span aria-hidden>·</span>
-            <span>{sraBadge.dateLabel}</span>
-          </p>
-          <p className="sl-sra-badge-demo m-0">{sraBadge.demoLabel}</p>
-        </div>
-      </div>
-      {annotationsOn ? (
-        <NotePin id={18} onOpen={onOpenNote} className="sl-pin-end" />
-      ) : null}
     </div>
   );
 }

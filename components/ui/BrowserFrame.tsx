@@ -10,6 +10,8 @@ type BrowserFrameProps = {
    * body flexes and clips instead of growing the card.
    */
   fill?: boolean;
+  /** Shown in the address pill so the mock browser feels finished. */
+  address?: string;
 };
 
 function cx(...parts: Array<string | false | null | undefined>) {
@@ -18,18 +20,19 @@ function cx(...parts: Array<string | false | null | undefined>) {
 
 /**
  * Browser chrome around a demo slide (§6.8).
- * Traffic-light dots are warm line-strong (not red/amber/green). Address pill is empty.
+ * Traffic-light dots are warm line-strong (not red/amber/green).
  */
 export function BrowserFrame({
   children,
   className,
   demoTheme = true,
   fill = false,
+  address,
 }: BrowserFrameProps) {
   return (
     <div
       className={cx(
-        "overflow-hidden rounded-lg border border-line bg-surface shadow-lg",
+        "overflow-hidden rounded-lg border border-line-strong bg-surface shadow-md",
         fill && "flex h-full flex-col",
         className,
       )}
@@ -42,9 +45,12 @@ export function BrowserFrame({
           <span className="size-2.5 rounded-full bg-line-strong" />
         </div>
         <span
-          className="pointer-events-none absolute left-1/2 h-6 w-2/5 -translate-x-1/2 rounded-full bg-surface-alt"
+          className="pointer-events-none absolute left-1/2 flex h-6 w-[min(70%,18rem)] -translate-x-1/2 items-center justify-center truncate rounded-full bg-surface-alt px-3 text-[0.6875rem] leading-none text-ink-subtle"
           aria-hidden="true"
-        />
+          title={address}
+        >
+          {address ?? ""}
+        </span>
       </div>
       <div
         className={cx(

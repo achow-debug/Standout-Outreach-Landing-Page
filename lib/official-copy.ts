@@ -45,20 +45,36 @@ export const officialCopy = {
         title: "See our enquiry form yourself",
         /** Two short lines so the 52px mobile caption slot can hold it. */
         mobileCaption: "See our enquiry\nform yourself",
+        /** Outside BrowserFrame — what the buyer is looking at. */
+        frameCaption:
+          "We custom-design every intake form to collect the information your team requires.",
+        addressBar: "standoutlegal.co.uk/enquire",
+        /** Carousel control labels (desktop / compact mobile). */
+        navLabel: "Website visitor to booked consultation",
+        navLabelShort: "Enquiry form",
         detail:
           "Use it as a client would. Tap the numbered dots to see why each detail is there.",
       },
       {
         id: "geo",
-        title: "AI Search Visibility (GEO)",
-        mobileCaption: "AI Search\nVisibility (GEO)",
+        title: "Be found when a potential client asks ChatGPT",
+        mobileCaption: "Be found when a potential\nclient asks ChatGPT",
+        frameCaption: "AI Search visibility (GEO)",
+        addressBar: "standoutlegal.co.uk/ai-visibility",
+        navLabel: "Reach where clients now ask",
+        navLabelShort: "Where clients ask",
         detail:
-          "Reach potential clients as they research legal advice, compare law firms and consider their next steps, with your firm positioned prominently in AI-powered search experiences like ChatGPT, Gemini and Perplexity.",
+          "Once demand exists, be findable where clients now ask. Reach prospects as they research legal advice, compare law firms and consider their next steps, with your firm positioned prominently in AI-powered search experiences like ChatGPT, Gemini and Perplexity.",
       },
       {
         id: "settlement",
-        title: "Settlement Agreement Enquiry Conversion",
-        mobileCaption: "Settlement Agreement\nEnquiry Conversion",
+        title: "Your website as a business tool instead of a brochure",
+        mobileCaption: "Your website as a business\ntool instead of a brochure",
+        frameCaption:
+          "A dedicated landing flow for settlement-agreement enquiries.",
+        addressBar: "standoutlegal.co.uk/settlement-agreement",
+        navLabel: "Your website as a tool instead of a brochure",
+        navLabelShort: "Site as a tool",
         detail:
           "Explore our dedicated mobile first landing page demo where a departing employee can upload their settlement agreement, confirm employer is covering legal fee and request a 15 min slot directly into your calendar.",
       },

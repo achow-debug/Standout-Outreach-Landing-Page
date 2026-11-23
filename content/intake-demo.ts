@@ -137,13 +137,11 @@ export const intakeDemoChrome = {
   title: "See our enquiry form yourself",
   leadLine:
     "Use the form as a client would. Tap the numbered dots to see why each detail is there.",
-  annotationsLabel: "Annotations",
+  annotationsLabel: "Our annotations",
   tabs: {
     client: "Client’s view",
     team: "What your team receives",
   },
-  caption:
-    "Demo only — fictional firm; rankings and registration numbers are placeholders.",
   chooseHint: "Choose an option to continue",
   backLabel: "Back",
   continueLabel: "Continue",
@@ -152,12 +150,12 @@ export const intakeDemoChrome = {
 // ── Firm chrome (inside the card) ───────────────────────────────────────────
 
 export const intakeFirmChrome = {
-  firmName: "Standout Legal",
+  firmName: "Sample Family Law",
   introHeading: "Talk to our family solicitor, in confidence.",
   trustLines: [
-    "No.1 ranked for family law 2026",
-    "100+ five-star Google reviews",
-    "Legal 500 firm",
+    "Example ranking shown for demo",
+    "Example review count for demo",
+    "Example directory listing for demo",
   ] as const,
   callFallback: "Prefer to call? 01XXX XXXXXX",
   callFallbackHref: "tel:01XXXXXXXXX",
@@ -168,7 +166,8 @@ export const intakeFirmChrome = {
     number: "847291",
     /** Fixed for SSR/client parity in the demo badge. */
     dateLabel: "8 Nov 2026",
-    firmLine: "Standout Legal LLP is authorised and regulated by the Solicitors Regulation Authority",
+    firmLine:
+      "Sample Family Law LLP is authorised and regulated by the Solicitors Regulation Authority",
     demoLabel: "Demo SRA badge — non-functional",
   },
 } as const;

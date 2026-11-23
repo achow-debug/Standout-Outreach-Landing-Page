@@ -97,19 +97,19 @@
 @media (width >= 48rem) {
   :root {
     --showcase-card-h: min(34rem, calc(100dvh - 11rem));
-    --showcase-card-w: min(64vw, 40rem);
+    --showcase-card-w: min(70vw, 42rem);
   }
 }
 @media (width >= 64rem) {
   :root {
     --showcase-card-h: min(36rem, calc(100dvh - 12rem));
-    --showcase-card-w: min(60vw, 43rem);
+    --showcase-card-w: min(66vw, 46rem);
   }
 }
 @media (width >= 80rem) {
   :root {
     --showcase-card-h: min(38rem, calc(100dvh - 12rem));
-    --showcase-card-w: min(56vw, 44rem);
+    --showcase-card-w: min(62vw, 48rem);
   }
 }
 
