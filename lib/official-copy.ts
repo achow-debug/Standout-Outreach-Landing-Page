@@ -412,32 +412,21 @@ export const officialCopy = {
     ],
   },
   finalCta: {
-    headingLines: ["Fewer enquiries lost", "More of the right matters"],
     steps: [
       {
-        title: "See what happens to your enquiries",
-        body: "We trace how enquiries reach your firm, and where competitors are winning ones that should be yours.",
+        title: "Request your enquiry review",
+        body: "Find out where prospective instructions drop off between first enquiry and consultation: jargon-free, practical findings, with no obligation to proceed further.",
       },
       {
-        title: "Approve your new enquiry journey",
-        body: "We build the page, form and follow-up. Nothing goes live until you sign it off.",
+        title: "Launch a free 90-day pilot",
+        body: "If the review findings make sense for your firm, we build an intake page, form, and follow-up for your priority practice area. It launches once you sign off, to drive stronger enquiry conversion over 90 days.",
       },
       {
-        title: "Take on more of the right matters",
-        body: "Every enquiry followed up and qualified, in the inbox or CRM you already use.",
+        title: "Grow deliberately with profitable, repeat work",
+        body: "Attract the right clients, convert them reliably and scale your fee-earning work on your own terms.",
       },
     ],
-    primaryCta: "See what happens to your enquiries",
-    secondaryCta: "Speak to Alex",
-    trust: "ICO-registered · Data Processing Agreement · UK data only",
-    microcopy: "Free enquiry report within 5 days. No obligation.",
-  },
-  thankYou: {
-    heading: "Your call is booked.",
-    steps: [
-      "Check your inbox for the confirmation.",
-      "Add it to your calendar.",
-    ],
+    primaryCta: "Request your enquiry review",
   },
 } as const;
 

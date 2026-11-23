@@ -19,6 +19,7 @@ import { ENQUIRY_CHECK_HREF, SPEAK_TO_ALEX_HREF } from "@/lib/cta";
 import { siteConfig } from "@/lib/site-config";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { useFinalCtaInView } from "@/hooks/use-final-cta-in-view";
 
 function isNavMenu(item: OfficialNavItem): item is OfficialNavMenu {
   return item.kind === "menu";
@@ -179,6 +180,7 @@ export function SiteHeader() {
   const headerCta = officialCopy.header.ctaLabel;
   const headerCtaMobile = officialCopy.header.ctaLabelMobile;
   const askLabel = officialCopy.header.askLabel;
+  const finalCtaInView = useFinalCtaInView();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -282,7 +284,7 @@ export function SiteHeader() {
           aria-label="Page"
           data-scrolled={scrolled ? "true" : undefined}
           className={cx(
-            "flex h-(--nav-h) items-center gap-2 overflow-hidden rounded-lg border border-line bg-surface/85 px-3 backdrop-blur-md transition-shadow duration-(--dur-ui) ease-(--ease-out) sm:gap-4 sm:px-4 lg:px-6",
+            "flex h-(--nav-h) items-center gap-2 overflow-hidden rounded-lg border border-line bg-surface px-3 transition-shadow duration-(--dur-ui) ease-(--ease-out) sm:gap-4 sm:px-4 lg:px-6",
             scrolled && "shadow-sm",
           )}
         >
@@ -327,7 +329,12 @@ export function SiteHeader() {
               size="md"
               href={ENQUIRY_CHECK_HREF}
               data-cta="measure-enquiries"
-              className="shrink-0 whitespace-nowrap max-lg:h-9 max-lg:px-3 max-lg:text-[0.8125rem]"
+              tabIndex={finalCtaInView ? -1 : undefined}
+              aria-hidden={finalCtaInView || undefined}
+              className={cx(
+                "shrink-0 whitespace-nowrap max-lg:h-9 max-lg:px-3 max-lg:text-[0.8125rem] transition-[opacity,visibility] duration-200 ease-(--ease-out) motion-reduce:transition-none",
+                finalCtaInView && "invisible opacity-0",
+              )}
               onClick={closeMenus}
             >
               <span className="lg:hidden">{headerCtaMobile}</span>
