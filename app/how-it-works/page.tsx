@@ -8,7 +8,6 @@ import { FirmDay } from "@/components/official/firm-day";
 import { HowItWorks } from "@/components/official/how-it-works";
 import { PracticeAreaProvider } from "@/components/official/practice-area";
 import { SiteHeader } from "@/components/official/site-header";
-import { SourcesSection } from "@/components/official/sources-section";
 import { EnquiryPath } from "@/components/path/EnquiryPath";
 import { siteConfig } from "@/lib/site-config";
 
@@ -43,7 +42,6 @@ export default function HowItWorksPage() {
             </EnquiryPath>
           </main>
           <SiteFooter />
-          <SourcesSection />
         </DpaRequestProvider>
       </BookingProvider>
     </PracticeAreaProvider>

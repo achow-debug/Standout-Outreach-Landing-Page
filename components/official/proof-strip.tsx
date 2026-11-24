@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { researchStats } from "@/content/landing";
 import { sources } from "@/content/sources";
 import { Sheet } from "@/components/official/sheet";
-import { openSourcesSection } from "@/components/official/source-button";
 
 const COUNT_MS = 900;
 
@@ -64,9 +64,9 @@ function Stat({
 export function ProofStrip() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
-  const seeAllRef = useRef(false);
   const [progress, setProgress] = useState(1);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (!document.documentElement.classList.contains("motion-ok")) {
@@ -101,12 +101,6 @@ export function ProofStrip() {
     observer.observe(section);
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    if (open || !seeAllRef.current) return;
-    seeAllRef.current = false;
-    openSourcesSection();
-  }, [open]);
 
   return (
     <div ref={sectionRef} className="official-proof">
@@ -144,8 +138,8 @@ export function ProofStrip() {
           type="button"
           className="source-sheet-see-all"
           onClick={() => {
-            seeAllRef.current = true;
             setOpen(false);
+            router.push("/sources");
           }}
         >
           {researchStats.seeAll}

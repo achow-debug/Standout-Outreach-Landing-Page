@@ -127,7 +127,6 @@ export const officialCopy = {
   security: {
     heading: "Privacy and security built on your SRA obligations",
     linkLabel: "Learn more about our security and data protection practices →",
-    /** Destination page is built later. This href will 404 until then. */
     linkHref: "/security",
     badges: [
       { id: "ico", label: "ICO", src: "/images/security/ico.png" },
@@ -137,7 +136,7 @@ export const officialCopy = {
   },
   nav: {
     items: [
-      { kind: "link", id: "security", label: "Security", href: "/#security" },
+      { kind: "link", id: "security", label: "Security", href: "/security" },
       {
         kind: "link",
         id: "partners",
@@ -185,6 +184,11 @@ export const officialCopy = {
             id: "faqs",
             label: "Frequently asked questions",
             href: "/customer-stories#faqs",
+          },
+          {
+            id: "sources",
+            label: "Sources & methodology",
+            href: "/sources",
           },
         ],
       },

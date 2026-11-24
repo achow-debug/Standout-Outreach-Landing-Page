@@ -6,7 +6,6 @@ import { Faq } from "@/components/official/faq";
 import { MeetTheFounder } from "@/components/official/meet-the-founder";
 import { PracticeAreaProvider } from "@/components/official/practice-area";
 import { SiteHeader } from "@/components/official/site-header";
-import { SourcesSection } from "@/components/official/sources-section";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -35,7 +34,6 @@ export default function CustomerStoriesPage() {
             <Faq />
           </main>
           <SiteFooter />
-          <SourcesSection />
         </DpaRequestProvider>
       </BookingProvider>
     </PracticeAreaProvider>

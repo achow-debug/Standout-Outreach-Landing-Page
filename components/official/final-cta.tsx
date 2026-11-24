@@ -12,6 +12,7 @@ import { officialCopy } from "@/lib/official-copy";
  */
 export function OfficialFinalCta() {
   const { steps, primaryCta } = officialCopy.finalCta;
+  const { headingLead, headingAccent } = officialCopy.hero;
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -41,11 +42,15 @@ export function OfficialFinalCta() {
     >
       <Container>
         <div className="rounded-lg bg-night px-6 py-14 text-night-text theme-night md:px-10 lg:px-16 lg:py-24">
-          <h2 id="final-cta-heading" className="sr-only">
-            How to get started
+          <h2
+            id="final-cta-heading"
+            className="m-0 max-w-[22ch] font-display text-display text-night-text"
+          >
+            {headingLead}{" "}
+            <span className="text-night-accent">{headingAccent}</span>
           </h2>
 
-          <ol className="m-0 flex list-none flex-col gap-10 p-0 text-left lg:grid lg:grid-cols-3 lg:grid-rows-[auto_auto_1fr] lg:gap-x-12 lg:gap-y-4">
+          <ol className="m-0 mt-12 flex list-none flex-col gap-10 p-0 text-left lg:mt-16 lg:grid lg:grid-cols-3 lg:grid-rows-[auto_auto_1fr] lg:gap-x-12 lg:gap-y-4">
             {steps.map((step, index) => {
               const isLast = index === steps.length - 1;
               return (
@@ -80,11 +85,11 @@ export function OfficialFinalCta() {
 
           <div className="mt-12 flex w-full justify-center lg:mt-16">
             <Button
-              variant="primary"
+              variant="inverse"
               size="lg"
               href={ENQUIRY_CHECK_HREF}
               data-cta="measure-enquiries"
-              className="h-14 min-h-12 w-full rounded-md bg-night-accent px-8 font-sans text-[1.125rem] font-semibold !text-night shadow-none hover:bg-[color-mix(in_oklab,var(--color-night-accent)_80%,white)] hover:shadow-none hover:translate-y-0 focus-visible:outline-night-accent focus-visible:outline-offset-4 lg:w-auto"
+              className="w-full lg:w-auto"
             >
               {primaryCta}
             </Button>

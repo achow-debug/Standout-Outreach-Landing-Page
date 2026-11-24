@@ -4,7 +4,6 @@ import { BookingProvider } from "@/components/official/booking-provider";
 import { DpaRequestProvider } from "@/components/official/dpa-request";
 import { PracticeAreaProvider } from "@/components/official/practice-area";
 import { SiteHeader } from "@/components/official/site-header";
-import { SourcesSection } from "@/components/official/sources-section";
 import { WhoItsFor } from "@/components/official/who-its-for";
 import { siteConfig } from "@/lib/site-config";
 
@@ -33,7 +32,6 @@ export default function WhoWePartnerWithPage() {
             <WhoItsFor />
           </main>
           <SiteFooter />
-          <SourcesSection />
         </DpaRequestProvider>
       </BookingProvider>
     </PracticeAreaProvider>

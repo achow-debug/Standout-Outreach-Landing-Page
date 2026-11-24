@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { getSource, sources, type SourceId } from "@/content/sources";
 import { Sheet } from "@/components/official/sheet";
 
@@ -23,15 +24,6 @@ function Citation({
   );
 }
 
-/** Closes nothing itself. Opens `<details id="sources">` and scrolls to it. */
-export function openSourcesSection() {
-  const section = document.getElementById(sources.sectionId);
-  if (section instanceof HTMLDetailsElement) {
-    section.open = true;
-  }
-  section?.scrollIntoView({ block: "start", behavior: "auto" });
-}
-
 export function SourceButton({
   sourceId,
   children,
@@ -46,13 +38,7 @@ export function SourceButton({
 }) {
   const source = getSource(sourceId);
   const [open, setOpen] = useState(false);
-  const seeAllRef = useRef(false);
-
-  useEffect(() => {
-    if (open || !seeAllRef.current) return;
-    seeAllRef.current = false;
-    openSourcesSection();
-  }, [open]);
+  const router = useRouter();
 
   return (
     <>
@@ -85,8 +71,8 @@ export function SourceButton({
             type="button"
             className="inline-flex min-h-11 items-center font-semibold text-ink underline-offset-4 hover:underline"
             onClick={() => {
-              seeAllRef.current = true;
               setOpen(false);
+              router.push("/sources");
             }}
           >
             {sources.seeAll}
